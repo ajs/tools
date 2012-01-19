@@ -1,0 +1,88 @@
+With few exceptions, this directory contains YAML files which contain
+one of two formats of data. Both are lookup tables for randomly rolled
+values. The first looks like this:
+
+---
+- num
+- value
+- num
+- value
+...
+
+where num is either -1 or a number between 1 and 100. When loaded,
+a random number between 1 and 100 will be generated, and the first
+pair in the list whose "num" is greater than or equal to the number
+selected will be selected. That pair's value is then returned.
+
+Values can either be a string or a hash/dictionary of name/value
+pairs.
+
+The second form looks like this:
+
+---
+-
+  -
+    - n
+    - m
+    - ...
+  - value
+  -
+    - n
+    - m
+    - ...
+  - value
+
+Where n, m, etc. (typically there are three) are numbers similar to
+num, in the example above. Typically, these are used for minor (0),
+medium (1) and major (2) items or attributes where the percentile
+numbers change depending on how powerful the item being generated
+is.
+
+As a special case, values can also come in a third form, which is an
+embeded selection structure like so:
+
+
+---
+- 10
+-
+  - 10
+  - value1
+  - 20
+  - value2
+  - ...
+- 20
+- value3
+- ...
+
+The embeded structure can be of either the first or second form, but
+MUST match the form of the enclosing structure.
+
+Values that represent items are always a hash/dictionary form that
+contain the following required (and optional) fields, but
+MAY contain any other field names:
+
+name: name of item
+type: item type such as ring
+price: price in (potentially fractional) gold pieces
+subtype: optional subtype such as shield for the armor type
+
+Here's a real example:
+
+---
+-
+  -
+    - 10
+    - 6
+    - 3
+  - name: bane
+    special: bane
+    plus: 1
+  -
+    - 17
+    - 12
+    - -1
+  - name: defending
+    plus: 1
+    type: melee
+
+These are the first two entries from the special weapons table.

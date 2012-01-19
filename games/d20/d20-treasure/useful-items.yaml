@@ -1,0 +1,44 @@
+# The robe of useful items can have various useful items in it. Price
+# can be used optionally. It indicates that the item listed has a
+# significant value, and the value of the robe should probably be
+# altered to match (though the SRD does not call for this).
+---
+- 8
+- name: bag of 100 gp
+  price: 100
+- 15
+- name: 'coffer, silver (6 in. by 6 in. by 1 ft.), 500 gp value'
+  price: 500
+- 22
+- name: 'door, iron (up to 10 ft. wide and 10 ft. high)'
+  price: 0
+- 30
+- name: 'gems, 10 (100 gp value each)'
+  price: 1000
+- 44
+- name: 'ladder, wooden (24 ft. long)'
+  price: 0
+- 51
+- name: mule (with saddle bags)
+  price: 0
+- 59
+- name: 'pit, open (10 ft. by 10 ft. by 10 ft.)'
+  price: 0
+- 68
+- name: potion of cure serious wounds
+  price: 0
+- 75
+- name: rowboat (12 ft. long)
+  price: 0
+- 83
+- name: scroll
+  price: 0
+- 90
+- name: 'war dogs, pair (treat as riding dogs)'
+  price: 0
+- 96
+- name: 'window (2 ft. by 4 ft., up to 2 ft. deep)'
+  price: 0
+- 100
+- name: portable ram
+  price: 0

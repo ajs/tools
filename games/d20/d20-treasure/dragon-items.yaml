@@ -1,0 +1,784 @@
+# This table contains items from Dragon Magazine. To avoid completely
+# pissing them off, we avoid listing anything more than issue #, name
+# and price. Everything else, you have to go out and buy a dragon magazine
+# to look up, sorry.
+#
+# IMPORTANT: This file is not in the typical format. Instead, it
+# simply lists the items has typical item hashes. Percentile rolls
+# must be generated dynamically by the reader of this file.
+#
+# A suggested tactic is to group them as "minor", "medium", and
+# "major" items based on price. See the SRD for typical
+# breakpoints by item type.
+---
+- issue: 289
+  name: alchemists glass
+  price: 1800
+  type: wondrous item
+- issue: 289
+  name: bardic cup
+  price: 6500
+  type: wondrous item
+- issue: 289
+  name: dwarven rune stein
+  price: 3300
+  type: wondrous item
+- issue: 289
+  name: Caine's flagon of shadows
+  price: 21600
+  type: wondrous item
+- issue: 289
+  name: chalice of true seeing
+  price: 21600
+  type: wondrous item
+- issue: 289
+  name: dragon's goblet
+  price: 72000
+  type: wondrous item
+- issue: 289
+  name: rose of kings
+  price: 10000
+  type: wondrous item
+- issue: 289
+  name: spy glass
+  price: 16000
+  type: wondrous item
+- issue: 289
+  name: talking cups (2)
+  price: 20000
+  type: wondrous item
+- issue: 289
+  name: vampiric goblet
+  price: 8100
+  type: wondrous item
+- frequency: uncommon
+  issue: 289
+  name: war mug of the ogre magi
+  price: 8315
+  subtype: melee
+  type: weapon
+- issue: 308
+  name: azure skullcap
+  price: 51200
+  type: wondrous item
+- issue: 308
+  name: crimson claw
+  price: 44000
+  type: wondrous item
+- issue: 308
+  name: ebon mask
+  price: 60000
+  type: wondrous item
+- issue: 308
+  name: emerald eye patch
+  price: 96000
+  type: wondrous item
+- issue: 308
+  name: opalescent amulet
+  price: 33000
+  type: wondrous item
+- issue: 308
+  name: brassy bacers
+  price: 64000
+  type: wondrous item
+- issue: 308
+  name: bronzed cuff
+  price: 125000
+  type: wondrous item
+- issue: 308
+  name: cupric brooch
+  price: 175500
+  type: wondrous item
+- issue: 308
+  name: golden visor
+  price: 212500
+  type: wondrous item
+- issue: 308
+  name: sterling collar
+  price: 54400
+  type: wondrous item
+- issue: 308
+  name: beruto of the carp dragon
+  price: 22000
+  type: wondrous item
+- issue: 308
+  name: fiery kabuto of the celestial dragon
+  price: 137000
+  type: wondrous item
+- issue: 308
+  name: iyaringu of the earth dragon
+  price: 26580
+  type: wondrous item
+- issue: 308
+  name: kuribune of the river dragon
+  price: 6000
+  type: wondrous item
+- issue: 308
+  name: pearly okimono of the sea dragon
+  price: 75000
+  type: wondrous item
+- issue: 308
+  name: tarekazari of the coiled dragon
+  price: 75360
+  type: wondrous item
+- issue: 308
+  name: watery hachimaki of the typhoon dragon
+  price: 124800
+  type: wondrous item
+- issue: 308
+  name: amber pinwheel
+  price: 39000
+  type: wondrous item
+- issue: 308
+  name: dark clasp
+  price: 24000
+  type: wondrous item
+- issue: 308
+  name: fanged ring
+  price: 10000
+  type: ring
+- issue: 308
+  name: shadowy diadem
+  price: 34500
+  type: wondrous item
+- issue: 308
+  name: sonorous scale
+  price: 24000
+  type: wondrous item
+- issue: 314
+  name: boots of stability
+  price: 9850
+  type: wondrous item
+- issue: 314
+  name: clay of sculpting
+  price: 20000
+  type: wondrous item
+- issue: 314
+  name: ring of earth's grasp
+  price: 10000
+  type: ring
+- charges: 50
+  issue: 314
+  name: staff of earthen might
+  price: 46406
+  type: staff
+- issue: 317
+  name: autonomous harp
+  price: 6250
+  type: wondrous item
+- issue: 317
+  name: shell of amplification
+  price: 7000
+  type: wondrous item
+- issue: 317
+  name: drum of the march
+  price: 10000
+  type: wondrous item
+- issue: 317
+  name: ventriloquist's mouthpiece
+  price: 6000
+  type: wondrous item
+- issue: 317
+  name: chromatic flute
+  price: 46500
+  type: wondrous item
+- issue: 317
+  name: flute of shrieking
+  price: 3500
+  type: wondrous item
+# This item requires a randomly selected instrument name
+- issue: 317
+  name: snake charmer
+  special: instrument
+  price: 1100
+  type: wondrous item
+- issue: 317
+  name: horn of the planes
+  price: 55000
+  type: wondrous item
+- issue: 319
+  name: amulet of deception
+  price: 1200
+  type: wondrous item
+- issue: 319
+  name: circlet of convocation
+  price: 4775
+  type: wondrous item
+- issue: 319
+  name: deathglance locket
+  price: 3860
+  type: wondrous item
+- issue: 319
+  name: golden beholder
+  price: 38000
+  type: wondrous item
+- issue: 319
+  name: ioun stone (black and white ellipsoid)
+  price: 60000
+  type: wondrous item
+- issue: 319
+  name: mirror of captured images
+  price: 40000
+  type: wondrous item
+- issue: 319
+  name: ring of scry detection
+  price: 28000
+  type: ring
+- issue: 319
+  name: ring of the evil eye
+  price: 6000
+  type: ring
+- issue: 319
+  name: scout goggles
+  price: 15000
+  type: wondrous item
+- issue: 319
+  name: scryskull and scryskull helm
+  price: 25200
+  type: wondrous item
+- issue: 323
+  name: armor of Thror
+  price: 60750
+  type: armor
+- issue: 323
+  name: breastplate of hardiness
+  price: 43350
+  type: armor
+- issue: 323
+  name: gauntlets of bashing
+  price: 45800
+  type: wondrous item
+- issue: 323
+  name: mug of clear-headedness
+  price: 38800
+  type: wondrous item
+- issue: 323
+  name: ring of spelunking
+  price: 37000
+  type: ring
+- issue: 323
+  name: statuette of the all-father
+  price: 2000
+  type: wondrous item
+- issue: 324
+  name: Herioneos's mercy
+  price: 30000
+  type: wondrous item
+- issue: 324
+  name: ring of the mystical elite
+  price: 306000
+  type: ring
+- issue: 324
+  name: lesser ring of the mystical elite
+  price: 182000
+  type: ring
+- issue: 324
+  name: skin of Kaletor
+  price: 12000
+  type: wondrous item
+- issue: 324
+  name: fool's plate
+  price: 7200
+  type: shield
+- issue: 324
+  name: Shadahkar's swift wind
+  price: 8350
+  type: wondrous item
+- issue: 324
+  name: mantle of the winter witch
+  price: 17000
+  type: wondrous item
+- issue: 324
+  name: Augustinius's folly
+  price: 6000
+  type: armor
+- issue: 324
+  name: mask of fury
+  price: 12000
+  type: wondrous item
+- frequency: uncommon
+  issue: 324
+  name: hammer of skill
+  price: 18000
+  subtype: melee
+  type: weapon
+- issue: 326
+  name: acorn of acuity
+  price: 4120
+  type: wondrous item
+- issue: 326
+  name: arboreal armor
+  price: 16000
+  type: armor
+- charges: 50
+  issue: 326
+  name: briar staff
+  price: 139500
+  type: staff
+- issue: 326
+  name: deluge rod
+  price: 93180
+  type: rod
+- issue: 326
+  name: eagles' cry bow
+  price: 73800
+  subtype: ranged
+  type: weapon
+- issue: 326
+  name: rod of the wild
+  price: 35145
+  type: rod
+- issue: 326
+  name: sylvan cloak
+  price: 11500
+  type: wondrous item
+- issue: 326
+  name: 'sylvan cloak, greater'
+  price: 153360
+  type: wondrous item
+- frequency: common
+  issue: 326
+  name: thornblade
+  price: 56450
+  subtype: melee
+  type: weapon
+- issue: 327
+  name: figurine of delivery
+  price: 32800
+  type: wondrous item
+- issue: 327
+  name: gem of location
+  price: 5000
+  type: wondrous item
+- issue: 327
+  name: horn of recording
+  price: 750
+  type: wondrous item
+- issue: 327
+  name: memory crystal
+  price: 200
+  type: wondrous item
+- issue: 327
+  name: mirrors of communication
+  price: 30000
+  type: wondrous item
+- issue: 327
+  name: slate folio
+  price: 7500
+  type: wondrous item
+- issue: 328
+  name: armor of the long journey
+  price: 39650
+  type: armor
+- issue: 328
+  name: boots of the woodland
+  price: 16000
+  type: wondrous item
+- issue: 328
+  name: cape of the general
+  price: 38000
+  type: wondrous item
+- frequency: uncommon
+  issue: 328
+  name: hand of the creator
+  price: 48502
+  subtype: melee
+  type: weapon
+- issue: 328
+  name: quiver of plenty
+  price: 18000
+  type: wondrous item
+- issue: 328
+  name: rod of revealing
+  price: 60000
+  type: rod
+- issue: 328
+  name: shield of obstruction
+  price: 27403
+  type: shield
+- issue: 328
+  name: thespian's mask
+  price: 3000
+  type: wondrous item
+- issue: 330
+  name: bolt of arcane penetration
+  price: 650
+  subtype: ammo
+  type: weapon
+- issue: 330
+  name: mask of the reaper
+  price: 30000
+  type: wondrous item
+- frequency: common
+  issue: 330
+  name: quiet dagger (apprentice)
+  price: 10800
+  subtype: melee
+  type: weapon
+- frequency: common
+  issue: 330
+  name: quiet dagger (journeyman)
+  price: 25300
+  subtype: melee
+  type: weapon
+- frequency: common
+  issue: 330
+  name: quiet dagger (master)
+  price: 59300
+  subtype: melee
+  type: weapon
+- issue: 330
+  name: requiem jar
+  price: 3300
+  type: wondrous item
+- issue: 330
+  name: ring of stalking
+  price: 56000
+  type: ring
+- issue: 330
+  name: rod of deadly function
+  price: 60000
+  type: rod
+- issue: 330
+  name: goggles of scrutiny
+  price: 12000
+  type: wondrous item
+- issue: 333
+  name: armbands of prestidigitation
+  price: 11700
+  type: wondrous item
+- issue: 333
+  name: battleplate
+  price: 31050
+  type: armor
+- charges: -1
+  issue: 333
+  name: devil's paste
+  price: 8000
+  type: wondrous item
+- frequency: common
+  issue: 333
+  name: moonrat's bane
+  price: 15530
+  subtype: melee
+  type: weapon
+- issue: 333
+  name: misleading necklace
+  price: 42400
+  type: wondrous item
+- issue: 333
+  name: ring of gnomekind
+  price: 20000
+  type: ring
+- issue: 333
+  name: tiara of shadow blending
+  price: 30000
+  type: wondrous item
+- charges: -1
+  issue: 334
+  name: caltrop of the captain
+  price: 1000
+  type: wondrous item
+- charges: -1
+  issue: 334
+  name: caltrop of the general
+  price: 4000
+  type: wondrous item
+- charges: -1
+  issue: 334
+  name: caltrop of the scout
+  price: 2000
+  type: wondrous item
+- issue: 334
+  name: captain's standard
+  price: 7600
+  type: wondrous item
+- issue: 334
+  name: cavalryman's bridle
+  price: 10000
+  type: wondrous item
+- issue: 334
+  name: cavalryman's saddle
+  price: 8500
+  type: wondrous item
+- issue: 334
+  name: cavalryman's spurs
+  price: 7000
+  type: wondrous item
+- issue: 334
+  name: earrings of the wolf
+  price: 2000
+  type: wondrous item
+- issue: 334
+  name: gauntlets of the siegebreaker
+  price: 11000
+  type: wondrous item
+- issue: 334
+  name: quiver of the north wind
+  price: 12000
+  type: wondrous item
+- issue: 334
+  name: scout's journal
+  price: 1025
+  type: wondrous item
+- issue: 334
+  name: sentry's eye
+  price: 9500
+  type: wondrous item
+- issue: 334
+  name: signalling trumpet
+  price: 5000
+  type: wondrous item
+- issue: 335
+  name: baleful eye of bad juju
+  price: 15000
+  type: wondrous item
+- issue: 335
+  name: black salt rod
+  price: 40000
+  type: rod
+- issue: 335
+  name: capote of dragonfly wings
+  price: 85000
+  type: wondrous item
+- charges: 50
+  issue: 335
+  name: eggsucker staff
+  price: 103922
+  type: staff
+- issue: 335
+  name: mudwalker ring
+  price: 28000
+  type: ring
+- charges: 50
+  issue: 335
+  name: shaker staff of the quondam
+  price: 9600
+  type: staff
+- issue: 335
+  name: star tortoise shield
+  price: 18157
+  type: shield
+- issue: 335
+  name: visard of Semuanya
+  price: 12600
+  type: wondrous item
+- charges: -1
+  issue: 335
+  name: vivifying bacalao
+  price: 1150
+  type: wondrous item
+- issue: 341
+  name: battering ball
+  price: 2000
+  type: wondrous item
+- issue: 341
+  name: clairaudience beetle
+  price: 7500
+  type: wondrous item
+- issue: 341
+  name: flying lantern
+  price: 1600
+  type: wondrous item
+- charges: -1
+  issue: 341
+  name: poison-dart wasp
+  price: 3300
+  type: wondrous item
+- issue: 341
+  name: trick coin
+  price: 350
+  type: wondrous item
+- issue: 340
+  name: basilisk's mask
+  price: 35000
+  type: wondrous item
+- issue: 340
+  name: bracers of the chimera
+  price: 12400
+  type: wondrous item
+- issue: 340
+  name: cloak of the dragon
+  price: 8400
+  type: wondrous item
+- issue: 340
+  name: dryad's helm
+  price: 4000
+  type: wondrous item
+- frequency: common
+  issue: 340
+  name: ettin's club
+  price: 18300
+  subtype: melee
+  type: weapon
+- issue: 340
+  name: eye of the beholder
+  price: 8700
+  type: wondrous item
+- issue: 340
+  name: harpy's cap
+  price: 3000
+  type: wondrous item
+- issue: 340
+  name: kraken's bracelet
+  price: 8000
+  type: wondrous item
+- issue: 340
+  name: ring of the hydra
+  price: 18000
+  type: ring
+- issue: 340
+  name: stirge's gauntlet
+  price: 5305
+  type: wondrous item
+- issue: 340
+  name: unicorn's shield
+  price: 9170
+  type: shield
+- issue: 340
+  name: wyvern's die
+  price: 10000
+  type: wondrous item
+- issue: 342
+  name: amulet of preservation
+  price: 6000
+  type: wondrous item
+- charges: -1
+  issue: 342
+  name: bolt of healing
+  price: 132
+  subtype: ammo
+  type: weapon
+- issue: 342
+  name: calming stone
+  price: 10800
+  type: wondrous item
+- issue: 342
+  name: detoxification orb
+  price: 3000
+  type: wondrous item
+- issue: 342
+  name: gem of poison detection
+  price: 1100
+  type: wondrous item
+- charges: -1
+  issue: 342
+  name: mask
+  price: 3125
+  type: wondrous item
+- issue: 342
+  name: medic hat
+  price: 8000
+  type: wondrous item
+- issue: 342
+  name: rod of disenchantment
+  price: 50000
+  type: rod
+- charges: -1
+  issue: 342
+  name: Tholveg's final prayer
+  price: 3000
+  type: wondrous item
+# All of the worm stuff is kind of wonky, but basically just requires
+# generation of some random extra details. Spellworms are essentially
+# just scrolls with one spell and double price. An easy way to do that
+# is generate a scroll and change the name/multiply the price.
+- issue: 343
+  name: spellworm
+  special: spellworm
+  type: wonder
+- charges: -1
+  issue: 343
+  name: loreworm +2
+  price: 600
+  type: wondrous item
+  special: knowledge
+- charges: -1
+  issue: 343
+  name: loreworm +5
+  price: 3750
+  type: wondrous item
+  special: knowledge
+- charges: -1
+  issue: 343
+  name: loreworm +10
+  price: 15000
+  type: wondrous item
+  special: knowledge
+- charges: -1
+  issue: 344
+  name: elixir of aranea ichor
+  price: 1400
+  type: potion
+- issue: 345
+  name: cloud giant harp
+  price: 4860
+  type: wondrous item
+- charges: 50
+  issue: 345
+  name: Hel's death staff
+  price: 59310
+  type: staff
+- issue: 345
+  name: ice armor of the northlands
+  price: 58650
+  type: armor
+- issue: 345
+  name: fire armor of the northlands (fire variant)
+  price: 58650
+  type: armor
+- issue: 345
+  name: fire armor of the northlands (fire variant)
+  price: 58650
+  type: armor
+- issue: 345
+  name: ring of the frost giant jarl
+  price: 22200
+  type: ring
+- frequency: uncommon
+  issue: 345
+  name: sword of giant rending
+  price: 72335
+  subtype: melee
+  type: weapon
+- issue: 347
+  name: boots of fire walking
+  price: 37500
+  type: wondrous item
+- issue: 347
+  name: bracers of whirlwind
+  price: 9800
+  type: wondrous item
+- charges: -1
+  issue: 347
+  name: candle of sweet breezes
+  price: 1500
+  type: wondrous item
+- issue: 347
+  name: choker of the sirens
+  price: 43600
+  type: wondrous item
+# Elemental elixirs require a randomly selected element name
+- charges: -1
+  issue: 347
+  name: elemental elixir
+  special: element
+  price: 1400
+  type: wondrous item
+- issue: 347
+  name: gloves of burrowing
+  price: 81000
+  type: wondrous item
+- issue: 347
+  name: Lascit's aquatic earring
+  price: 19500
+  type: wondrous item
+- issue: 347
+  name: ring of immolation
+  price: 56000
+  type: ring
+- issue: 347
+  name: sling boulder
+  price: 367
+  subtype: ammo
+  type: weapon

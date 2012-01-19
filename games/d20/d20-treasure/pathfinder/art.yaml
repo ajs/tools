@@ -1,0 +1,57 @@
+# The art selection is done first by price, and then a name is randomly
+# selected. Note that there is no such thing as "minor art", the
+# only difference between CR1 art loot and CR20 art loot is how many
+# items the treasure-by-cr table will call for.
+# Unlike most files, the prices in this file are strings that must be
+# parsed. They are in adb*c format where a, b and c are integers with
+# a representing the number of dice, b representing the number of sides
+# on the dice and c being a multiplier.
+---
+- 10
+- price: 1d10*10
+  art_level: 0
+  special: art_name
+- 25
+- price: 3d6*10
+  art_level: 1
+  special: art_name
+- 40
+- price: 1d6*100
+  art_level: 2
+  special: art_name
+- 50
+- price: 1d10*100
+  art_level: 3
+  special: art_name
+- 60
+- price: 2d6*100
+  art_level: 4
+  special: art_name
+- 70
+- price: 3d6*100
+  art_level: 5
+  special: art_name
+- 80
+- price: 4d6*100
+  art_level: 6
+  special: art_name
+- 85
+- price: 5d6*100
+  art_level: 7
+  special: art_name
+- 90
+- price: 1d4*1000
+  art_level: 8
+  special: art_name
+- 95
+- price: 1d6*1000
+  art_level: 9
+  special: art_name
+- 99
+- price: 2d4*1000
+  art_level: 10
+  special: art_name
+- 100
+- price: 2d6*1000
+  art_level: 11
+  special: art_name

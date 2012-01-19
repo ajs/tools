@@ -1,0 +1,74 @@
+---
+-
+  -
+    - 50
+    - 25
+    - -1
+  - name: mithral shirt
+    price: 1100
+  -
+    - 80
+    - 45
+    - -1
+  - name: dragonhide plate
+    price: 3300
+  -
+    - 100
+    - 57
+    - -1
+  - name: elven chain
+    price: 4150
+  -
+    - -1
+    - 67
+    - -1
+  - name: rhino hide
+    price: 5165
+  -
+    - -1
+    - 82
+    - 10
+  - name: adamantine breastplate
+    price: 10200
+  -
+    - -1
+    - 97
+    - 20
+  - name: dwarven plate
+    price: 16500
+  -
+    - -1
+    - 100
+    - 32
+  - name: banded mail of luck
+    price: 18900
+  -
+    - -1
+    - -1
+    - 50
+  - name: celestial armor
+    price: 22400
+  -
+    - -1
+    - -1
+    - 60
+  - name: plate armor of the deep
+    price: 24650
+  -
+    - -1
+    - -1
+    - 75
+  - name: breastplate of command
+    price: 25400
+  -
+    - -1
+    - -1
+    - 90
+  - name: mithral full plate of speed
+    price: 26500
+  -
+    - -1
+    - -1
+    - 100
+  - name: demon armor
+    price: 52260

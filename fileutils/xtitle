@@ -1,0 +1,8 @@
+#!/usr/bin/perl
+
+$esc = "\033";
+$bel = "\007";
+$begin="$esc\]2;";
+$end=$bel;
+
+print $begin, join(" ",@ARGV), $end;

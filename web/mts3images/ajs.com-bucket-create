@@ -1,0 +1,37 @@
+#!/usr/bin/perl
+
+use Net::Amazon::S3;
+use strict;
+use DBI;
+
+use aws_s3; # local module for fetching secret AWS data
+
+my $aws = aws_s3::fetch();
+my $s3 = Net::Amazon::S3->new(
+    {
+	aws_access_key_id     => $aws->{aws_access_key_id},
+	aws_secret_access_key => $aws->{aws_secret_access_key},
+	retry                 => 1,
+    }
+) or die "Cannot connect to S3: $!";
+
+my @buckets = qw(publicstorage privatestorage);
+my $domain = 'ajs.com';
+my $response = $s3->buckets;
+for my $bucket_prefix (@buckets) {
+    my $bucket_name = "$bucket_prefix.$domain";
+    my $bucket = $s3->add_bucket({ bucket=> $bucket_name }) or s3die($s3);
+    if ($bucket_prefix =~ /public/) {
+	$bucket->set_acl({acl_short=>'public-read'}) or s3die($s3);
+    }
+    print "Created $bucket_name\n";
+}
+
+exit (0);
+
+sub s3die {
+    my $s3 = shift;
+    die $s3->err() . ": " . $s3->errstr();
+}
+
+__END__

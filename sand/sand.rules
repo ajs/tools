@@ -1,0 +1,73 @@
+
+rule program {
+	^ <statement>* $
+}
+
+rule statement {
+	\s* ( <block_like_stmt> | <expr> | <directive> )? <eos>
+}
+
+rule linespace { :token (! \S | \n)* }
+
+rule eos { ( \# \N*: ) <?linespace> [ \; | \n | <before $ > ] }
+
+rule block_like_stmt {
+	<subdef> | <ruledef> | <block>
+}
+
+rule subdef {
+	:sigspace
+	  <subtype>? sub <identifier>? <signature>? <block>?
+	  # Yes, "my $s = sub;" is valid, and gives an unimplemented stub
+	| <subtype>? method <identifier>? <signature>? <block>?
+}
+
+rule subtype { :sigspace ( our | my ) <type>?  }
+
+rule ruledef {
+	:sigspace
+	  <ruletype>? rule <identifier>? <ruleblock>?
+	| <ruletype>? rx                 <ruleblock>?
+}
+
+rule ruletype { our | my }
+
+rule ruleblock { :sigspace \{ <rulebody> \} }
+
+rule rulebody { <rulepragma>* <rulematch> }
+
+rule rulematch {
+	\s* [<negate> \s*]?
+		[ <ruletok> [ \s* <rulecount> [\?|\!]? ] (\s*) ]
+}
+
+rule ruletok {
+	  \( <rulematch> \)
+	| \[ <rulematch> \]
+	| <ruleclosure>
+	| \\ \\
+	| \\ \W
+	| \< <subrule> \>
+}
+
+rule rulecount {
+	  \*\* \s* <ruleclosure>
+	| [\*|\?|\+]
+}
+
+rule rulepragma {
+	\: [ sigspace | ratchet ]
+}
+
+rule subrule {
+	\s* [ \!\?? | \?\!? ] \s* [
+		  (\w+)
+		| <ruleclosure>
+	]
+}
+
+rule ruleclosure {
+	:sigspace
+	\{ <statement>* \}
+}
+

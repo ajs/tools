@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+
+use Net::Amazon::S3;
+use strict;
+use DBI;
+
+use aws_s3; # local module for fetching secret AWS data
+
+my $db_name = 'mt_3d6';
+my $db_host = 'localhost';
+my $db_user = 'root';
+my $db_pass = undef;
+my $dsn = "DBI:mysql:database=$db_name;host=$db_host";
+my $dbh = DBI->connect($dsn,$db_user,$db_pass) or
+    die "Cannot connect to $dsn: $DBI::errstr";
+
+my $aws = aws_s3::fetch();
+#use Data::Dumper;
+#die Dumper($aws);
+
+my $s3 = Net::Amazon::S3->new(
+    {
+	aws_access_key_id     => $aws->{aws_access_key_id},
+	aws_secret_access_key => $aws->{aws_secret_access_key},
+	retry                 => 1,
+    }
+) or die "Cannot connect to S3: $!";
+
+my $image_bucket_name = '3d6.net';
+my $image_bucket = undef;
+my $response = $s3->buckets;
+foreach my $bucket (@{$response->{buckets}}) {
+    if ($bucket->bucket() eq $image_bucket_name) {
+	$image_bucket = $bucket;
+	last;
+    }
+}
+
+if (!defined $image_bucket) {
+    print "Cannot find $image_bucket_name, creating it...\n";
+    $image_bucket = $s3->add_bucket({ bucket=>$image_bucket_name }) or s3die($s3);
+} else {
+    $image_bucket->set_acl({acl_short=>'public-read'}) or s3die($s3);
+    print "Image bucket $image_bucket_name exists\n";
+}
+
+my $sql = q{
+    select *
+	from mt_asset
+	where
+	    asset_url like '\%r/%' and
+	    asset_mime_type is not null
+};
+our %blog_paths;
+my $prefix;
+my $sth = $dbh->prepare($sql) or die "Cant prep asset select: $DBI::errstr";
+$sth->execute() or die $DBI::errstr;
+my $sth2;
+while((my $row = $sth->fetchrow_hashref())) {
+    my $blog_id = $row->{asset_blog_id};
+    if (!($prefix = $blog_paths{$blog_id})) {
+	$sth2 = $dbh->prepare(q{select blog_site_path from mt_blog where blog_id = ?}) or die $DBI::errstr;
+	$sth2->execute($blog_id) or die $DBI::errstr;
+	if (($prefix)=($sth2->fetchrow_array())) {
+	    $blog_paths{$blog_id} = $prefix;
+	} else {
+	    die "Cannot get blog prefix path for blog \#$blog_id\n";
+	}
+	print "Prefix for blog id $blog_id is $prefix";
+    }
+    (my $blog_name = $prefix) =~ s/^.*\///; # just the trailing name
+    my $path = $row->{asset_file_path};
+    my $file_name = "$blog_name/$path";
+    $file_name =~ s/\%r\/?//;
+    my $url = $row->{asset_url};
+    $path =~ s/\%r/$prefix/g;
+    $url =~ s|\%r|http://3d6.net.s3.amazonaws.com/$blog_name|g;
+    print "Asset: moveing $path\n\tto $url\n";
+
+    $image_bucket->add_key_filename($file_name,$path,
+	{content_type => $row->{asset_mime_type}}) or s3die($s3);
+    $image_bucket->set_acl({key=>$file_name, acl_short=>'public-read'})
+	or s3die($s3);
+    print "Done uploading and making public.\n";
+    $sth2 = $dbh->prepare(q{
+	update mt_asset set asset_url = ? where asset_id = ?
+    }) or die $DBI::errstr;
+    $sth2->execute($url,$row->{asset_id}) or die $DBI::errstr;
+}
+
+exit (0);
+
+sub s3die {
+    my $s3 = shift;
+    die $s3->err() . ": " . $s3->errstr();
+}
+
+__END__

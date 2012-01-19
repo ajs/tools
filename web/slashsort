@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+
+use DB_File;
+use LWP::Simple;
+
+$markup = '(?:\<[^\>]*\>|\s)*';
+$slash = get("http://slashdot.org/");
+while($slash =~ s{
+		\<img\s+SRC="\S+\/slc\.gif".*?
+		\<b\>(.*?)\</b\>.*?
+		\<a\s+HREF="([^>"]+)"[^>]*\>${markup}Read\s+More\.\.\.
+		${markup}\|${markup}
+		(?:\d+\s+bytes\s+in\s+body${markup}\|${markup})?
+		\d+${markup}of${markup}(\d+)${markup}comments
+       }{}six) {
+	my $headline = $1;
+	my $url = $2;
+	my $comments = $3;
+	$headline =~ s/\<.*?\>//g;
+	$headline =~ s/\s+/ /g;
+	$headlines{$headline} = {url => $url, comments => $comments};
+}
+
+foreach $hl (sort {$headlines{$b}{comments} <=> $headlines{$a}{comments}}
+		grep {$headlines{$_}{comments} > 600} keys %headlines) {
+	my $url = $headlines{$hl}{url};
+	$url =~ s{^/+}{http://};
+	my $comments = $headlines{$hl}{comments};
+	my %db;
+	tie %db, 'DB_File', "/home/ajs/tmp/slashheadlines", O_CREAT|O_RDWR;
+	if (!exists $db{$hl}) {
+		$db{$hl} = 1;
+		open(S,"|/usr/lib/sendmail -f slashdot\@ajs.com pageajs ajs") or
+			die "$0: Cannot fork: $!\n";
+		print S "From: slashdot\@ajs.com\nTo: pageajs\@ajs.com\n";
+		print S "Subject: /. $comments\n\n$hl\n$url\n";
+		close S;
+	}
+	untie %db;
+}
+
+__END__

@@ -1,0 +1,141 @@
+# Armor special abilities. Not much of interest here other than
+# the fact that each may map to a price in gp or a plus (bonus)
+---
+-
+  -
+    - 25
+    - 5
+    - 3
+  - name: glamered
+    price: 2700
+  -
+    - 32
+    - 8
+    - 4
+  - name: fortification (light)
+    plus: 1
+  -
+    - 52
+    - 11
+    - -1
+  - name: slick
+    price: 3750
+  -
+    - 92
+    - 17
+    - -1
+  - name: shadow
+    price: 3750
+  -
+    - 96
+    - 19
+    - -1
+  - name: spell resistance (13)
+    plus: 2
+  -
+    - 97
+    - 29
+    - 7
+  - name: slick (improved)
+    price: 15000
+  -
+    - 98
+    - 49
+    - 13
+  - name: shadow (improved)
+    price: 15000
+  -
+    - -1
+    - 74
+    - 28
+  - name: energy resistance
+    price: 18000
+  -
+    - -1
+    - 79
+    - 33
+  - name: ghost touch
+    plus: 3
+  -
+    - -1
+    - 84
+    - 35
+  - name: invulnerability
+    plus: 3
+  -
+    - -1
+    - 89
+    - 40
+  - name: fortification (moderate)
+    plus: 3
+  -
+    - -1
+    - 94
+    - 42
+  - name: spell resistance (15)
+    plus: 3
+  -
+    - -1
+    - 99
+    - 43
+  - name: wild
+    plus: 3
+  -
+    - -1
+    - -1
+    - 48
+  - name: slick (greater)
+    price: 33750
+  -
+    - -1
+    - -1
+    - 58
+  - name: shadow (greater)
+    price: 33750
+  -
+    - -1
+    - -1
+    - 83
+  - name: energy resistance (improved)
+    price: 42000
+  -
+    - -1
+    - -1
+    - 88
+  - name: spell resistance (17)
+    plus: 4
+  -
+    - -1
+    - -1
+    - 89
+  - name: etherealness
+    price: 49000
+  -
+    - -1
+    - -1
+    - 90
+  - name: undead controlling
+    price: 49000
+  -
+    - -1
+    - -1
+    - 92
+  - name: fortification (heavy)
+    plus: 5
+  -
+    - -1
+    - -1
+    - 94
+  - name: spell resistance (19)
+    plus: 5
+  -
+    - -1
+    - -1
+    - 99
+  - name: energy resistance (greater)
+    price: 66000
+  -
+    - 100
+    - 100
+    - 100
+  - reroll: 1

@@ -1,0 +1,49 @@
+# This is the core lookup table which is consulted for ALL magic items
+# to determine what type of item should be generated.
+---
+-
+  -
+    - 4
+    - 10
+    - 10
+  - special: magic_armor
+  -
+    - 9
+    - 20
+    - 20
+  - special: magic_weapon
+  -
+    - 44
+    - 30
+    - 25
+  - special: magic_potion
+  -
+    - 46
+    - 40
+    - 35
+  - special: magic_ring
+  -
+    - -1
+    - 50
+    - 45
+  - special: magic_rod
+  -
+    - 81
+    - 65
+    - 55
+  - special: magic_scroll
+  -
+    - -1
+    - 68
+    - 75
+  - special: magic_staff
+  -
+    - 91
+    - 83
+    - 80
+  - special: magic_wand
+  -
+    - 100
+    - 100
+    - 100
+  - special: wondrous_item

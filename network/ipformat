@@ -1,0 +1,189 @@
+#!/usr/bin/perl
+
+use strict;
+use vars qw($usage $ip $mask $bits $format $arg);
+
+$0 =~ s/^.*\///;
+$usage = "Usage: $0 [--ip <addr>] [--netmask <mask>] [--bits <number>]
+	[<format>]\n";
+
+$ip = undef;
+$mask = undef;
+$bits = 24;
+$format = '%i(%h/%b)';
+
+while(defined($arg = shift @ARGV)) {
+  if ($arg =~ s/^-//) {
+    if ($arg eq '-ip' || $arg eq 'i') {
+      die $usage unless defined($ip = shift @ARGV);
+      die "$0: Bad IP: $ip\n" unless parse_ip($ip);
+    } elsif ($arg eq '-netmask' || $arg eq 'n') {
+      die $usage unless defined($mask = shift @ARGV);
+      die "$0: Bad netmask: $mask\n" unless parse_mask($mask)
+    } elsif ($arg eq '-bits' || $arg eq 'b') {
+      die $usage unless defined($bits = shift @ARGV);
+      die "$0: Bad number of bits: $bits\n" unless parse_bits($bits);
+    } elsif ($arg eq '-interface' || $arg eq 'f') {
+      read_interface(shift @ARGV);
+    } elsif ($arg eq '-parse') {
+      # Parse output of ifconfig, eg:
+      # inet addr:63.107.91.98  Bcast:63.107.91.111  Mask:255.255.255.240
+      my $tmp;
+      die $usage unless defined($tmp = shift @ARGV);
+      if ($tmp =~ /addr:\s*([\d.]+)\s+Bcast:\s*([\d.]+)\s+Mask:([\d.]+)/i) {
+      	my($tmp_ip,$tmp_mask) = ($1,$2);
+	$ip = $tmp_ip;
+	parse_ip($ip);
+	parse_mask($tmp_mask);
+      }
+    } else {
+      die "Invalid argument: -$arg\n$usage";
+    }
+  } else {
+    $format = $arg;
+    die $usage if @ARGV;
+  }
+}
+
+
+die $usage unless defined $ip;
+
+ip_printf($format,$ip,$mask,$bits);
+
+exit(0);
+
+sub parse_interface {
+	my $if = shift;
+	local *P;
+	$ENV{PATH}="/sbin:/usr/sbin:$ENV{PATH}";
+	open P,"ifconfig $if 2>&1 |" or die "$0: Cannot fork: $!";
+	while(<P>) {
+		if (/inet addr:\s*(\S+).*Mask:\s*(\S+)/) {
+			my $i = $1;
+			my $m = $2;
+			return parse_ip($i) && parse_mask($m);
+		}
+	}
+	close P;
+	return 0;
+}
+
+sub parse_ip {
+	my $newip = shift;
+	my $re_octet = qr/[12]?\d\d?/;
+	my $re_ip = qr/$re_octet(?:\.$re_octet){0,3}/;
+	my @oct;
+	if ($newip =~ /^$re_ip$/) {
+		@oct = split /\./, $newip;
+	} elsif ($newip =~ /($re_ip)\/(\d+)/) {
+		$bits = $2;
+		@oct = split /\./, $1, 4;
+	} else {
+		return 0;
+	}
+	$ip = ($oct[0]<<24) + ($oct[1]<<16) + ($oct[2]<<8) + ($oct[3]);
+	if (defined $bits) {
+		$mask = calc_mask($bits);
+	} else {
+		$mask = 0xffffff00 unless defined $mask;
+	}
+	return 1;
+}
+
+sub calc_mask {
+	my $bits = shift;
+	my $mask = 0;
+	for(my $i=0;$i<$bits;$i++) {
+		$mask += (1<<(31-$i));
+	}
+	return $mask;
+}
+
+sub parse_mask {
+	my $nm = shift;
+	if ($nm =~ /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/) {
+		$mask = ($1<<24) + ($2<<16) + ($3<<8) + $4;
+	} elsif ($nm =~ /^(?:0x)?([0-9a-f]{8})$/) {
+		$mask = hex("0x".$1);
+	} else {
+		return 0;
+	}
+	$bits = 32;
+	die $mask;
+	for(my $i=0;$i<32;$i++) {
+		last if $mask & (1<<$i);
+		$bits--;
+	}
+	return 1;
+}
+
+sub parse_bits {
+	$mask = undef;
+	$bits = shift;
+}
+
+sub ip_printf {
+	print ip_sprintf(@_), "\n";
+}
+
+sub ip_sprintf {
+	my $format = shift;
+	my $ip = shift;
+	my $mask = shift;
+	my $bits = shift;
+	my %actions = (
+		# n bits
+		b => sub { $bits },
+		# classfull addressing class identifier (A, B, C, D, E)
+		c => sub {
+			$ip & 0x80000000 ?
+				($ip & 0x40000000 ?
+					($ip & 0x20000000 ?
+						($ip & 0x10000000 ? 'E' :
+						'D') :
+					'C') :
+				'B') :
+			'A' },
+		# A host address (n)
+		H => sub { hex_ip(($ip & $mask) + (~$mask & $_[0])) },
+		h => sub { dot_ip(($ip & $mask) + (~$mask & $_[0])) },
+		# IP address
+		I => sub { hex_ip($ip) },
+		i => sub { dot_ip($ip) },
+		# netmask
+		N => sub { hex_ip($mask) },
+		n => sub { dot_ip($mask) },
+		# Broadcast address
+		X => sub { hex_ip(($ip & $mask) + (~$mask & 0xffffffff)) },
+		x => sub { dot_ip(($ip & $mask) + (~$mask & 0xffffffff)) },
+		# Just a %
+		'%' => sub { '%' }
+	);
+
+	$format =~ s{
+		\%(-?\d*)(\S)
+	}{
+		exists($actions{$2})?&{$actions{$2}}(($1?$1:0)+0):ferr($1,$2)
+	}egx;
+	return $format;
+}
+
+sub ferr {
+	my $count = shift;
+	my $token = shift;
+	die "ip_sprintf: Unknown format string: \%$count$token\n";
+}
+
+sub dot_ip {
+	my $ip = shift;
+	return sprintf("%d.%d.%d.%d",
+		($ip&0xff000000)>>24,
+		($ip&0x00ff0000)>>16,
+		($ip&0x0000ff00)>>8,
+		$ip&0x000000ff);
+}
+
+sub hex_ip {
+	my $ip = shift;
+	return sprintf "%08x", $ip;
+}

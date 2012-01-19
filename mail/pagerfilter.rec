@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+
+my $message = parsemail();
+open(F,"<$ENV{HOME}/.mailpagers") ||
+  die("$0: Cannot open .mailpagers: $!\n");
+
+while(<F>) {
+  next if /^\s*($|\#)/;
+  s/^\s+//; s/\s+$//;
+  ($who, $number) = split /\s+/, $_, 2;
+  $number =~ s/[\#\s].*//;
+  if ($who =~ /^x-(urgent)?pageme$/i) {
+    print P ":0 cH\n* ^$who:\n";
+    print P "| \$HOME/bin/pagenet --message $number\n\n";
+    print P ":0 cH\n* ^Subject:.*$who\n";
+    print P "| \$HOME/bin/pagenet --message $number\n\n";
+  } else {
+    print P ":0 cH\n* ^From: .*$who\n";
+    print P "| \$HOME/bin/pagenet --message $number\n\n";
+  }
+}
+close F;
+close P;
+
+sub parsemail {
+	local $/ = undef;
+	local $_ = <STDIN>;
+	my $mess = {};
+	my $headers = $_;
+	$headers =~ s/\r?\n\r?\n(.*)//s;
+	$mess->{body} = $1;
+	$mess->{headers} = $headers;
+	foreach $name (qw(subject to from cc)) {
+		$mess->{$name} = fetchheader($headers,$name);
+	}
+	return $mess;
+}
+
+sub fetchheader {
+	my $headers = shift;
+	my $name = shift;
+	my @matches = ();
+	while ($headers =~ /^\Q$name\E:\s*(.*(\r?\n\s+(.*))*)/mig) {
+		my $match = $1;
+		$match =~ s/\s*\n\s*/ /g;
+		push @matches, $match;
+	}
+	if (@matches == 0) {
+		return undef;
+	} elsif (@matches == 1) { # Force context behavior
+		return $matches[0];
+	} else {
+		return @matches;
+	}
+}

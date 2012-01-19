@@ -1,0 +1,109 @@
+---
+-
+  -
+    - 15
+    - 10
+    - -1
+  - name: psychokinetic
+    plus: 1
+  -
+    - 45
+    - 25
+    - 9
+  - name: dissipater
+    plus: 1
+  -
+    - 55
+    - 30
+    - 12
+  - name: lucky
+    plus: 1
+  -
+    - 70
+    - 40
+    - 17
+  - name: sundering
+    plus: 1
+  -
+    - 80
+    - 46
+    - 21
+  - name: power storing
+    plus: 1
+  -
+    - 99
+    - 56
+    - 30
+  - name: collision
+    plus: 2
+  -
+    - -1
+    - 65
+    - 37
+  - name: mindcrusher
+    plus: 2
+  -
+    - -1
+    - 71
+    - 41
+  - name: psychokinetic burst
+    plus: 2
+  -
+    - -1
+    - 75
+    - 49
+  - name: suppression
+    plus: 2
+  -
+    - -1
+    - 78
+    - 58
+  - name: psibane
+    plus: 2
+  -
+    - -1
+    - 81
+    - 61
+  - name: parrying
+    price: 8000
+  -
+    - -1
+    - 85
+    - 65
+  - name: manifester
+    price: 16000
+  -
+    - -1
+    - 88
+    - 71
+  - name: bodyfeeder
+    plus: 3
+  -
+    - -1
+    - 91
+    - 77
+  - name: mindfeeder
+    plus: 3
+  -
+    - -1
+    - 93
+    - 83
+  - name: soulbreaker
+    plus: 3
+  -
+    - -1
+    - 94
+    - 86
+  - name: psychic
+    price: 35000
+  -
+    - -1
+    - 95
+    - 90
+  - name: coup de grace
+    plus: 5
+  -
+    - 100
+    - 100
+    - 100
+  - special: two_abilities

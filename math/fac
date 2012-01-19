@@ -1,0 +1,66 @@
+#!/usr/bin/perl
+#
+# A command-line factorization program based on BigInt and BigFloat.
+#
+# This is the slow, dumb way of doing it, but it gets the job done in
+# finite time for all cases that you have sufficient VM for.
+#
+# Written in 1999,2000 (c) by Aaron Sherman <ajs@ajs.com>
+
+use Math::BigInt;
+use Math::BigFloat;
+
+$MAXINT = 2**31+(2**31-1);
+$doint = 0;
+$0=~s/^.*\///;
+$usage = "Usage: $0 [-i|--int] <number> ...\n";
+
+while(defined($arg = shift @ARGV)) {
+  if ($arg =~ s/^-//) {
+    if ($arg eq 'i' || $arg eq '-int') {
+      $doint = 1;
+    } else {
+      die "$0: Unknown argument -$arg\n$usage";
+    }
+  } else {
+    @numbers = ($arg,@ARGV);
+    last;
+  }
+}
+
+if ($doint) {
+  eval q{
+    package Math::BigInt;
+    sub new {int $_[0]}
+  };
+}
+
+foreach $n (@numbers) {
+	print "$n: ", join(", ", fac(Math::BigInt->new($n))), "\n";
+}
+
+sub fac {
+  my $n = shift;
+  my $m = shift;
+  my $s;
+  $m = 2 unless defined $m;
+  if ($n < $MAXINT) {
+    if (ref($n) || ref($m)) {
+      $n = int($n);
+      $m = int($m);
+    }
+    return (fac($n/2), 2) if $m == 2 && $n%2 == 0;
+    $s = int sqrt $n;
+  } else {
+    return (fac($n/2), 2) if $m == 2 && $n%2 == 0;
+    $s = int Math::BigFloat->new($n)->fsqrt;
+  }
+  $m++ if $m == 2;
+  for(my $i = $m;$s >= $i;$i+=2) {
+    if ($n%$i == 0) {
+      return ($i, fac($n/$i, $i));
+    }
+  }
+  return $n;
+}
+

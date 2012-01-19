@@ -1,0 +1,66 @@
+set terminal svg size [% image_width %] [% image_height %]
+set output "[% svg_path %]"
+set size 1,1
+set origin 0,0
+[% IF image_width >= 400 %]
+set multiplot
+set size 1,0.8
+set origin 0,0.2
+set format y "%4g"
+[% END %]
+set xdata time
+set timefmt "%Y-%m-%d"
+set format x "%m/%d"
+set xrange ["[%start_date%]":"[%end_date%]"]
+[% IF reverse_video %]
+set border 31 lt rgb "#FFFFFF"
+set style line 10 lt rgb "#FFFFFF"
+[% ELSE %]
+set style line 10 lt rgb "#000000"
+[% END %]
+[% IF image_width <= 600 %]
+set nokey
+set xtics rotate
+set xtics nomirror
+set ytics nomirror
+set tics scale 0.8
+set xtics font "Helvetica,10"
+set ytics font "Helvetica,8"
+set grid y
+set noxmtics
+set noymtics
+[% ELSE %]
+set xlabel "Date" textcolor lt 10
+set title "[%item.name%]\n20-day rolling stats" textcolor lt 10
+set grid
+[% END %]
+set ylabel "[%units%]" textcolor lt 10
+[% FOREACH g = gp_extra %][% g %]
+[% END %]
+[% gpopt="smooth bezier with lines" %]
+plot "-" using 1:2 [% IF image_width > 600 %]title "75th percentile"[% END %] [%gpopt%] lw 2, "-" using 1:3 [% IF image_width > 600 %]title "50th percentile"[% END %] [%gpopt%] lw 4, "-" using 1:4 [% IF image_width > 600 %]title "25th percentile"[% END %] [%gpopt%] lw 2
+[% FOREACH p = prices_list %][% FOREACH row = p %] [% FOREACH col = row %][% col %] [% END %]
+[% END %]e
+[% END %]
+
+[% IF image_width >= 400 %]
+set size 1,0.2
+set origin 0,0
+set yrange [0:]
+set format y "%4g"
+set xdata time
+set timefmt "%Y-%m-%d"
+set format x "%m/%d"
+set xrange ["[%start_date%]":"[%end_date%]"]
+unset grid
+unset xlabel
+unset title
+[% IF image_width <= 600 %]
+set ytics (0)
+[% END %]
+set ylabel "Count" textcolor lt 10
+set noxtics
+plot "-" using 1:2 notitle with imp
+[% FOREACH c = count_list %] [% FOREACH r = c %][% r %] [% END %]
+[% END %]e
+[% END %]

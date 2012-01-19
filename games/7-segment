@@ -1,0 +1,6 @@
+#!/usr/bin/perl -nlaF''
+@n=(unpack'c*','w$]m.k{%o')[@F];for$o(1,8,64){print
+map{$".(a($_&$o)x3)."   "}@n;$o<9&&print
+map{a($_&$o*2),"   ",a($_&$o*4),"  "}@n
+for 1..3}sub
+a{$_[0]?"#":$"}

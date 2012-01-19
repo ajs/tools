@@ -1,0 +1,2473 @@
+This loot was generated with the assumtion that 10 out of the 13.3 encounters
+per level would have an average of 1 equal-CR treasure horde. Thus, there are
+200 treasures generated, 10 for each level.
+
+Psionic, cursed, large, Dragon magazine and non-standard loot are all included.
+
+**************************************
+
+Level 1
+
+coin: 0pp 0gp 400sp 0cp (40gp value)
+Total value: 40gp
+----
+coin: 0pp 75gp 41sp 90cp (80gp value)
+Total value: 80gp
+----
+coin: 0pp 0gp 793sp 0cp (79gp 3sp value)
+Total value: 79gp 3sp
+----
+coin: 0pp 0gp 800sp 0cp (80gp value)
+Total value: 80gp
+----
+coin: 0pp 18gp 11sp 90cp (20gp value)
+mundane: antitoxin (4) (200gp)
+Total value: 220gp
+Resale value: 120gp
+----
+coin: 0pp 18gp 11sp 90cp (20gp value)
+Total value: 20gp
+----
+coin: 0pp 57gp 0sp 34cp (57gp 3sp 4cp value)
+Total value: 57gp 3sp 4cp
+----
+coin: 0pp 74gp 56sp 40cp (80gp value)
+Total value: 80gp
+----
+coin: 3pp 32gp 60sp 36cp (68gp 3sp 6cp value)
+Total value: 68gp 3sp 6cp
+----
+coin: 0pp 85gp 45sp 50cp (90gp value)
+mundane: acid (6) (60gp)
+Total value: 150gp
+Resale value: 120gp
+====
+Total coins: 3pp 359gp 2,217sp 430cp
+Grand total: 875gp
+Sales grand total: 745gp
+
+**************************************
+
+Level 2
+
+coin: 0pp 200gp 0sp 0cp (200gp value)
+Total value: 200gp
+----
+mundane: climber's kit (80gp)
+Total value: 80gp
+Resale value: 40gp
+----
+coin: 28pp 5gp 46sp 40cp (290gp value)
+Total value: 290gp
+----
+coin: 1pp 83gp 64sp 81cp (100gp 2sp 1cp value)
+melee, mundane: large masterwork mace, light (305gp)
+Total value: 405gp 2sp 1cp
+Resale value: 252gp 7sp 1cp
+----
+coin: 0pp 150gp 0sp 0cp (150gp value)
+melee, mundane: medium masterwork mace, light (305gp)
+Total value: 455gp
+Resale value: 302gp 5sp
+----
+coin: 0pp 241gp 0sp 0cp (241gp value)
+Total value: 241gp
+----
+coin: 0pp 230gp 0sp 0cp (230gp value)
+Total value: 230gp
+----
+coin: 27pp 22gp 0sp 54cp (292gp 5sp 4cp value)
+Total value: 292gp 5sp 4cp
+----
+coin: 0pp 190gp 0sp 0cp (190gp value)
+gem: silver pearl (90gp)
+gem: rhodochrosite (9gp)
+gem: large pale blue topaz (5,000gp)
+ranged, mundane: medium masterwork crossbow, light (335gp)
+Total value: 5,624gp
+Resale value: 5,456gp 5sp
+----
+coin: 23pp 62gp 12sp 28cp (293gp 4sp 8cp value)
+Total value: 293gp 4sp 8cp
+====
+Total coins: 79pp 1,183gp 122sp 203cp
+Grand total: 8,111gp 2sp 3cp
+Sales grand total: 7,598gp 7sp 3cp
+
+**************************************
+
+Level 3
+
+coin: 0pp 312gp 0sp 0cp (312gp value)
+armor, mundane: medium chain shirt (100gp)
+armor, mundane: medium chain shirt (100gp)
+armor, mundane: medium half-plate (600gp)
+Total value: 1,112gp
+Resale value: 712gp
+----
+coin: 34pp 58gp 19sp 10cp (400gp value)
+armor, mundane: medium masterwork heavy wooden shield (157gp)
+ranged, mundane: medium masterwork axe, throwing (308gp)
+melee, mundane: medium masterwork dagger (302gp)
+Total value: 1,167gp
+Resale value: 783gp 5sp
+----
+coin: 30pp 86gp 20sp 36cp (388gp 3sp 6cp value)
+bear's endurance (potion) (300gp)
+Total value: 688gp 3sp 6cp
+Resale value: 538gp 3sp 6cp
+----
+coin: 3pp 69gp 4sp 60cp (100gp value)
+armor, mundane: medium masterwork studded leather (175gp)
+armor, mundane: medium full plate (1,500gp)
+ranged, mundane: medium masterwork javelin (301gp)
+Total value: 2,076gp
+Resale value: 1,088gp
+----
+Total value: 0gp
+----
+coin: 0pp 110gp 0sp 0cp (110gp value)
+gem: large jet (300gp)
+gem: onyx (70gp)
+gem: black pearl (200gp)
+arcane scroll containing: (62gp 5sp value)
+	1. flare (lvl 0, cast 1) (12gp 5sp)
+	2. grease (lvl 1, cast 1) (25gp)
+	3. expeditious retreat (lvl 1, cast 1) (25gp)
+Total value: 742gp 5sp
+Resale value: 711gp 2sp 5cp
+----
+coin: 0pp 0gp 1,300sp 0cp (130gp value)
+armor, mundane: medium masterwork heavy wooden shield (157gp)
+mundane: acid (7) (70gp)
+mundane: healer's kit (50gp)
+Total value: 407gp
+Resale value: 268gp 5sp
+----
+coin: 0pp 377gp 0sp 0cp (377gp value)
+Total value: 377gp
+----
+coin: 0pp 95gp 0sp 0cp (95gp value)
+gem: small blue-white diamond (6,000gp)
+mundane: thunderstone (2) (60gp)
+mundane: spyglass (1,000gp)
+Total value: 7,155gp
+Resale value: 6,625gp
+----
+art: tiny brass scepter (80gp)
+amulet of mighty fists +1 (6,000gp)
+Total value: 6,080gp
+Resale value: 3,080gp
+====
+Total coins: 67pp 1,107gp 1,343sp 106cp
+Grand total: 19,804gp 8sp 6cp
+Sales grand total: 14,183gp 6sp 1cp
+
+**************************************
+
+Level 4
+
+coin: 0pp 400gp 0sp 0cp (400gp value)
+misdirection (potion) (300gp)
+Total value: 700gp
+Resale value: 550gp
+----
+coin: 0pp 408gp 2sp 9cp (408gp 2sp 9cp value)
+gem: fiery yellow corundum (5,000gp)
+gem: azurite (11gp)
+Total value: 5,419gp 2sp 9cp
+----
+coin: 0pp 0gp 0sp 16,000cp (160gp value)
+Total value: 160gp
+----
+coin: 10pp 0gp 0sp 0cp (100gp value)
+cognizance crystal (1 points) (1,000gp)
+Total value: 1,100gp
+Resale value: 600gp
+----
+coin: 7pp 27gp 28sp 20cp (100gp value)
+Total value: 100gp
+----
+coin: 42pp 73gp 69sp 10cp (500gp value)
+gem: alexandrite (700gp)
+gem: small amethyst (60gp)
+wand of acid arrow (charges 9) (810gp)
+Total value: 2,070gp
+Resale value: 1,665gp
+----
+coin: 8pp 19gp 1sp 90cp (100gp value)
+Total value: 100gp
+----
+coin: 215pp 651gp 309sp 796cp (2,839gp 8sp 6cp value)
+gem: alexandrite (600gp)
+gem: large rhodochrosite (70gp)
+gem: large red spinel (700gp)
+gem: large banded agate (60gp)
+Total value: 4,269gp 8sp 6cp
+----
+coin: 0pp 500gp 0sp 0cp (500gp value)
+art: faceted crystal brooch (1,200gp)
+art: faceted crystal sculpture (1,200gp)
+armor, mundane: medium half-plate (600gp)
+Total value: 3,500gp
+Resale value: 3,200gp
+----
+coin: 35pp 14gp 72sp 25cp (371gp 4sp 5cp value)
+mundane: lock, superior (150gp)
+melee, mundane: medium masterwork waraxe, dwarven (330gp)
+mundane: alchemist's fire (1) (20gp)
+armor, mundane: medium breastplate (200gp)
+Total value: 1,071gp 4sp 5cp
+Resale value: 721gp 4sp 5cp
+====
+Total coins: 317pp 2,092gp 481sp 16,950cp
+Grand total: 18,490gp 6sp
+Sales grand total: 16,785gp 6sp
+
+**************************************
+
+Level 5
+
+coin: 45pp 46gp 38sp 20cp (500gp value)
+medium +1 shield, tower (1,360gp)
+Total value: 1,860gp
+Resale value: 1,180gp
+----
+coin: 0pp 0gp 1,904sp 0cp (190gp 4sp value)
+gem: small sardonyx (10gp)
+gem: small rich purple corundum (700gp)
+gem: small fire opal (400gp)
+gem: small brown diamond (8,000gp)
+mundane: hourglass (25gp)
+armor, mundane: small full plate (1,500gp)
+Total value: 10,825gp 4sp
+Resale value: 10,062gp 9sp
+----
+coin: 0pp 0gp 5,815sp 0cp (581gp 5sp value)
+gem: bloodstone (50gp)
+protection from (alignment) (potion) (50gp)
+Total value: 681gp 5sp
+Resale value: 656gp 5sp
+----
+coin: 42pp 6gp 79sp 22cp (434gp 1sp 2cp value)
+gem: chrysoprase (60gp)
+gem: large malachite (50gp)
+gem: large rock crystal (clear quartz) (60gp)
+gem: black pearl (500gp)
+medium glowing +1 longbow, composite (+1 str bonus) (2,500gp)
+wand of magic missile (5th) (charges 23) (1,725gp)
+medium [bane (elementals)] +1 longsword (8,315gp)
+Total value: 13,644gp 1sp 2cp
+Resale value: 7,374gp 1sp 2cp
+----
+coin: 0pp 700gp 0sp 0cp (700gp value)
+Total value: 700gp
+----
+coin: 79pp 10gp 0sp 0cp (800gp value)
+Total value: 800gp
+----
+coin: 0pp 200gp 0sp 0cp (200gp value)
+Total value: 200gp
+----
+armor, mundane: medium full plate (1,500gp)
+melee, mundane: medium masterwork quarterstaff (600gp)
+Total value: 2,100gp
+Resale value: 1,050gp
+----
+sanctuary (potion) (50gp)
+Total value: 50gp
+Resale value: 25gp
+----
+coin: 0pp 601gp 0sp 0cp (601gp value)
+Total value: 601gp
+====
+Total coins: 166pp 1,563gp 7,836sp 42cp
+Grand total: 31,462gp 1cp
+Sales grand total: 22,649gp 5sp 2cp
+
+**************************************
+
+Level 6
+
+coin: 64pp 32gp 23sp 29cp (674gp 5sp 9cp value)
+Total value: 674gp 5sp 9cp
+----
+coin: 0pp 200gp 0sp 0cp (200gp value)
+art: decorated silver dinnerware (1,800gp)
+art: smooth wooden clasp (90gp)
+Total value: 2,090gp
+----
+coin: 0pp 700gp 0sp 0cp (700gp value)
+divine scroll containing: (325gp value)
+	1. speak with plants (lvl 2, cast 3) (150gp)
+	2. charm animal (lvl 1, cast 1) (25gp)
+	3. cure moderate wounds (lvl 2, cast 3) (150gp)
+Total value: 1,025gp
+Resale value: 862gp 5sp
+----
+coin: 0pp 400gp 0sp 0cp (400gp value)
+gem: large onyx (140gp)
+gem: large azurite (40gp)
+gem: silver pearl (110gp)
+gem: large obsidian (40gp)
+Total value: 730gp
+----
+coin: 0pp 539gp 0sp 2cp (539gp 2cp value)
+Total value: 539gp 2cp
+----
+gem: small carnelian (13gp)
+arcane scroll containing: (25gp value)
+	1. hypnotism (lvl 1, cast 1) (25gp)
+cure light wounds (potion) (50gp)
+Total value: 88gp
+Resale value: 50gp 5sp
+----
+coin: 0pp 687gp 0sp 0cp (687gp value)
+Total value: 687gp
+----
+coin: 0pp 668gp 0sp 0cp (668gp value)
+gem: rose quartz (30gp)
+gem: large coral (400gp)
+divine scroll containing: (200gp value)
+	1. hold person (lvl 2, cast 3) (150gp)
+	2. doom (lvl 1, cast 1) (25gp)
+	3. protection from law (lvl 1, cast 1) (25gp)
+pipes of the sewers (1,150gp)
+cure light wounds (potion) (50gp)
+Total value: 2,498gp
+Resale value: 1,798gp
+----
+coin: 42pp 78gp 44sp 76cp (503gp 1sp 6cp value)
+gem: jade (110gp)
+Total value: 613gp 1sp 6cp
+----
+coin: 89pp 59gp 615sp 323cp (1,013gp 7sp 3cp value)
+Total value: 1,013gp 7sp 3cp
+====
+Total coins: 195pp 3,363gp 682sp 430cp
+Grand total: 9,958gp 5sp
+Sales grand total: 9,058gp 5sp
+
+**************************************
+
+Level 7
+
+coin: 72pp 33gp 71sp 96cp (761gp 6cp value)
+arcane scroll containing: (25gp value)
+	1. magic aura (lvl 1, cast 1) (25gp)
+psionic tatoo: bestow power (2nd level) (300gp)
+Total value: 1,086gp 6cp
+Resale value: 923gp 5sp 6cp
+----
+coin: 0pp 1,251gp 0sp 0cp (1,251gp value)
+horn of recording (Dragon issue #327) (750gp)
+divine scroll containing: (300gp value)
+	1. speak with plants (lvl 2, cast 3) (150gp)
+	2. flaming sphere (lvl 2, cast 3) (150gp)
+power stone (psion/wilder): (200gp value)
+	1. know direction and location (level 1) (25gp)
+	2. inertial armor (level 1) (25gp)
+	3. missive, mass (level 2) (150gp)
+Total value: 2,501gp
+Resale value: 1,876gp
+----
+gem: iolite (50gp)
+gem: large jade (600gp)
+gem: pale blue topaz (800gp)
+gem: small chrysoberyl (80gp)
+Total value: 1,530gp
+----
+coin: 73pp 70gp 0sp 0cp (800gp value)
+cure light wounds (potion) (50gp)
+medium glowing +1 nunchaku (2,302gp)
+cure moderate wounds (potion) (300gp)
+Total value: 3,452gp
+Resale value: 2,126gp
+----
+gem: small red-brown spinel (80gp)
+gem: large carnelian (120gp)
+arcane scroll containing: (75gp value)
+	1. floating disk (lvl 1, cast 1) (25gp)
+	2. magic weapon (lvl 1, cast 1) (25gp)
+	3. reduce person (lvl 1, cast 1) (25gp)
+Total value: 275gp
+Resale value: 237gp 5sp
+----
+coin: 0pp 839gp 0sp 0cp (839gp value)
+magic fang (potion) (50gp)
+arcane scroll containing: (25gp value)
+	1. shield (lvl 1, cast 1) (25gp)
+Total value: 914gp
+Resale value: 876gp 5sp
+----
+coin: 35pp 44gp 28sp 33cp (397gp 1sp 3cp value)
+art: smooth bone plate (200gp)
+art: ornate bone brooch (200gp)
+art: etched brass candelabra (120gp)
+art: faceted electrum clasp (4,000gp)
+Total value: 4,917gp 1sp 3cp
+----
+coin: 75pp 53gp 34sp 8cp (806gp 4sp 8cp value)
+gem: white pearl (120gp)
+gem: large red garnet (600gp)
+gem: large chalcedony (100gp)
+gem: large deep green spinel (500gp)
+protection from (alignment) (potion) (50gp)
+aid (potion) (300gp)
+bless weapon (oil) (100gp)
+Total value: 2,576gp 4sp 8cp
+Resale value: 2,351gp 4sp 8cp
+----
+coin: 0pp 0gp 1,822sp 0cp (182gp 2sp value)
+gem: large chalcedony (100gp)
+gem: large amethyst (600gp)
+Total value: 882gp 2sp
+----
+gem: deep green spinel (110gp)
+gem: lapis lazuli (12gp)
+gem: small chalcedony (11gp)
+gem: black opal (5,000gp)
+bracers of armor +2 (4,000gp)
+lesser restoration (potion) (300gp)
+Total value: 9,433gp
+Resale value: 7,283gp
+====
+Total coins: 255pp 2,290gp 1,955sp 137cp
+Grand total: 27,566gp 8sp 7cp
+Sales grand total: 23,003gp 3sp 7cp
+
+**************************************
+
+Level 8
+
+coin: 0pp 500gp 0sp 0cp (500gp value)
+power stone (psion/wilder): (200gp value)
+	1. grease, psionic (level 1) (25gp)
+	2. mental disruption (level 2) (150gp)
+	3. force screen (level 1) (25gp)
+arcane scroll containing: (300gp value)
+	1. bear's endurance (lvl 2, cast 3) (150gp)
+	2. touch of idiocy (lvl 2, cast 3) (150gp)
+wand of charm animal (charges 31) (465gp)
+efficient quiver (1,800gp)
+Total value: 3,265gp
+Resale value: 1,882gp 5sp
+----
+coin: 0pp 0gp 0sp 60,000cp (600gp value)
+art: intricate jade-inlaid scepter (1,600gp)
+art: baroque jade-inlaid sword-stand (1,200gp)
+Total value: 3,400gp
+----
+coin: 0pp 488gp 2sp 2cp (488gp 2sp 2cp value)
+Total value: 488gp 2sp 2cp
+----
+coin: 0pp 900gp 0sp 0cp (900gp value)
+gem: small peridot (10gp)
+gem: large golden pearl (400gp)
+Total value: 1,310gp
+----
+coin: 28pp 779gp 286sp 289cp (1,090gp 4sp 9cp value)
+gem: small star rose quartz (8gp)
+gem: alexandrite (600gp)
+gem: large red garnet (400gp)
+Total value: 2,098gp 4sp 9cp
+----
+coin: 0pp 761gp 8sp 1cp (761gp 8sp 1cp value)
+gem: large chrysoprase (100gp)
+ring of water walking (15,000gp)
+Total value: 15,861gp 8sp 1cp
+Resale value: 8,361gp 8sp 1cp
+----
+coin: 74pp 236gp 696sp 25cp (1,045gp 8sp 5cp value)
+art: ornate gold plate (5,000gp)
+art: etched gold door-knocker (5,000gp)
+art: decorated wooden pipe (10gp)
+art: delicate crystal sword-stand (800gp)
+Total value: 11,855gp 8sp 5cp
+----
+coin: 0pp 0gp 6,000sp 0cp (600gp value)
+art: faceted crystal pommel (900gp)
+art: delicate bone ring (400gp)
+art: etched wooden shoe-rack (50gp)
+art: intricate jade-inlaid paperweight (1,200gp)
+bag of holding type II (5,000gp)
+Total value: 8,150gp
+Resale value: 5,650gp
+----
+gem: large lapis lazuli (30gp)
+gem: small brown-green garnet (70gp)
+Total value: 100gp
+----
+coin: 44pp 9gp 11sp 59cp (450gp 6sp 9cp value)
+gem: white opal (4,000gp)
+gem: banded agate (7gp)
+gem: large black pearl (8,000gp)
+gem: white opal (8,000gp)
+gem: small fire opal (500gp)
+gem: large jet (300gp)
+arcane scroll containing: (325gp value)
+	1. eagle's splendor (lvl 2, cast 3) (150gp)
+	2. comprehend languages (lvl 1, cast 1) (25gp)
+	3. bear's endurance (lvl 2, cast 3) (150gp)
+reduce person (potion) (250gp)
+resist energy (type) 10 (potion) (300gp)
+bear's endurance (potion) (300gp)
+Total value: 22,432gp 6sp 9cp
+Resale value: 21,845gp 1sp 9cp
+====
+Total coins: 146pp 3,673gp 7,003sp 60,376cp
+Grand total: 68,962gp 6cp
+Sales grand total: 56,992gp 6cp
+
+**************************************
+
+Level 9
+
+gem: small golden yellow topaz (110gp)
+gem: large bloodstone (80gp)
+gem: small fire opal (600gp)
+gem: large star rose quartz (100gp)
+Total value: 890gp
+----
+coin: 0pp 1,074gp 4sp 6cp (1,074gp 4sp 6cp value)
+gem: small chalcedony (9gp)
+Total value: 1,083gp 4sp 6cp
+----
+medium +1 shield, heavy, steel (1,340gp)
+sanctuary (potion) (50gp)
+Total value: 1,390gp
+Resale value: 695gp
+----
+coin: 134pp 0gp 0sp 0cp (1,340gp value)
+art: intricate bone ring (400gp)
+art: etched gold ring (5,000gp)
+arcane scroll containing: (400gp value)
+	1. silence (lvl 2, cast 3) (200gp)
+	2. delay poison (lvl 2, cast 3) (200gp)
+dorje: energy push (2nd level) (charges 24) (2,160gp)
+cure light wounds (potion) (50gp)
+Total value: 9,350gp
+Resale value: 8,045gp
+----
+coin: 0pp 400gp 0sp 0cp (400gp value)
+gem: small peridot (11gp)
+gem: large rich purple corundum (4,000gp)
+gem: large iolite (120gp)
+gem: large white pearl (800gp)
+gem: small star ruby (700gp)
+medium +1 gauntlet (2,302gp)
+Total value: 8,333gp
+Resale value: 7,182gp
+----
+coin: 70pp 822gp 77sp 659cp (1,536gp 2sp 9cp value)
+cat's grace (potion) (300gp)
+medium +1 shortspear (2,302gp)
+Total value: 4,138gp 2sp 9cp
+Resale value: 2,837gp 2sp 9cp
+----
+coin: 0pp 1,000gp 0sp 0cp (1,000gp value)
+Total value: 1,000gp
+----
+coin: 82pp 75gp 49sp 10cp (900gp value)
+medium +2 longsword (8,315gp)
+Total value: 9,215gp
+Resale value: 5,057gp 5sp
+----
+coin: 0pp 1,321gp 0sp 0cp (1,321gp value)
+gem: obsidian (11gp)
+gem: large tourmaline (600gp)
+medium +2 longbow, composite (+4 str bonus) (8,800gp)
+Total value: 10,732gp
+Resale value: 6,332gp
+----
+coin: 0pp 800gp 0sp 0cp (800gp value)
+gem: star rose quartz (60gp)
+gem: small clearest bright green emerald (8,000gp)
+gem: chrysoberyl (120gp)
+wand of daylight (charges 11) (990gp)
+sanctuary (potion) (50gp)
+ring of counterspells (4,000gp)
+dorje: create sound (1st level) (charges 32) (480gp)
+Total value: 14,500gp
+Resale value: 11,740gp
+====
+Total coins: 286pp 5,492gp 130sp 675cp
+Grand total: 60,631gp 7sp 5cp
+Sales grand total: 44,862gp 2sp 5cp
+
+**************************************
+
+Level 10
+
+coin: 0pp 1,000gp 0sp 0cp (1,000gp value)
+gem: rhodochrosite (10gp)
+gem: small white opal (500gp)
+magic weapon (oil) (50gp)
+blur (potion) (300gp)
+wand of bull's strength (charges 32) (2,880gp)
+Total value: 4,740gp
+Resale value: 3,125gp
+----
+coin: 0pp 1,500gp 0sp 0cp (1,500gp value)
+gem: star rose quartz (30gp)
+cure light wounds (potion) (50gp)
+divine scroll containing: (225gp value)
+	1. goodberry (lvl 1, cast 1) (25gp)
+	2. fire trap (lvl 2, cast 3) (175gp)
+	3. divine favor (lvl 1, cast 1) (25gp)
+arcane scroll containing: (150gp value)
+	1. false life (lvl 2, cast 3) (150gp)
+Total value: 1,955gp
+Resale value: 1,742gp 5sp
+----
+coin: 0pp 1,596gp 2sp 3cp (1,596gp 2sp 3cp value)
+gem: moonstone (50gp)
+gem: small aquamarine (120gp)
+gem: hematite (10gp)
+psionic universal item: eyes of expanded vision (3,000gp)
+Total value: 4,776gp 2sp 3cp
+Resale value: 3,276gp 2sp 3cp
+----
+coin: 0pp 1,800gp 0sp 0cp (1,800gp value)
+Total value: 1,800gp
+----
+coin: 0pp 1,700gp 0sp 0cp (1,700gp value)
+gem: small brown-green garnet (20gp)
+small +1 shield, heavy, steel (1,340gp)
+wand of bear's endurance (charges 15) (1,350gp)
+arcane scroll containing: (150gp value)
+	1. scorching ray (lvl 2, cast 3) (150gp)
+Total value: 4,560gp
+Resale value: 3,140gp
+----
+coin: 0pp 1,101gp 0sp 0cp (1,101gp value)
+art: etched marble shoe-rack (900gp)
+Total value: 2,001gp
+----
+coin: 0pp 1,443gp 0sp 0cp (1,443gp value)
+arcane scroll containing: (275gp value)
+	1. protection from arrows (lvl 2, cast 3) (150gp)
+	2. identify (lvl 1, cast 1) (125gp)
+Total value: 1,718gp
+Resale value: 1,580gp 5sp
+----
+coin: 29pp 4gp 54sp 60cp (300gp value)
+gem: violet garnet (400gp)
+gem: hematite (9gp)
+gem: sardonyx (30gp)
+gem: alexandrite (500gp)
+gem: small white opal (400gp)
+gem: large iolite (70gp)
+arcane scroll containing: (150gp value)
+	1. knock (lvl 2, cast 3) (150gp)
+Total value: 1,859gp
+Resale value: 1,784gp
+----
+coin: 0pp 1,600gp 0sp 0cp (1,600gp value)
+Total value: 1,600gp
+----
+coin: 0pp 0gp 10,917sp 0cp (1,091gp 7sp value)
+art: tiny marble sword-stand (600gp)
+art: smooth bone figurine (400gp)
+art: tiny porcelain shoe-rack (500gp)
+art: etched wooden door-knocker (100gp)
+art: solid gold idol (10 lb.) with marble stand (400gp)
+Total value: 3,091gp 7sp
+====
+Total coins: 29pp 11,744gp 10,973sp 63cp
+Grand total: 28,100gp 9sp 3cp
+Sales grand total: 23,140gp 9sp 3cp
+
+**************************************
+
+Level 11
+
+coin: 0pp 1,600gp 0sp 0cp (1,600gp value)
+art: faceted silver dinnerware (1,300gp)
+art: baroque bone ring (400gp)
+art: etched brass dinnerware (90gp)
+staff of life (charges 26) (80,990gp)
+Total value: 84,380gp
+Resale value: 43,885gp
+----
+coin: 0pp 1,562gp 0sp 0cp (1,562gp value)
+art: old bone shoe-rack (200gp)
+art: smooth marble scepter (700gp)
+art: delicate brass dinnerware (130gp)
+art: baroque crystal scepter (900gp)
+arcane scroll containing: (150gp value)
+	1. darkvision (lvl 2, cast 3) (150gp)
+cure moderate wounds (potion) (300gp)
+divine scroll containing: (325gp value)
+	1. cure moderate wounds (lvl 2, cast 3) (150gp)
+	2. comprehend languages (lvl 1, cast 1) (25gp)
+	3. cure moderate wounds (lvl 2, cast 3) (150gp)
+Total value: 4,267gp
+Resale value: 3,879gp 5sp
+----
+coin: 0pp 1,293gp 9sp 5cp (1,293gp 9sp 5cp value)
+art: old electrum ring (3,000gp)
+art: delicate bone dinnerware (400gp)
+art: faceted porcelain candelabra (200gp)
+art: faceted bone figurine (100gp)
+art: etched jade-inlaid pipe (1,100gp)
+art: fine wooden clasp (50gp)
+divine scroll containing: (2,250gp value)
+	1. command, greater (lvl 5, cast 9) (1,125gp)
+	2. remove curse (lvl 3, cast 5) (375gp)
+	3. invisibility purge (lvl 3, cast 5) (375gp)
+	4. searing light (lvl 3, cast 5) (375gp)
+Total value: 8,393gp 9sp 5cp
+Resale value: 7,268gp 9sp 5cp
+----
+gem: small golden yellow topaz (60gp)
+arcane scroll containing: (1,450gp value)
+	1. globe of invulnerability, lesser (lvl 4, cast 7) (700gp)
+	2. deep slumber (lvl 3, cast 5) (375gp)
+	3. fly (lvl 3, cast 5) (375gp)
+Total value: 1,510gp
+Resale value: 785gp
+----
+coin: 0pp 2,100gp 0sp 0cp (2,100gp value)
+gem: small rich purple corundum (600gp)
+gem: large freshwater (irregular) pearl (30gp)
+gem: small jade (70gp)
+gem: bloodstone (80gp)
+gem: large smoky quartz (80gp)
+gem: small smoky quartz (11gp)
+gem: small moonstone (12gp)
+gem: large moss agate (30gp)
+gem: obsidian (7gp)
+divine scroll containing: (250gp value)
+	1. endure elements (lvl 1, cast 1) (25gp)
+	2. detect snares and pits (lvl 1, cast 1) (25gp)
+	3. desecrate (lvl 2, cast 3) (200gp)
+wand of summon monster II (charges 30) (2,700gp)
+Total value: 5,970gp
+Resale value: 4,495gp
+----
+coin: 310pp 0gp 0sp 0cp (3,100gp value)
+gem: moss agate (11gp)
+gem: small bloodstone (10gp)
+gem: pale blue topaz (700gp)
+gem: small black pearl (100gp)
+gem: large eye agate (40gp)
+gem: small fiery yellow corundum (500gp)
+Total value: 4,461gp
+----
+coin: 110pp 0gp 0sp 0cp (1,100gp value)
+gem: small aquamarine (100gp)
+gem: small smoky quartz (11gp)
+gem: large eye agate (50gp)
+gem: coral (110gp)
+gem: large onyx (100gp)
+gem: large chrysoberyl (700gp)
+gem: violet garnet (600gp)
+gem: star ruby (4,000gp)
+Total value: 6,771gp
+----
+coin: 0pp 2,200gp 0sp 0cp (2,200gp value)
+Total value: 2,200gp
+----
+coin: 0pp 1,400gp 0sp 0cp (1,400gp value)
+arcane scroll containing: (325gp value)
+	1. alarm (lvl 1, cast 1) (25gp)
+	2. web (lvl 2, cast 3) (150gp)
+	3. bull's strength (lvl 2, cast 3) (150gp)
+blur (potion) (300gp)
+Total value: 2,025gp
+Resale value: 1,712gp 5sp
+----
+coin: 0pp 2,237gp 5sp 4cp (2,237gp 5sp 4cp value)
+art: tiny bone dinnerware (500gp)
+art: old wooden sword-stand (100gp)
+art: delicate bone door-knocker (500gp)
+art: etched wooden paperweight (30gp)
+art: tiny platinum sword-stand (6,000gp)
+Total value: 9,367gp 5sp 4cp
+====
+Total coins: 420pp 12,392gp 14sp 9cp
+Grand total: 129,345gp 4sp 9cp
+Sales grand total: 84,825gp 4sp 9cp
+
+**************************************
+
+Level 12
+
+coin: 0pp 1,000gp 0sp 0cp (1,000gp value)
+Total value: 1,000gp
+----
+coin: 0pp 3,000gp 0sp 0cp (3,000gp value)
+gem: amethyst (100gp)
+Total value: 3,100gp
+----
+coin: 283pp 417gp 176sp 317cp (3,267gp 7sp 7cp value)
+gem: obsidian (13gp)
+gem: large violet garnet (6,000gp)
+gem: rhodochrosite (7gp)
+gem: large deep green spinel (800gp)
+gem: star rose quartz (40gp)
+gem: black opal (6,000gp)
+gem: large amethyst (800gp)
+Total value: 16,927gp 7sp 7cp
+----
+coin: 124pp 663gp 902sp 680cp (2,000gp value)
+art: etched crystal shoe-rack (1,600gp)
+delay poison (potion) (300gp)
+barkskin +2 (potion) (300gp)
+magic fang (potion) (50gp)
+Total value: 4,250gp
+Resale value: 3,925gp
+----
+coin: 217pp 775gp 508sp 420cp (3,000gp value)
+gem: large citrine (100gp)
+gem: black pearl (400gp)
+gem: chalcedony (40gp)
+gem: lapis lazuli (7gp)
+gem: small white pearl (20gp)
+gem: large freshwater (irregular) pearl (50gp)
+gem: coral (90gp)
+arcane scroll containing: (162gp 5sp value)
+	1. read magic (lvl 0, cast 1) (12gp 5sp)
+	2. darkvision (lvl 2, cast 3) (150gp)
+Total value: 3,869gp 5sp
+Resale value: 3,788gp 2sp 5cp
+----
+coin: 0pp 2,792gp 0sp 0cp (2,792gp value)
+gem: small jasper (13gp)
+gem: small zircon (10gp)
+gem: large amethyst (400gp)
+gem: carnelian (70gp)
+gem: large jade (600gp)
+gem: small peridot (12gp)
+divine scroll containing: (75gp value)
+	1. calm animals (lvl 1, cast 1) (25gp)
+	2. divine favor (lvl 1, cast 1) (25gp)
+	3. hide from animals (lvl 1, cast 1) (25gp)
+darkvision (potion) (300gp)
+Total value: 4,272gp
+Resale value: 4,084gp 5sp
+----
+gem: small deep green spinel (50gp)
+gem: large carnelian (100gp)
+gem: sard (20gp)
+gem: large jade (500gp)
+pearl of power, 3rd-level spell (9,000gp)
+Total value: 9,670gp
+Resale value: 5,170gp
+----
+coin: 363pp 366gp 36sp 40cp (4,000gp value)
+gem: large pink pearl (600gp)
+gem: sard (50gp)
+gem: jade (120gp)
+gem: small fire opal (600gp)
+gem: small black opal (500gp)
+gem: tiger eye turquoise (11gp)
+gem: obsidian (5gp)
+gem: small rich purple corundum (600gp)
+gem: small canary diamond (7,000gp)
+gem: small jacinth (5,000gp)
+divine scroll containing: (150gp value)
+	1. flame blade (lvl 2, cast 3) (150gp)
+Total value: 18,636gp
+Resale value: 18,561gp
+----
+coin: 0pp 4,000gp 0sp 0cp (4,000gp value)
+gem: large pale blue topaz (6,000gp)
+gem: hematite (9gp)
+gem: red spinel (110gp)
+gem: red spinel (90gp)
+gem: small violet garnet (90gp)
+gem: chalcedony (20gp)
+gem: large moonstone (110gp)
+arcane scroll containing: (700gp value)
+	1. rainbow pattern (lvl 4, cast 7) (700gp)
+Total value: 11,129gp
+Resale value: 10,779gp
+----
+coin: 250pp 467gp 320sp 100cp (3,000gp value)
+art: decorated silver sculpture (1,800gp)
+art: etched bone shoe-rack (400gp)
+art: etched jade-inlaid wine-cup (1,300gp)
+arcane scroll containing: (150gp value)
+	1. glitterdust (lvl 2, cast 3) (150gp)
+Total value: 6,650gp
+Resale value: 6,575gp
+====
+Total coins: 1,237pp 13,480gp 1,942sp 1,557cp
+Grand total: 79,504gp 2sp 7cp
+Sales grand total: 73,910gp 5sp 2cp
+
+**************************************
+
+Level 13
+
+coin: 0pp 8,896gp 5sp 8cp (8,896gp 5sp 8cp value)
+art: intricate wooden door-knocker (30gp)
+art: delicate crystal sword-stand (800gp)
+art: etched silver figurine (1,000gp)
+art: fine gold paperweight (3,000gp)
+art: smooth brass shoe-rack (140gp)
+art: old bone bracelet (300gp)
+art: tiny wooden paperweight (90gp)
+art: old bone dinnerware (300gp)
+aid (potion) (300gp)
+darkvision (potion) (300gp)
+helm of comprehend languages and read magic (5,200gp)
+thespian's mask (Dragon issue #328) (3,000gp)
+Total value: 23,356gp 5sp 8cp
+Resale value: 18,956gp 5sp 8cp
+----
+coin: 0pp 3,000gp 0sp 0cp (3,000gp value)
+art: tiny wooden wine-cup (60gp)
+art: baroque brass sculpture (70gp)
+art: smooth crystal shoe-rack (1,200gp)
+art: faceted jade-inlaid brooch (1,000gp)
+art: decorated marble plate (700gp)
+art: intricate crystal figurine (600gp)
+art: old bone clasp (300gp)
+art: baroque electrum sculpture (1,000gp)
+art: decorated gold clasp (6,000gp)
+resist energy (type) 10 (potion) (300gp)
+Total value: 14,230gp
+Resale value: 14,080gp
+----
+coin: 117pp 850gp 483sp 70cp (2,069gp value)
+gem: moss agate (12gp)
+gem: small golden yellow topaz (130gp)
+psionic universal item: crystal anchor, body (24,000gp)
+Total value: 26,211gp
+Resale value: 14,211gp
+----
+coin: 0pp 4,000gp 0sp 0cp (4,000gp value)
+gem: white pearl (140gp)
+gem: rich purple corundum (8,000gp)
+gem: small citrine (12gp)
+gem: amber (80gp)
+gem: large red spinel (400gp)
+gem: black pearl (300gp)
+gem: brown-green garnet (110gp)
+ring of climbing, improved (10,000gp)
+Total value: 23,042gp
+Resale value: 18,042gp
+----
+coin: 753pp 446gp 174sp 660cp (8,000gp value)
+gem: large pink pearl (300gp)
+ring of water walking (15,000gp)
+Total value: 23,300gp
+Resale value: 15,800gp
+----
+coin: 0pp 1,054gp 0sp 0cp (1,054gp value)
+art: etched bone scepter (300gp)
+art: delicate bone ring (200gp)
+art: old silver sword-stand (2,000gp)
+art: decorated brass sculpture (120gp)
+art: smooth marble ring (700gp)
+art: smooth wooden paperweight (50gp)
+art: baroque electrum pipe (3,000gp)
+art: decorated porcelain sword-stand (500gp)
+art: decorated bone door-knocker (400gp)
+art: fine gold dinnerware (6,000gp)
+Total value: 14,324gp
+----
+coin: 0pp 1,899gp 0sp 0cp (1,899gp value)
+art: fine bone paperweight (500gp)
+art: decorated gem-encrusted pipe (3,000gp)
+art: decorated porcelain sword-stand (1,000gp)
+art: faceted jade-inlaid candelabra (1,400gp)
+art: decorated wooden candelabra (40gp)
+art: baroque marble dinnerware (800gp)
+art: faceted electrum candelabra (3,000gp)
+art: ornate brass paperweight (120gp)
+art: etched brass sword-stand (70gp)
+art: tiny bone figurine (100gp)
+staff of size alteration (charges 18) (10,440gp)
+Total value: 22,369gp
+Resale value: 17,149gp
+----
+coin: 139pp 562gp 467sp 213cp (2,000gp 8sp 3cp value)
+gem: small jasper (12gp)
+spider climb (potion) (300gp)
+magic weapon (oil) (50gp)
+Total value: 2,362gp 8sp 3cp
+Resale value: 2,187gp 8sp 3cp
+----
+coin: 312pp 816gp 625sp 150cp (4,000gp value)
+gem: coral (110gp)
+gem: obsidian (6gp)
+gem: malachite (9gp)
+gem: small amber (50gp)
+gem: small emerald (200gp)
+gem: large moonstone (140gp)
+gem: large blue quartz (80gp)
+staff of conjuration (charges 11) (14,300gp)
+Total value: 18,895gp
+Resale value: 11,745gp
+----
+coin: 600pp 0gp 0sp 0cp (6,000gp value)
+gem: small blue diamond (3,000gp)
+gem: large banded agate (80gp)
+gem: small blue-white diamond (6,000gp)
+gem: malachite (8gp)
+medium +2 full plate armor (7,300gp)
+Total value: 22,388gp
+Resale value: 18,738gp
+====
+Total coins: 1,921pp 21,523gp 1,754sp 1,101cp
+Grand total: 190,478gp 4sp 1cp
+Sales grand total: 145,233gp 4sp 1cp
+
+**************************************
+
+Level 14
+
+coin: 219pp 582gp 232sp 915cp (2,804gp 3sp 5cp value)
+gem: aquamarine (600gp)
+gem: black pearl (400gp)
+gem: deep blue spinel (500gp)
+gem: large chrysoprase (110gp)
+gem: blue sapphire (4,000gp)
+horn of the tritons (15,100gp)
+Total value: 23,514gp 3sp 5cp
+Resale value: 15,964gp 3sp 5cp
+----
+coin: 0pp 1,000gp 0sp 0cp (1,000gp value)
+art: fine gold clasp (1,000gp)
+art: brass mug with jade inlays (600gp)
+art: etched bone sculpture (500gp)
+art: smooth crystal door-knocker (1,000gp)
+art: smooth crystal ring (1,100gp)
+art: smooth crystal brooch (1,200gp)
+art: smooth bone brooch (400gp)
+medium +1 longbow, composite (+2 str bonus) (2,600gp)
+mage armor (potion) (50gp)
+Total value: 9,450gp
+Resale value: 8,125gp
+----
+coin: 26pp 656gp 791sp 490cp (1,000gp value)
+gem: jasper (80gp)
+gem: large jet (800gp)
+gem: zircon (60gp)
+gem: blue quartz (13gp)
+gem: large eye agate (30gp)
+gem: large tiger eye turquoise (70gp)
+gem: aquamarine (500gp)
+gem: small iolite (14gp)
+gem: small moonstone (10gp)
+vivifying bacalao (Dragon issue #335) (1,150gp)
+figurine of wondrous power, silver raven (3,800gp)
+cognizance crystal (1 points) (1,000gp)
+Total value: 8,527gp
+Resale value: 5,552gp
+----
+coin: 434pp 565gp 899sp 510cp (5,000gp value)
+gem: small jasper (12gp)
+gem: large iolite (90gp)
+gem: large jade (400gp)
+gem: small deep green spinel (60gp)
+gem: large chrysoprase (110gp)
+gem: moss agate (13gp)
+gem: large rich purple corundum (7,000gp)
+gem: small iolite (9gp)
+gem: large coral (800gp)
+ring of counterspells (4,000gp)
+Total value: 17,494gp
+Resale value: 15,494gp
+----
+coin: 0pp 4,000gp 0sp 0cp (4,000gp value)
+art: fine crystal plate (700gp)
+art: ornate brass ring (120gp)
+art: faceted electrum wine-cup (4,000gp)
+art: smooth crystal candelabra (500gp)
+art: delicate electrum pipe (1,000gp)
+art: baroque wooden figurine (20gp)
+Total value: 10,340gp
+----
+coin: 29pp 664gp 436sp 240cp (1,000gp value)
+gem: brown-green garnet (80gp)
+gem: peridot (50gp)
+gem: golden yellow topaz (600gp)
+gem: small jade (20gp)
+gem: pale blue topaz (500gp)
+gem: small blue-white diamond (5,000gp)
+gem: small jade (40gp)
+gem: small sardonyx (11gp)
+censer of controlling air elementals (100,000gp)
+Total value: 107,301gp
+Resale value: 57,301gp
+----
+coin: 0pp 2,188gp 0sp 0cp (2,188gp value)
+gem: deep green spinel (120gp)
+gem: small rose quartz (11gp)
+gem: white opal (5,000gp)
+gem: small peridot (10gp)
+gem: aquamarine (300gp)
+gem: large pale blue topaz (3,000gp)
+gem: small citrine (15gp)
+gem: small amber (40gp)
+gem: coral (80gp)
+arcane scroll containing: (9,900gp value)
+	1. horrid wilting (lvl 8, cast 15) (3,000gp)
+	2. cat's grace, mass (lvl 6, cast 11) (1,650gp)
+	3. sequester (lvl 7, cast 13) (2,275gp)
+	4. mage's sword (lvl 7, cast 13) (2,275gp)
+	5. confusion (lvl 4, cast 7) (700gp)
+Total value: 20,664gp
+Resale value: 15,714gp
+----
+coin: 900pp 0gp 0sp 0cp (9,000gp value)
+art: etched bone dinnerware (200gp)
+art: smooth porcelain wine-cup (800gp)
+art: ornate silver bracelet (1,300gp)
+art: faceted bone candelabra (600gp)
+art: decorated marble figurine (600gp)
+art: delicate brass sculpture (140gp)
+art: tiny brass sculpture (130gp)
+art: intricate gold paperweight (3,000gp)
+art: ornate crystal door-knocker (1,300gp)
+staff of healing (charges 48) (26,640gp)
+Total value: 43,710gp
+Resale value: 30,390gp
+----
+Total value: 0gp
+----
+coin: 0pp 4,553gp 0sp 0cp (4,553gp value)
+art: delicate bone paperweight (100gp)
+art: jade-inlaid idol (1,700gp)
+art: tiny gold clasp (2,000gp)
+art: decorated bone ring (100gp)
+art: faceted brass bracelet (70gp)
+art: smooth gold door-knocker (6,000gp)
+art: intricate wooden door-knocker (30gp)
+remove paralysis (potion) (300gp)
+arcane scroll containing: (50gp value)
+	1. remove fear (lvl 1, cast 1) (50gp)
+power stone (psion/wilder): (175gp value)
+	1. control sound (level 2) (150gp)
+	2. conceal thoughts (level 1) (25gp)
+shillelagh (oil) (50gp)
+Total value: 15,128gp
+Resale value: 14,840gp 5sp
+====
+Total coins: 1,608pp 14,208gp 2,358sp 2,155cp
+Grand total: 256,128gp 3sp 5cp
+Sales grand total: 173,720gp 8sp 5cp
+
+**************************************
+
+Level 15
+
+coin: 555pp 382gp 641sp 390cp (6,000gp value)
+gem: blue quartz (13gp)
+gem: large white pearl (800gp)
+gem: pale blue topaz (600gp)
+gem: clearest bright green emerald (3,000gp)
+gem: large golden pearl (800gp)
+gem: white opal (7,000gp)
+gem: small bloodstone (7gp)
+gem: large moonstone (120gp)
+gem: small amber (20gp)
+gem: pale blue topaz (400gp)
+gem: white opal (6,000gp)
+gem: large black pearl (4,000gp)
+rod of python (13,000gp)
+Total value: 41,760gp
+Resale value: 35,260gp
+----
+coin: 0pp 6,000gp 0sp 0cp (6,000gp value)
+art: smooth bone dinnerware (200gp)
+art: decorated bone pommel (500gp)
+art: intricate electrum bracelet (4,000gp)
+art: old gem-encrusted scepter (5,000gp)
+art: ornate electrum sculpture (3,000gp)
+art: baroque marble sculpture (900gp)
+medium [shadow, slick] +1 shield, light, wooden (8,806gp)
+remove paralysis (potion) (300gp)
+Total value: 28,706gp
+Resale value: 24,153gp
+----
+coin: 0pp 3,000gp 0sp 0cp (3,000gp value)
+art: crystal idol (800gp)
+art: etched brass paperweight (140gp)
+art: tiny brass scepter (80gp)
+arcane scroll containing: (900gp value)
+	1. glibness (lvl 3, cast 5) (525gp)
+	2. dispel magic (lvl 3, cast 5) (375gp)
+Total value: 4,920gp
+Resale value: 4,470gp
+----
+coin: 0pp 7,281gp 0sp 0cp (7,281gp value)
+gem: small brown-green garnet (50gp)
+gem: fiery yellow corundum (5,000gp)
+gem: sard (50gp)
+gem: large iolite (130gp)
+gem: azurite (12gp)
+wand of summon monster I (charges 44) (660gp)
+arcane scroll containing: (325gp value)
+	1. ventriloquism (lvl 1, cast 1) (25gp)
+	2. darkvision (lvl 2, cast 3) (150gp)
+	3. whispering wind (lvl 2, cast 3) (150gp)
+bracers of archery, lesser (5,000gp)
+feather token, tree (400gp)
+eagle's splendor (potion) (300gp)
+Total value: 19,208gp
+Resale value: 15,865gp 5sp
+----
+coin: 0pp 6,000gp 0sp 0cp (6,000gp value)
+fox's cunning (potion) (300gp)
+delay poison (potion) (300gp)
+medium +1 waraxe, dwarven (2,330gp)
+cat's grace (potion) (300gp)
+arcane scroll containing: (325gp value)
+	1. enlarge person (lvl 1, cast 1) (25gp)
+	2. mirror image (lvl 2, cast 3) (150gp)
+	3. invisibility (lvl 2, cast 3) (150gp)
+arcane scroll containing: (175gp value)
+	1. protection from evil (lvl 1, cast 1) (25gp)
+	2. invisibility (lvl 2, cast 3) (150gp)
+Total value: 9,730gp
+Resale value: 7,865gp
+----
+coin: 600pp 0gp 0sp 0cp (6,000gp value)
+art: ornate marble shoe-rack (500gp)
+art: smooth marble dinnerware (700gp)
+art: decorated jade-inlaid paperweight (700gp)
+art: intricate wooden clasp (60gp)
+art: delicate jade-inlaid door-knocker (1,300gp)
+art: old wooden sculpture (70gp)
+art: smooth wooden sculpture (60gp)
+art: large well-done wool tapestry with bone stand (600gp)
+art: intricate electrum plate (3,000gp)
+art: ornate porcelain dinnerware (500gp)
+art: old porcelain clasp (300gp)
+art: delicate marble pommel (900gp)
+art: faceted gem-encrusted plate (5,000gp)
+medium [frost, keen] +2 longsword (32,315gp)
+divine scroll containing: (175gp value)
+	1. detect snares and pits (lvl 1, cast 1) (25gp)
+	2. calm emotions (lvl 2, cast 3) (150gp)
+horn of goodness/evil (6,500gp)
+Total value: 58,680gp
+Resale value: 39,185gp
+----
+coin: 0pp 4,000gp 0sp 0cp (4,000gp value)
+art: fine electrum figurine (1,000gp)
+art: tiny marble brooch (800gp)
+art: smooth brass shoe-rack (130gp)
+staff of charming (charges 15) (4,950gp)
+Total value: 10,880gp
+Resale value: 8,405gp
+----
+coin: 0pp 1,000gp 0sp 0cp (1,000gp value)
+gem: violet garnet (800gp)
+gem: fire opal (6,000gp)
+gem: pink pearl (110gp)
+gem: small peridot (10gp)
+gem: large golden yellow topaz (6,000gp)
+gem: large citrine (90gp)
+gem: small peridot (10gp)
+gem: sardonyx (50gp)
+gem: golden yellow topaz (700gp)
+gem: small smoky quartz (12gp)
+gem: banded agate (13gp)
+fly (potion) (750gp)
+Total value: 15,545gp
+Resale value: 15,170gp
+----
+coin: 868pp 308gp 64sp 560cp (9,000gp value)
+gem: small bloodstone (8gp)
+gem: black opal (5,000gp)
+gem: small peridot (12gp)
+gem: large coral (600gp)
+gem: large lapis lazuli (40gp)
+gem: azurite (8gp)
+gem: small golden pearl (70gp)
+gem: small jasper (13gp)
+staff of healing (charges 37) (20,535gp)
+Total value: 35,286gp
+Resale value: 25,018gp 5sp
+----
+coin: 0pp 2,014gp 8sp 6cp (2,014gp 8sp 6cp value)
+gem: small zircon (14gp)
+gem: large iolite (50gp)
+gem: red-brown spinel (100gp)
+gem: large black pearl (2,000gp)
+gem: chrysoprase (50gp)
+gem: small moonstone (8gp)
+gem: azurite (12gp)
+gem: star rose quartz (50gp)
+gem: small fiery yellow corundum (600gp)
+gem: large red spinel (700gp)
+haste (potion) (750gp)
+Total value: 6,348gp 8sp 6cp
+Resale value: 5,973gp 8sp 6cp
+====
+Total coins: 2,023pp 29,985gp 713sp 956cp
+Grand total: 231,063gp 8sp 6cp
+Sales grand total: 181,365gp 8sp 6cp
+
+**************************************
+
+Level 16
+
+coin: 726pp 491gp 902sp 446cp (7,845gp 6sp 6cp value)
+art: tiny bone shoe-rack (300gp)
+art: faceted brass clasp (120gp)
+art: smooth marble brooch (700gp)
+art: old jade-inlaid sword-stand (1,800gp)
+art: intricate marble plate (800gp)
+art: ornate gold scepter (1,000gp)
+art: intricate silver plate (1,900gp)
+art: old porcelain wine-cup (900gp)
+art: intricate electrum plate (4,000gp)
+art: etched porcelain clasp (900gp)
+art: fine brass sword-stand (150gp)
+art: ornate wooden paperweight (30gp)
+art: delicate gold wine-cup (4,000gp)
+art: intricate porcelain sword-stand (700gp)
+Total value: 25,145gp 6sp 6cp
+----
+coin: 0pp 4,260gp 0sp 0cp (4,260gp value)
+gem: small jasper (9gp)
+gem: small onyx (11gp)
+gem: large malachite (40gp)
+gem: small smoky quartz (12gp)
+gem: large rich purple corundum (2,000gp)
+gem: jasper (40gp)
+gem: large pale blue topaz (5,000gp)
+gem: small amber (50gp)
+gem: iolite (50gp)
+gem: large star rose quartz (110gp)
+gem: rock crystal (clear quartz) (50gp)
+gem: zircon (60gp)
+gem: citrine (40gp)
+gem: white pearl (140gp)
+gem: large coral (700gp)
+gem: large amber (800gp)
+gem: fire opal (6,000gp)
+Total value: 19,372gp
+----
+coin: 0pp 8,000gp 0sp 0cp (8,000gp value)
+gem: moonstone (60gp)
+gem: small pale blue topaz (120gp)
+gem: small amethyst (40gp)
+gem: small rich purple corundum (400gp)
+gem: red garnet (130gp)
+gem: large red spinel (600gp)
+gem: small pale blue topaz (100gp)
+gem: small pale blue topaz (90gp)
+gem: coral (100gp)
+gem: large zircon (140gp)
+gem: small red garnet (50gp)
+gem: large jade (300gp)
+gem: large coral (500gp)
+gem: small black opal (500gp)
+gem: malachite (14gp)
+gem: small smoky quartz (10gp)
+gem: small red-brown spinel (50gp)
+gem: small pink pearl (50gp)
+arcane scroll containing: (225gp value)
+	1. alarm (lvl 1, cast 1) (25gp)
+	2. silence (lvl 2, cast 3) (200gp)
+fox's cunning (potion) (300gp)
+cure light wounds (potion) (50gp)
+cognizance crystal (1 points) (1,000gp)
+hide from animals (potion) (50gp)
+mage armor (potion) (50gp)
+ring of protection +2 (8,000gp)
+remove paralysis (potion) (300gp)
+Total value: 21,229gp
+Resale value: 16,241gp 5sp
+----
+coin: 95pp 68gp 56sp 91cp (1,024gp 5sp 1cp value)
+art: tiny bone candelabra (600gp)
+art: old porcelain sword-stand (1,000gp)
+art: etched crystal paperweight (1,000gp)
+art: old electrum pipe (1,000gp)
+art: gold and topaz bottle stopper cork with crystal stand (1,100gp)
+art: faceted silver pipe (1,800gp)
+art: ornate brass brooch (70gp)
+art: delicate bone wine-cup (400gp)
+art: smooth marble bracelet (500gp)
+art: smooth jade-inlaid wine-cup (1,000gp)
+art: etched jade-inlaid door-knocker (1,500gp)
+art: etched wooden shoe-rack (20gp)
+art: smooth marble plate (1,000gp)
+wand of contagion (charges 28) (6,300gp)
+rod of wonder (12,000gp value)
+	CURSED: completely different effect
+pearl of power, 3rd-level spell (9,000gp)
+Total value: 39,314gp 5sp 1cp
+Resale value: 25,664gp 5sp 1cp
+----
+coin: 590pp 635gp 158sp 151cp (6,552gp 3sp 1cp value)
+art: decorated bone brooch (400gp)
+art: smooth gem-encrusted paperweight (6,000gp)
+art: ornate jade-inlaid door-knocker (1,800gp)
+art: decorated gold candelabra (5,000gp)
+art: delicate wooden brooch (80gp)
+art: faceted crystal pommel (1,000gp)
+art: faceted brass ring (160gp)
+art: decorated jade-inlaid dinnerware (1,300gp)
+art: ornate electrum sword-stand (1,000gp)
+art: baroque marble candelabra (600gp)
+wand of magic missile (5th) (charges 35) (2,625gp)
+bracers of armor +3 (9,000gp)
+Total value: 35,517gp 3sp 1cp
+Resale value: 29,704gp 8sp 1cp
+----
+coin: 8pp 857gp 602sp 280cp (1,000gp value)
+gem: large peridot (100gp)
+gem: large zircon (100gp)
+gem: small sard (11gp)
+gem: large bloodstone (110gp)
+gem: small white pearl (80gp)
+gem: small white pearl (70gp)
+gem: large deep green spinel (400gp)
+gem: small chalcedony (8gp)
+gem: large alexandrite (5,000gp)
+gem: large chalcedony (120gp)
+medium mithral heavy shield (1,020gp)
+Total value: 8,019gp
+Resale value: 7,509gp
+----
+coin: 493pp 62gp 79sp 10cp (5,000gp value)
+gem: small blue sapphire (400gp)
+gem: large amethyst (500gp)
+gem: large moonstone (110gp)
+gem: large tourmaline (700gp)
+gem: freshwater (irregular) pearl (10gp)
+gem: peridot (40gp)
+gem: zircon (40gp)
+gem: small blue sapphire (600gp)
+gem: pale blue topaz (400gp)
+gem: small deep green spinel (40gp)
+gem: citrine (30gp)
+gem: eye agate (11gp)
+gem: small amethyst (30gp)
+Total value: 7,911gp
+----
+coin: 785pp 647gp 842sp 985cp (8,591gp 5cp value)
+gem: citrine (40gp)
+gem: azurite (12gp)
+gem: white opal (5,000gp)
+gem: small rock crystal (clear quartz) (9gp)
+gem: small fire opal (300gp)
+gem: large chalcedony (140gp)
+gem: small citrine (7gp)
+gem: large amethyst (300gp)
+gem: small alexandrite (110gp)
+gem: small white pearl (50gp)
+gem: large white opal (5,000gp)
+gem: large red spinel (300gp)
+gem: small rock crystal (clear quartz) (12gp)
+gem: malachite (6gp)
+gem: chalcedony (30gp)
+Total value: 19,907gp 5cp
+----
+coin: 0pp 3,163gp 0sp 0cp (3,163gp value)
+art: baroque bone wine-cup (600gp)
+art: decorated jade-inlaid scepter (1,100gp)
+art: smooth marble sculpture (800gp)
+art: etched wooden plate (60gp)
+art: fine porcelain bracelet (200gp)
+art: decorated marble pipe (700gp)
+art: old brass shoe-rack (50gp)
+art: baroque marble door-knocker (400gp)
+art: ornate bone plate (600gp)
+art: delicate crystal dinnerware (900gp)
+art: tiny jade-inlaid brooch (900gp)
+Total value: 9,473gp
+----
+coin: 874pp 0gp 0sp 0cp (8,740gp value)
+gem: small chalcedony (8gp)
+gem: large rock crystal (clear quartz) (70gp)
+gem: deep blue spinel (200gp)
+gem: malachite (11gp)
+gem: blue sapphire (3,000gp)
+gem: tourmaline (110gp)
+gem: red spinel (90gp)
+gem: large aquamarine (4,000gp)
+gem: large black pearl (4,000gp)
+gem: small blue sapphire (500gp)
+gem: small chrysoberyl (40gp)
+gem: small alexandrite (110gp)
+gem: large tourmaline (300gp)
+gem: large black pearl (2,000gp)
+arcane scroll containing: (1,450gp value)
+	1. illusory wall (lvl 4, cast 7) (700gp)
+	2. vampiric touch (lvl 3, cast 5) (375gp)
+	3. water breathing (lvl 3, cast 5) (375gp)
+Total value: 24,629gp
+Resale value: 23,904gp
+====
+Total coins: 3,571pp 18,183gp 2,639sp 1,963cp
+Grand total: 210,517gp 5sp 3cp
+Sales grand total: 184,832gp 5sp 3cp
+
+**************************************
+
+Level 17
+
+coin: 878pp 137gp 814sp 160cp (9,000gp value)
+gem: moss agate (9gp)
+gem: black star sapphire (8,000gp)
+gem: small rock crystal (clear quartz) (8gp)
+gem: large rhodochrosite (20gp)
+gem: golden yellow topaz (300gp)
+gem: obsidian (6gp)
+gem: small onyx (9gp)
+gem: blue quartz (12gp)
+gem: small moonstone (14gp)
+gem: large silver pearl (600gp)
+gem: golden pearl (60gp)
+gem: large jasper (100gp)
+gem: smoky quartz (70gp)
+gem: blue quartz (7gp)
+gem: malachite (7gp)
+large +4 alchemical silver greataxe (32,488gp)
+manual of bodily health +1 (27,500gp)
+Total value: 78,210gp
+Resale value: 48,216gp
+----
+coin: 0pp 10,000gp 0sp 0cp (10,000gp value)
+gem: large rhodochrosite (50gp)
+gem: small moonstone (10gp)
+gem: small smoky quartz (8gp)
+gem: large alexandrite (7,000gp)
+gem: white opal (6,000gp)
+gem: large tourmaline (700gp)
+gem: large chrysoprase (60gp)
+gem: small citrine (12gp)
+gem: alexandrite (400gp)
+gem: small emerald (700gp)
+gem: carnelian (30gp)
+gem: small smoky quartz (9gp)
+gem: small golden pearl (50gp)
+gem: small fiery yellow corundum (600gp)
+Total value: 25,629gp
+----
+coin: 0pp 5,110gp 0sp 0cp (5,110gp value)
+art: eyepatch with mock eye of sapphire and moonstone with jade-inlaid stand (1,100gp)
+art: tiny porcelain scepter (1,000gp)
+art: fine wooden dinnerware (70gp)
+art: smooth bone plate (100gp)
+art: ornate jade-inlaid wine-cup (1,100gp)
+art: delicate jade-inlaid candelabra (1,900gp)
+art: smooth bone sword-stand (600gp)
+magic vestment +2 (oil) (1,200gp)
+Total value: 12,180gp
+Resale value: 11,580gp
+----
+coin: 760pp 363gp 290sp 800cp (8,000gp value)
+art: old gold brooch (6,000gp)
+art: etched porcelain candelabra (1,000gp)
+art: smooth bone candelabra (400gp)
+art: old brass scepter (100gp)
+art: baroque crystal plate (1,100gp)
+art: faceted brass wine-cup (80gp)
+art: smooth wooden sword-stand (20gp)
+art: silver-plated steel longsword with jet jewel in hilt (1,000gp)
+art: tiny platinum dinnerware (8,000gp)
+art: etched bone wine-cup (200gp)
+art: fire opal pendant on a fine gold chain with jade-inlaid stand (1,700gp)
+art: fine marble ring (700gp)
+art: smooth brass dinnerware (70gp)
+art: intricate bone plate (100gp)
+Total value: 28,470gp
+----
+coin: 584pp 707gp 220sp 790cp (6,576gp 9sp value)
+gem: small red garnet (50gp)
+gem: small amethyst (20gp)
+gem: small jet (50gp)
+gem: lapis lazuli (12gp)
+gem: small black star sapphire (700gp)
+gem: deep green spinel (100gp)
+gem: small fire opal (400gp)
+gem: iolite (60gp)
+gem: large moonstone (110gp)
+gem: small star rose quartz (9gp)
+gem: red garnet (100gp)
+gem: moonstone (70gp)
+wand of major image (charges 24) (5,400gp)
+figurine of wondrous power, marble elephant (17,000gp)
+divine scroll containing: (900gp value)
+	1. magic circle against chaos (lvl 3, cast 5) (375gp)
+	2. resist electricity (lvl 2, cast 3) (150gp)
+	3. inflict serious wounds (lvl 3, cast 5) (375gp)
+Total value: 31,557gp 9sp
+Resale value: 19,907gp 9sp
+----
+coin: 0pp 11,000gp 0sp 0cp (11,000gp value)
+iron bands of binding (26,000gp)
+Total value: 37,000gp
+Resale value: 24,000gp
+----
+coin: 668pp 289gp 271sp 390cp (7,000gp value)
+art: old gold pommel (1,000gp)
+art: old brass scepter (90gp)
+art: smooth crystal sculpture (1,100gp)
+art: etched brass pommel (90gp)
+art: ornate brass paperweight (130gp)
+art: ornate bone pipe (200gp)
+art: fine porcelain plate (1,000gp)
+art: decorated bone door-knocker (300gp)
+art: tiny bone pipe (100gp)
+art: etched marble wine-cup (800gp)
+art: delicate wooden candelabra (90gp)
+art: faceted brass door-knocker (90gp)
+art: fine porcelain paperweight (400gp)
+Total value: 12,390gp
+----
+coin: 923pp 695gp 701sp 490cp (10,000gp value)
+gem: smoky quartz (50gp)
+gem: jet (120gp)
+gem: bloodstone (30gp)
+gem: small moonstone (15gp)
+gem: small moonstone (16gp)
+gem: large malachite (60gp)
+gem: large carnelian (100gp)
+gem: large sard (110gp)
+gem: small bloodstone (11gp)
+gem: small chrysoprase (16gp)
+gem: large zircon (80gp)
+gem: small emerald (500gp)
+cape of the mountebank (10,080gp)
+medium +4 shield, heavy, steel (16,340gp)
+ring of blinking (27,000gp)
+Total value: 64,528gp
+Resale value: 37,818gp
+----
+coin: 0pp 12,000gp 0sp 0cp (12,000gp value)
+art: intricate wooden plate (100gp)
+art: decorated marble ring (900gp)
+art: decorated brass door-knocker (120gp)
+art: decorated brass ring (80gp)
+art: fine electrum pommel (3,000gp)
+art: fine bone wine-cup (600gp)
+art: old masterpiece painting with jade-inlaid stand (1,900gp)
+art: delicate wooden dinnerware (100gp)
+art: baroque marble door-knocker (700gp)
+art: etched marble paperweight (600gp)
+art: ornate marble bracelet (900gp)
+art: old marble dinnerware (500gp)
+art: decorated jade-inlaid brooch (1,300gp)
+art: ornate gold figurine (1,000gp)
+art: etched wooden bracelet (100gp)
+medium +2 shortspear (8,302gp)
+Total value: 32,202gp
+Resale value: 28,051gp
+----
+coin: 414pp 584gp 937sp 365cp (4,821gp 3sp 5cp value)
+gem: large azurite (40gp)
+gem: large golden pearl (300gp)
+gem: small star ruby (500gp)
+gem: large freshwater (irregular) pearl (70gp)
+gem: rhodochrosite (14gp)
+gem: large jade (400gp)
+gem: smoky quartz (70gp)
+gem: small deep green spinel (20gp)
+gem: emerald (5,000gp)
+gem: coral (110gp)
+gem: sard (40gp)
+gem: pink pearl (80gp)
+gem: small peridot (9gp)
+gem: deep green spinel (100gp)
+gem: lapis lazuli (10gp)
+gem: red-brown spinel (110gp)
+Total value: 11,694gp 3sp 5cp
+====
+Total coins: 4,227pp 40,885gp 3,233sp 2,995cp
+Grand total: 333,861gp 2sp 5cp
+Sales grand total: 247,756gp 2sp 5cp
+
+**************************************
+
+Level 18
+
+coin: 753pp 466gp 37sp 30cp (8,000gp value)
+art: intricate porcelain scepter (200gp)
+art: fine crystal plate (800gp)
+art: decorated porcelain clasp (100gp)
+art: baroque electrum sculpture (2,000gp)
+art: tiny marble sculpture (700gp)
+art: old porcelain candelabra (500gp)
+art: old bone clasp (100gp)
+art: delicate crystal shoe-rack (900gp)
+art: fine marble figurine (900gp)
+art: smooth marble figurine (1,000gp)
+art: intricate bone clasp (300gp)
+art: intricate wooden bracelet (30gp)
+art: decorated wooden sword-stand (100gp)
+art: ornate gem-encrusted plate (2,000gp)
+art: etched brass sword-stand (110gp)
+art: baroque jade-inlaid pipe (1,600gp)
+art: old bone scepter (600gp)
+art: decorated gem-encrusted candelabra (5,000gp)
+art: smooth silver scepter (1,100gp)
+art: baroque jade-inlaid scepter (1,200gp)
+art: ornate marble figurine (1,100gp)
+wand of acid arrow (charges 42) (3,780gp)
+Total value: 32,120gp
+Resale value: 30,230gp
+----
+coin: 0pp 8,000gp 0sp 0cp (8,000gp value)
+gem: small amethyst (50gp)
+gem: tiger eye turquoise (10gp)
+gem: large blue quartz (40gp)
+gem: small rock crystal (clear quartz) (4gp)
+gem: small chrysoberyl (40gp)
+gem: eye agate (12gp)
+gem: small smoky quartz (10gp)
+gem: jade (110gp)
+gem: deep green spinel (90gp)
+gem: violet garnet (700gp)
+gem: large obsidian (30gp)
+gem: freshwater (irregular) pearl (10gp)
+gem: bloodstone (70gp)
+gem: small red-brown spinel (40gp)
+gem: star rose quartz (50gp)
+gem: small aquamarine (110gp)
+gem: small fire opal (800gp)
+gem: small chalcedony (7gp)
+gem: large golden pearl (500gp)
+gem: large obsidian (40gp)
+gem: citrine (50gp)
+gem: small brown-green garnet (60gp)
+gem: freshwater (irregular) pearl (12gp)
+gem: small black opal (500gp)
+gem: hematite (8gp)
+gem: sardonyx (50gp)
+rod of negation (37,000gp)
+Total value: 48,403gp
+Resale value: 29,903gp
+----
+coin: 275pp 7,531gp 566sp 5,554cp (10,393gp 1sp 4cp value)
+art: decorated brass candelabra (90gp)
+art: smooth wooden pommel (10gp)
+art: faceted wooden dinnerware (80gp)
+art: delicate wooden candelabra (40gp)
+art: tiny porcelain plate (100gp)
+art: decorated wooden plate (90gp)
+art: fine crystal wine-cup (1,100gp)
+art: fine porcelain pipe (700gp)
+art: smooth brass sword-stand (120gp)
+art: ornate porcelain pommel (600gp)
+art: intricate crystal sword-stand (600gp)
+art: decorated jade-inlaid shoe-rack (1,800gp)
+art: smooth wooden shoe-rack (60gp)
+art: faceted bone paperweight (600gp)
+art: smooth brass wine-cup (100gp)
+Total value: 16,483gp 1sp 4cp
+----
+coin: 0pp 8,303gp 0sp 0cp (8,303gp value)
+art: tiny jade-inlaid figurine (1,400gp)
+art: old gold paperweight (3,000gp)
+art: smooth jade-inlaid sculpture (1,500gp)
+art: ornate marble bracelet (400gp)
+art: decorated brass paperweight (80gp)
+art: decorated wooden bracelet (30gp)
+art: tiny gold clasp (2,000gp)
+art: tiny silver candelabra (1,400gp)
+art: faceted gem-encrusted pipe (4,000gp)
+art: etched electrum dinnerware (2,000gp)
+art: fine bone figurine (500gp)
+art: delicate wooden sculpture (20gp)
+art: delicate gold figurine (2,000gp)
+art: tiny crystal door-knocker (800gp)
+art: fine brass bracelet (100gp)
+art: gold dragon comb with red garnet eye with crystal stand (1,200gp)
+art: smooth porcelain ring (1,000gp)
+art: fine crystal clasp (1,200gp)
+belt of giant strength +4 (16,000gp)
+Total value: 46,933gp
+Resale value: 38,933gp
+----
+coin: 0pp 10,559gp 0sp 0cp (10,559gp value)
+art: baroque jade-inlaid door-knocker (2,000gp)
+art: ornate electrum clasp (2,000gp)
+art: ornate porcelain sculpture (900gp)
+art: etched gold figurine (5,000gp)
+art: etched crystal clasp (1,000gp)
+art: ornate brass door-knocker (60gp)
+art: etched gem-encrusted pipe (4,000gp)
+art: tiny jade-inlaid clasp (1,600gp)
+art: tiny crystal pipe (1,000gp)
+art: intricate bone bracelet (300gp)
+art: faceted gem-encrusted wine-cup (5,000gp)
+art: decorated jade-inlaid paperweight (1,700gp)
+art: fine marble plate (500gp)
+art: faceted porcelain scepter (100gp)
+art: baroque silver sword-stand (2,000gp)
+art: faceted wooden brooch (30gp)
+art: old gold plate (1,000gp)
+art: fine wooden sculpture (10gp)
+art: baroque porcelain pommel (200gp)
+art: intricate jade-inlaid door-knocker (1,900gp)
+art: fine marble sword-stand (1,000gp)
+Total value: 41,859gp
+----
+coin: 0pp 12,000gp 0sp 0cp (12,000gp value)
+art: faceted bone bracelet (200gp)
+art: intricate bone pipe (100gp)
+art: delicate marble sculpture (800gp)
+art: faceted marble pommel (800gp)
+art: decorated porcelain clasp (400gp)
+art: decorated crystal clasp (800gp)
+art: ornate jade-inlaid brooch (2,000gp)
+art: faceted crystal bracelet (500gp)
+art: baroque gem-encrusted pipe (5,000gp)
+art: faceted gold brooch (4,000gp)
+art: tiny brass pipe (100gp)
+art: delicate jade-inlaid dinnerware (1,700gp)
+art: old crystal wine-cup (900gp)
+art: old jade-inlaid sculpture (1,200gp)
+rod of metamagic, enlarge, lesser (3,000gp)
+psionic universal item: third eye sense (24,000gp)
+medium +2 shortbow, composite (+0 str bonus) (8,375gp)
+large +1 longsword (2,315gp)
+Total value: 68,190gp
+Resale value: 49,345gp
+----
+coin: 982pp 65gp 761sp 370cp (9,964gp 8sp value)
+art: etched porcelain candelabra (800gp)
+art: ornate wooden figurine (90gp)
+art: faceted brass shoe-rack (110gp)
+art: delicate crystal sword-stand (1,200gp)
+art: decorated electrum sculpture (3,000gp)
+art: faceted crystal shoe-rack (1,000gp)
+art: fine bone sword-stand (500gp)
+art: smooth brass sculpture (80gp)
+art: delicate silver ring (2,300gp)
+art: intricate silver pipe (1,800gp)
+art: tiny crystal ring (600gp)
+art: etched gem-encrusted door-knocker (4,000gp)
+art: old porcelain shoe-rack (200gp)
+art: fine marble scepter (700gp)
+art: faceted platinum wine-cup (8,000gp)
+art: fine bone scepter (200gp)
+art: fine porcelain clasp (100gp)
+flame arrow (oil) (750gp)
+Total value: 35,394gp 8sp
+Resale value: 35,019gp 8sp
+----
+coin: 0pp 14,000gp 0sp 0cp (14,000gp value)
+gem: large amber (500gp)
+gem: large jasper (100gp)
+gem: peridot (30gp)
+gem: fiery yellow corundum (6,000gp)
+gem: small rock crystal (clear quartz) (10gp)
+gem: large deep blue spinel (3,000gp)
+gem: small star rose quartz (11gp)
+gem: small deep green spinel (70gp)
+gem: small chrysoprase (9gp)
+gem: large golden yellow topaz (8,000gp)
+gem: large rhodochrosite (50gp)
+gem: small pink diamond (2,000gp)
+wand of cure moderate wounds (charges 43) (3,870gp)
+reduce person (potion) (250gp)
+Total value: 37,900gp
+Resale value: 35,840gp
+----
+gem: large red-brown spinel (300gp)
+gem: blue diamond (4,000gp)
+gem: rhodochrosite (13gp)
+gem: small amethyst (60gp)
+gem: large golden yellow topaz (3,000gp)
+gem: large silver pearl (500gp)
+gem: small onyx (10gp)
+gem: large amber (600gp)
+gem: large jasper (70gp)
+gem: large azurite (70gp)
+gem: small moonstone (9gp)
+gem: small black opal (700gp)
+gem: small sardonyx (13gp)
+gem: large amethyst (800gp)
+gem: small iolite (6gp)
+gem: small star rose quartz (12gp)
+gem: jet (120gp)
+gem: large carnelian (120gp)
+Total value: 10,403gp
+----
+coin: 1,100pp 0gp 0sp 0cp (11,000gp value)
+gem: small red-brown spinel (60gp)
+gem: small chrysoberyl (80gp)
+gem: jasper (60gp)
+gem: malachite (10gp)
+gem: small amethyst (30gp)
+gem: small zircon (9gp)
+gem: large eye agate (30gp)
+gem: large amethyst (300gp)
+gem: small deep green spinel (50gp)
+gem: small amber (60gp)
+gem: small chrysoprase (10gp)
+gem: white pearl (110gp)
+gem: large golden pearl (600gp)
+gem: small amethyst (40gp)
+gem: small jacinth (4,000gp)
+gem: large tiger eye turquoise (60gp)
+Total value: 16,509gp
+====
+Total coins: 3,110pp 60,924gp 1,364sp 5,954cp
+Grand total: 354,194gp 9sp 4cp
+Sales grand total: 304,524gp 9sp 4cp
+
+**************************************
+
+Level 19
+
+coin: 1,137pp 2,274gp 6,017sp 2,827cp (14,273gp 9sp 7cp value)
+gem: large hematite (50gp)
+gem: obsidian (10gp)
+gem: small onyx (9gp)
+gem: small sardonyx (10gp)
+gem: small onyx (11gp)
+gem: small onyx (10gp)
+gem: violet garnet (700gp)
+gem: small red spinel (40gp)
+gem: large moss agate (20gp)
+gem: jade (100gp)
+gem: small chalcedony (15gp)
+gem: small blue sapphire (600gp)
+gem: black pearl (400gp)
+gem: small jasper (9gp)
+gem: large red garnet (700gp)
+gem: small rich purple corundum (600gp)
+gem: sard (20gp)
+gem: small aquamarine (110gp)
+gem: small white pearl (50gp)
+gem: large hematite (50gp)
+gem: moonstone (20gp)
+gem: sard (60gp)
+gem: small zircon (8gp)
+gem: large blue quartz (40gp)
+gem: fiery yellow corundum (6,000gp)
+gem: small chalcedony (12gp)
+gem: small moonstone (9gp)
+gem: jade (110gp)
+gem: small rich purple corundum (400gp)
+gem: chalcedony (40gp)
+staff of healing (charges 44) (24,420gp)
+Total value: 48,906gp 9sp 7cp
+Resale value: 36,696gp 9sp 7cp
+----
+coin: 1,480pp 0gp 0sp 0cp (14,800gp value)
+gem: sard (70gp)
+gem: small blue diamond (4,000gp)
+gem: chalcedony (50gp)
+gem: small red garnet (70gp)
+gem: hematite (12gp)
+gem: small bloodstone (7gp)
+gem: large tiger eye turquoise (20gp)
+gem: tiger eye turquoise (10gp)
+gem: large lapis lazuli (80gp)
+gem: sard (20gp)
+gem: small onyx (11gp)
+gem: small peridot (13gp)
+gem: tiger eye turquoise (12gp)
+gem: small deep blue spinel (80gp)
+gem: blue sapphire (8,000gp)
+gem: large hematite (40gp)
+power stone (psychic warrior): (1,125gp value)
+	1. oak body (level 5) (1,125gp)
+Total value: 28,420gp
+Resale value: 27,857gp 5sp
+----
+coin: 2,000pp 0gp 0sp 0cp (20,000gp value)
+gem: amethyst (90gp)
+gem: small moonstone (13gp)
+gem: small black opal (500gp)
+gem: small red spinel (50gp)
+gem: banded agate (14gp)
+gem: small white opal (700gp)
+gem: large black pearl (6,000gp)
+gem: peridot (30gp)
+gem: small chrysoprase (8gp)
+gem: large golden yellow topaz (6,000gp)
+gem: small deep blue spinel (80gp)
+gem: jasper (50gp)
+gem: large golden pearl (400gp)
+gem: onyx (70gp)
+gem: jasper (60gp)
+gem: large jasper (80gp)
+gem: large golden pearl (500gp)
+gem: large banded agate (50gp)
+gem: large citrine (110gp)
+gem: iolite (50gp)
+gem: small citrine (6gp)
+gem: black star sapphire (6,000gp)
+arcane scroll containing: (1,450gp value)
+	1. slow (lvl 3, cast 5) (375gp)
+	2. enervation (lvl 4, cast 7) (700gp)
+	3. flame arrow (lvl 3, cast 5) (375gp)
+medium +2 longbow, composite (+3 str bonus) (8,700gp)
+ioun stone, pink and green sphere (8,000gp)
+Total value: 59,011gp
+Resale value: 49,936gp
+----
+coin: 1,272pp 0gp 0sp 0cp (12,720gp value)
+art: intricate gem-encrusted figurine (4,000gp)
+art: decorated jade-inlaid plate (1,800gp)
+art: baroque brass clasp (110gp)
+art: tiny silver candelabra (1,600gp)
+art: old gem-encrusted pipe (4,000gp)
+art: ornate silver ring (2,500gp)
+art: smooth bone pommel (500gp)
+art: faceted bone sculpture (400gp)
+art: faceted gold scepter (5,000gp)
+art: fine bone pommel (200gp)
+art: ornate gold paperweight (3,000gp)
+art: intricate jade-inlaid paperweight (1,300gp)
+art: ornate bone plate (200gp)
+art: smooth brass paperweight (90gp)
+art: porcelain idol (100gp)
+art: tiny bone bracelet (500gp)
+art: ornate gold dinnerware (3,000gp)
+art: old jade-inlaid pommel (1,700gp)
+art: delicate bone pipe (100gp)
+art: ornate marble door-knocker (400gp)
+art: ornate wooden sculpture (80gp)
+art: intricate marble shoe-rack (800gp)
+art: intricate electrum sculpture (2,000gp)
+art: baroque gem-encrusted sculpture (3,000gp)
+art: intricate brass ring (100gp)
+art: old crystal sculpture (800gp)
+art: smooth marble pommel (1,200gp)
+arcane scroll containing: (1,125gp value)
+	1. flame arrow (lvl 3, cast 5) (375gp)
+	2. sleet storm (lvl 3, cast 5) (375gp)
+	3. heroism (lvl 3, cast 5) (375gp)
+medium +3 sword, bastard (18,335gp)
+Total value: 70,660gp
+Resale value: 60,930gp
+----
+coin: 385pp 8,765gp 3,811sp 390cp (13,000gp value)
+gem: small deep green spinel (50gp)
+gem: violet garnet (600gp)
+gem: iolite (60gp)
+gem: large red garnet (700gp)
+gem: large amethyst (400gp)
+gem: banded agate (15gp)
+gem: rose quartz (60gp)
+gem: white opal (5,000gp)
+gem: fire opal (3,000gp)
+gem: small onyx (12gp)
+gem: banded agate (9gp)
+gem: small peridot (11gp)
+gem: alexandrite (700gp)
+gem: small brown-green garnet (40gp)
+divine scroll containing: (1,825gp value)
+	1. transmute mud to rock (lvl 5, cast 9) (1,125gp)
+	2. dismissal (lvl 4, cast 7) (700gp)
+wand of silence (charges 50) (4,500gp)
+Total value: 29,982gp
+Resale value: 26,819gp 5sp
+----
+coin: 1,345pp 4,921gp 710sp 198cp (18,443gp 9sp 8cp value)
+art: etched bone brooch (200gp)
+art: baroque brass pipe (70gp)
+art: faceted electrum door-knocker (1,000gp)
+art: ornate gem-encrusted sculpture (7,000gp)
+art: smooth jade-inlaid pipe (1,700gp)
+art: fine jade-inlaid bracelet (1,400gp)
+art: baroque silver shoe-rack (1,500gp)
+art: smooth brass pipe (70gp)
+art: tiny porcelain wine-cup (1,000gp)
+art: intricate brass pipe (80gp)
+art: smooth marble sword-stand (700gp)
+art: faceted marble candelabra (600gp)
+art: baroque brass clasp (120gp)
+art: faceted crystal sword-stand (700gp)
+art: old jade-inlaid clasp (1,200gp)
+art: old jade-inlaid clasp (1,400gp)
+art: decorated silver bracelet (1,900gp)
+art: delicate bone shoe-rack (600gp)
+art: fine bone ring (600gp)
+art: smooth gold shoe-rack (6,000gp)
+art: etched crystal bracelet (1,100gp)
+art: intricate crystal plate (700gp)
+arcane scroll containing: (8,925gp value)
+	1. simulacrum (lvl 7, cast 13) (7,275gp)
+	2. flesh to stone (lvl 6, cast 11) (1,650gp)
+Total value: 57,008gp 9sp 8cp
+Resale value: 52,546gp 4sp 8cp
+----
+coin: 0pp 9,777gp 0sp 0cp (9,777gp value)
+art: intricate wooden pipe (30gp)
+art: delicate gem-encrusted clasp (3,000gp)
+art: baroque marble brooch (200gp)
+art: faceted silver door-knocker (2,200gp)
+art: old bone dinnerware (500gp)
+art: old jade-inlaid brooch (1,200gp)
+art: decorated porcelain pommel (700gp)
+art: fine marble figurine (700gp)
+art: intricate wooden dinnerware (60gp)
+art: smooth bone clasp (500gp)
+art: baroque crystal sculpture (800gp)
+art: etched porcelain pommel (700gp)
+art: old porcelain scepter (900gp)
+art: faceted gem-encrusted sword-stand (7,000gp)
+art: old bone ring (600gp)
+art: tiny bone clasp (300gp)
+art: faceted bone bracelet (300gp)
+art: faceted jade-inlaid plate (1,200gp)
+art: tiny gem-encrusted plate (6,000gp)
+art: faceted brass paperweight (110gp)
+levitate (potion or oil) (300gp)
+rod of wonder (12,000gp)
+arcane scroll containing: (750gp value)
+	1. arcane sight (lvl 3, cast 5) (375gp)
+	2. lightning bolt (lvl 3, cast 5) (375gp)
+psicrown: great dominator (points/level 735/15) (44,100gp)
+Total value: 93,927gp
+Resale value: 65,352gp
+----
+art: intricate wooden clasp (70gp)
+art: baroque marble candelabra (1,100gp)
+art: faceted crystal pipe (900gp)
+art: ornate brass clasp (120gp)
+art: smooth bone brooch (500gp)
+art: tiny bone plate (200gp)
+art: intricate gold sword-stand (6,000gp)
+art: etched gem-encrusted ring (4,000gp)
+art: intricate brass figurine (120gp)
+art: old crystal wine-cup (1,300gp)
+art: decorated marble bracelet (700gp)
+art: old marble door-knocker (700gp)
+art: decorated brass sword-stand (70gp)
+art: fine gem-encrusted wine-cup (6,000gp)
+art: baroque electrum wine-cup (2,000gp)
+art: faceted crystal dinnerware (300gp)
+art: intricate brass sword-stand (110gp)
+ring of wizardry (IV) (100,000gp)
+Total value: 124,190gp
+Resale value: 74,190gp
+----
+coin: 0pp 20,000gp 0sp 0cp (20,000gp value)
+art: faceted brass pipe (110gp)
+art: faceted silver sword-stand (1,500gp)
+art: delicate electrum scepter (1,000gp)
+art: old porcelain sculpture (700gp)
+art: old porcelain shoe-rack (1,000gp)
+art: intricate brass clasp (100gp)
+art: intricate wooden scepter (40gp)
+art: smooth jade-inlaid figurine (900gp)
+art: black velvet mask with numerous citrines with brass stand (90gp)
+art: smooth jade-inlaid sculpture (1,800gp)
+art: ornate wooden door-knocker (80gp)
+art: baroque jade-inlaid scepter (1,600gp)
+art: faceted porcelain ring (200gp)
+art: decorated electrum paperweight (2,000gp)
+art: intricate crystal plate (800gp)
+art: etched silver pommel (1,300gp)
+art: decorated jade-inlaid figurine (700gp)
+power stone (psion/wilder): (5,750gp value)
+	1. temporal acceleration (level 6) (1,650gp)
+	2. psychic reformation (level 4) (700gp)
+	3. decerebrate (level 7) (2,275gp)
+	4. true seeing, psionic (level 5) (1,125gp)
+Total value: 39,670gp
+Resale value: 36,795gp
+----
+coin: 898pp 15gp 42sp 80cp (9,000gp value)
+art: intricate wooden sculpture (30gp)
+art: baroque gold ring (6,000gp)
+art: fine brass plate (130gp)
+art: baroque bone scepter (400gp)
+art: intricate porcelain sword-stand (900gp)
+art: old marble ring (900gp)
+art: baroque marble pommel (300gp)
+art: old bone door-knocker (600gp)
+art: fine bone ring (600gp)
+art: etched brass candelabra (40gp)
+art: decorated gem-encrusted scepter (4,000gp)
+art: delicate crystal bracelet (1,000gp)
+art: tiny bone paperweight (500gp)
+art: smooth brass brooch (100gp)
+art: ornate bone dinnerware (500gp)
+art: delicate jade-inlaid door-knocker (800gp)
+art: etched gem-encrusted dinnerware (6,000gp)
+art: delicate bone plate (500gp)
+cure moderate wounds (potion) (300gp)
+medium +3 greataxe (18,320gp)
+greater magic fang +1 (potion) (750gp)
+amulet of health +4 (16,000gp)
+Total value: 67,670gp
+Resale value: 49,985gp
+====
+Total coins: 8,517pp 45,752gp 10,580sp 3,495cp
+Grand total: 619,445gp 9sp 4cp
+Sales grand total: 481,108gp 4sp 5cp
+
+**************************************
+
+Level 20
+
+coin: 1,100pp 0gp 0sp 0cp (11,000gp value)
+art: tiny marble bracelet (800gp)
+art: fine porcelain wine-cup (900gp)
+art: fine marble sword-stand (500gp)
+art: intricate silver bracelet (1,700gp)
+art: decorated gold pipe (2,000gp)
+art: delicate marble pommel (200gp)
+art: faceted bone sword-stand (300gp)
+art: decorated porcelain candelabra (700gp)
+art: tiny crystal pommel (1,500gp)
+art: intricate marble dinnerware (900gp)
+art: etched electrum shoe-rack (3,000gp)
+art: ornate gem-encrusted plate (7,000gp)
+art: baroque brass wine-cup (60gp)
+art: delicate gold wine-cup (2,000gp)
+art: etched marble paperweight (700gp)
+art: old electrum wine-cup (3,000gp)
+art: carved bone statuette with wooden stand (40gp)
+art: old wooden candelabra (50gp)
+art: baroque porcelain pommel (200gp)
+art: etched brass sword-stand (70gp)
+art: baroque silver brooch (1,900gp)
+art: decorated marble shoe-rack (600gp)
+art: decorated brass clasp (70gp)
+staff of defense (charges 37) (43,105gp)
+staff of passage (charges 50) (170,500gp)
+arcane scroll containing: (9,900gp value)
+	1. contact other plane (lvl 5, cast 9) (1,125gp)
+	2. scintillating pattern (lvl 8, cast 15) (3,000gp)
+	3. horrid wilting (lvl 8, cast 15) (3,000gp)
+	4. freezing sphere (lvl 6, cast 11) (1,650gp)
+	5. break enchantment (lvl 5, cast 9) (1,125gp)
+Total value: 262,695gp
+Resale value: 150,942gp 5sp
+----
+coin: 0pp 7,000gp 0sp 0cp (7,000gp value)
+art: etched crystal dinnerware (800gp)
+art: faceted silver shoe-rack (1,400gp)
+art: ornate wooden clasp (20gp)
+art: old silver candelabra (1,600gp)
+art: decorated gem-encrusted wine-cup (3,000gp)
+art: large well-done wool tapestry with bone stand (200gp)
+art: old bone ring (300gp)
+art: smooth brass candelabra (80gp)
+art: decorated brass paperweight (150gp)
+art: intricate bone pommel (200gp)
+art: delicate marble sword-stand (200gp)
+Total value: 14,950gp
+----
+coin: 2,100pp 0gp 0sp 0cp (21,000gp value)
+art: smooth brass clasp (110gp)
+art: baroque brass paperweight (70gp)
+art: baroque marble wine-cup (1,100gp)
+art: fine brass clasp (90gp)
+art: ornate crystal figurine (800gp)
+art: baroque wooden paperweight (100gp)
+art: ornate marble sword-stand (200gp)
+art: smooth brass door-knocker (140gp)
+art: fine marble scepter (1,100gp)
+art: fine wooden figurine (70gp)
+art: fine brass ring (130gp)
+art: smooth electrum wine-cup (3,000gp)
+art: ornate gem-encrusted candelabra (6,000gp)
+art: fine platinum pommel (9,000gp)
+art: fine brass pommel (100gp)
+art: delicate crystal plate (1,300gp)
+art: smooth marble sculpture (700gp)
+art: fine crystal sword-stand (800gp)
+art: decorated crystal clasp (300gp)
+art: baroque brass figurine (70gp)
+art: decorated electrum figurine (3,000gp)
+Total value: 49,180gp
+----
+coin: 888pp 5,459gp 6,465sp 1,450cp (15,000gp value)
+gem: small rose quartz (10gp)
+gem: large chrysoberyl (700gp)
+gem: small moonstone (7gp)
+gem: small amethyst (30gp)
+gem: rock crystal (clear quartz) (40gp)
+gem: moss agate (10gp)
+gem: large azurite (40gp)
+gem: small deep green spinel (50gp)
+gem: large citrine (90gp)
+gem: blue quartz (8gp)
+gem: small blue sapphire (400gp)
+gem: large tourmaline (800gp)
+gem: deep blue spinel (500gp)
+gem: small black opal (400gp)
+gem: small deep green spinel (80gp)
+gem: amethyst (100gp)
+gem: white opal (6,000gp)
+gem: small pink diamond (6,000gp)
+gem: red spinel (100gp)
+arcane scroll containing: (950gp value)
+	1. cure moderate wounds (lvl 2, cast 3) (200gp)
+	2. tongues (lvl 3, cast 5) (375gp)
+	3. water breathing (lvl 3, cast 5) (375gp)
+cognizance crystal (1 points) (1,000gp)
+ring of protection +2 (8,000gp)
+small +3 shield, heavy, steel (9,340gp)
+Total value: 49,655gp
+Resale value: 40,010gp
+----
+coin: 949pp 1,885gp 5,782sp 4,680cp (12,000gp value)
+art: baroque crystal sculpture (1,300gp)
+art: ornate wooden door-knocker (60gp)
+art: intricate wooden figurine (70gp)
+art: ornate wooden plate (10gp)
+art: ornate brass paperweight (90gp)
+art: delicate crystal clasp (1,300gp)
+art: delicate bone scepter (500gp)
+art: tiny jade-inlaid figurine (700gp)
+art: intricate marble wine-cup (500gp)
+art: baroque jade-inlaid sculpture (1,500gp)
+art: faceted crystal dinnerware (1,300gp)
+art: faceted gold pipe (2,000gp)
+art: ornate jade-inlaid scepter (1,300gp)
+art: tiny bone clasp (300gp)
+art: baroque crystal clasp (900gp)
+art: faceted porcelain scepter (400gp)
+art: tiny marble figurine (500gp)
+Total value: 24,730gp
+----
+coin: 617pp 7,379gp 4,076sp 4,340cp (14,000gp value)
+art: smooth gold sword-stand (5,000gp)
+art: baroque bone plate (300gp)
+art: ornate crystal scepter (1,100gp)
+art: tiny porcelain pipe (400gp)
+art: faceted bone door-knocker (300gp)
+art: smooth crystal figurine (700gp)
+art: etched electrum sword-stand (1,000gp)
+art: tiny bone clasp (100gp)
+art: delicate brass sculpture (130gp)
+art: smooth wooden wine-cup (40gp)
+art: faceted gem-encrusted shoe-rack (6,000gp)
+art: etched brass scepter (150gp)
+art: tiny wooden sword-stand (50gp)
+art: baroque brass figurine (130gp)
+art: ornate electrum door-knocker (3,000gp)
+art: baroque porcelain bracelet (1,000gp)
+art: faceted bone paperweight (100gp)
+art: fine jade-inlaid paperweight (1,000gp)
+art: tiny gold sculpture (1,000gp)
+art: faceted brass door-knocker (130gp)
+art: decorated electrum ring (3,000gp)
+art: decorated wooden wine-cup (60gp)
+medium dragonhide plate (3,300gp)
+Total value: 41,990gp
+Resale value: 40,340gp
+----
+coin: 462pp 34gp 670sp 13cp (4,721gp 1sp 3cp value)
+art: tiny bone candelabra (400gp)
+art: etched silver sword-stand (1,600gp)
+art: delicate bone shoe-rack (400gp)
+art: fine marble brooch (800gp)
+art: decorated electrum shoe-rack (3,000gp)
+art: etched porcelain wine-cup (400gp)
+art: fine marble candelabra (600gp)
+art: decorated jade-inlaid clasp (1,700gp)
+art: intricate silver pipe (1,800gp)
+art: smooth crystal shoe-rack (1,100gp)
+art: baroque jade-inlaid wine-cup (1,500gp)
+art: decorated wooden pommel (20gp)
+art: fine brass door-knocker (100gp)
+art: tiny bone plate (600gp)
+art: faceted electrum dinnerware (4,000gp)
+art: fine marble door-knocker (800gp)
+art: etched silver brooch (2,300gp)
+art: etched brass scepter (90gp)
+art: baroque gold shoe-rack (5,000gp)
+ring of protection +3 (18,000gp)
+Total value: 48,931gp 1sp 3cp
+Resale value: 39,931gp 1sp 3cp
+----
+coin: 839pp 574gp 266sp 940cp (9,000gp value)
+art: delicate silver door-knocker (1,900gp)
+art: tiny brass wine-cup (80gp)
+art: ornate wooden door-knocker (70gp)
+art: etched brass pommel (100gp)
+art: decorated bone door-knocker (600gp)
+art: fine porcelain sword-stand (700gp)
+art: tiny gold brooch (6,000gp)
+art: ornate wooden brooch (70gp)
+art: smooth porcelain ring (1,000gp)
+art: smooth jade-inlaid plate (700gp)
+art: baroque marble clasp (400gp)
+art: old crystal pipe (1,400gp)
+art: baroque electrum ring (2,000gp)
+art: etched wooden door-knocker (80gp)
+art: fine marble bracelet (900gp)
+art: delicate marble clasp (700gp)
+art: baroque platinum brooch (6,000gp)
+art: smooth jade-inlaid door-knocker (1,200gp)
+art: smooth crystal bracelet (700gp)
+art: tiny brass candelabra (150gp)
+art: faceted marble scepter (500gp)
+rod of metamagic, empower (32,500gp)
+staff of swarming insects (charges 28) (13,860gp)
+Total value: 80,610gp
+Resale value: 57,430gp
+----
+coin: 0pp 17,000gp 0sp 0cp (17,000gp value)
+gem: jasper (70gp)
+gem: small sardonyx (7gp)
+gem: rose quartz (20gp)
+gem: small amber (50gp)
+gem: small carnelian (10gp)
+gem: large chrysoprase (80gp)
+gem: large iolite (80gp)
+gem: small black star sapphire (700gp)
+gem: chalcedony (40gp)
+gem: large lapis lazuli (30gp)
+gem: small tourmaline (30gp)
+gem: small black star sapphire (600gp)
+gem: small aquamarine (110gp)
+gem: rhodochrosite (10gp)
+gem: alexandrite (300gp)
+gem: golden pearl (90gp)
+gem: pink pearl (100gp)
+Total value: 19,327gp
+----
+coin: 3,053pp 0gp 0sp 0cp (30,530gp value)
+art: faceted marble dinnerware (600gp)
+art: old bone dinnerware (600gp)
+art: smooth marble shoe-rack (500gp)
+art: tiny jade-inlaid figurine (1,600gp)
+art: tiny porcelain bracelet (700gp)
+art: baroque crystal bracelet (800gp)
+art: intricate wooden door-knocker (60gp)
+art: ornate jade-inlaid candelabra (1,900gp)
+art: baroque jade-inlaid brooch (1,700gp)
+art: fine brass sword-stand (100gp)
+art: fine gem-encrusted door-knocker (7,000gp)
+art: smooth bone plate (600gp)
+art: etched marble figurine (900gp)
+art: baroque jade-inlaid bracelet (1,200gp)
+art: baroque crystal sculpture (1,100gp)
+art: baroque wooden wine-cup (80gp)
+art: faceted gold paperweight (6,000gp)
+art: etched jade-inlaid dinnerware (2,000gp)
+art: baroque electrum figurine (3,000gp)
+art: decorated brass brooch (120gp)
+art: intricate gold figurine (5,000gp)
+art: ornate jade-inlaid figurine (1,800gp)
+art: smooth brass ring (80gp)
+art: old crystal shoe-rack (600gp)
+art: etched jade-inlaid clasp (900gp)
+art: decorated marble pommel (800gp)
+art: tiny wooden brooch (100gp)
+art: smooth wooden candelabra (70gp)
+rod of metamagic, extend (11,000gp)
+Total value: 81,440gp
+Resale value: 75,940gp
+====
+Total coins: 10,008pp 39,331gp 17,259sp 11,423cp
+Grand total: 673,508gp 1sp 3cp
+Sales grand total: 512,780gp 6sp 3cp
+
+36,222pp 329,170gp 72,456sp 107,969cp in coin loot
+626 works of art
+610 gems
+32 arcane scrolls
+24 magic weapons
+12 divine scrolls
+10 magic rings
+5 magic swords
+3 Dragon magazine items
+0 intelligent items

@@ -1,0 +1,273 @@
+---
+psion/wilder:
+  -
+    - astral traveler
+    - attraction
+    - bolt
+    - call to mind
+    - catfall
+    - conceal thoughts
+    - control flames
+    - control light
+    - create sound
+    - crystal shard
+    - 'daze, psionic'
+    - deceleration
+    - déjà vu
+    - demoralize
+    - detect psionics
+    - disable
+    - dissipating touch
+    - distract
+    - ecto protection
+    - empathy
+    - empty mind
+    - energy ray
+    - entangling ectoplasm
+    - far hand
+    - float
+    - force screen
+    - 'grease, psionic'
+    - hammer
+    - inertial armor
+    - know direction and location
+    - matter agitation
+    - mind thrust
+    - missive
+    - my light
+    - 'precognition, defensive'
+    - 'precognition, offensive'
+    - 'prescience, offensive'
+    - sense link
+    - skate
+    - synesthete
+    - telempathic projection
+    - vigor
+  -
+    - bestow power
+    - biofeedback
+    - body equilibrium
+    - cloud mind
+    - concealing amorpha
+    - concussion blast
+    - control sound
+    - detect hostile intent
+    - ego whip
+    - elfsight
+    - 'energy adaptation, specified'
+    - energy push
+    - energy stun
+    - feat leech
+    - id insinuation
+    - 'identify, psionic'
+    - inflict pain
+    - 'knock, psionic'
+    - 'levitate, psionic'
+    - mental disruption
+    - 'missive, mass'
+    - psionic lock
+    - recall agony
+    - 'sense link, forced'
+    - share pain
+    - sustenance
+    - swarm of crystals
+    - thought shield
+    - 'tongues, psionic'
+  -
+    - body adjustment
+    - body purification
+    - danger sense
+    - 'darkvision, psionic'
+    - dismiss ectoplasm
+    - dispel psionics
+    - energy bolt
+    - energy burst
+    - energy retort
+    - energy wall
+    - eradicate invisibility
+    - 'keen edge, psionic'
+    - mental barrier
+    - mind trap
+    - psionic blast
+    - 'share pain, forced'
+    - solicit psicrystal
+    - telekinetic force
+    - telekinetic thrust
+    - time hop
+    - touchsight
+    - ubiquitous vision
+  -
+    - aura sight
+    - correspond
+    - death urge
+    - detect remote viewing
+    - 'dimension door, psionic'
+    - 'divination, psionic'
+    - empathic feedback
+    - energy adaptation
+    - 'freedom of movement, psionic'
+    - intellect fortress
+    - mindwipe
+    - personality parasite
+    - power leech
+    - psychic reformation
+    - telekinetic maneuver
+    - trace teleport
+    - wall of ectoplasm
+  -
+    - adapt body
+    - catapsi
+    - ectoplasmic shambler
+    - incarnate
+    - leech field
+    - 'major creation, psionic'
+    - 'plane shift, psionic'
+    - power resistance
+    - psychic crush
+    - shatter mind blank
+    - tower of iron will
+    - 'true seeing, psionic'
+  -
+    - aura alteration
+    - breath of the black dragon
+    - 'cloud mind, mass'
+    - 'contingency, psionic'
+    - co-opt concentration
+    - 'disintegrate, psionic'
+    - fuse flesh
+    - 'overland flight, psionic'
+    - remote view trap
+    - retrieve
+    - suspend life
+    - temporal acceleration
+  -
+    - decerebrate
+    - divert teleport
+    - energy conversion
+    - energy wave
+    - evade burst
+    - insanity
+    - 'mind blank, personal'
+    - 'moment of prescience, psionic'
+    - oak body
+    - 'phase door, psionic'
+    - 'sequester, psionic'
+    - ultrablast
+  -
+    - bend reality
+    - 'iron body, psionic'
+    - matter manipulation
+    - 'mind blank, psionic'
+    - recall death
+    - shadow body
+    - 'teleport, psionic greater'
+    - true metabolism
+  -
+    - affinity field
+    - apopsi
+    - assimilate
+    - 'etherealness, psionic'
+    - microcosm
+    - reality revision
+    - timeless body
+psychic warrior:
+  -
+    - astral traveler
+    - biofeedback
+    - bite of the wolf
+    - burst
+    - call weaponry
+    - catfall
+    - chameleon
+    - claws of the beast
+    - compression
+    - conceal thoughts
+    - detect psionics
+    - dissipating touch
+    - distract
+    - elfsight
+    - empty mind
+    - expansion
+    - float
+    - force screen
+    - grip of iron
+    - hammer
+    - inertial armor
+    - metaphysical claw
+    - metaphysical weapon
+    - my light
+    - 'precognition, defensive'
+    - 'precognition, offensive'
+    - 'prescience, offensive'
+    - prevenom
+    - prevenom weapon
+    - skate
+    - stomp
+    - synesthete
+    - thicken skin
+    - vigor
+  -
+    - animal affinity
+    - body adjustment
+    - body equilibrium
+    - body purification
+    - concealing amorpha
+    - 'darkvision, psionic'
+    - detect hostile intent
+    - dimension swap
+    - dissolving touch
+    - dissolving weapon
+    - empathic transfer
+    - 'energy adaptation, specified'
+    - feat leech
+    - hustle
+    - 'levitate, psionic'
+    - painful strike
+    - prowess
+    - psionic lion's charge
+    - psionic scent
+    - strength of my enemy
+    - sustenance
+    - thought shield
+    - wall walker
+  -
+    - claws of the vampire
+    - 'concealing amorpha, greater'
+    - danger sense
+    - dimension slide
+    - duodimensional claw
+    - ectoplasmic form
+    - empathic feedback
+    - 'empathic transfer, hostile'
+    - escape detection
+    - evade burst
+    - exhalation of the black dragon
+    - graft weapon
+    - 'keen edge, psionic'
+    - mental barrier
+    - ubiquitous vision
+    - vampiric blade
+  -
+    - claw of energy
+    - 'dimension door, psionic'
+    - energy adaptation
+    - 'freedom of movement, psionic'
+    - immovability
+    - inertial barrier
+    - psychic vampire
+    - steadfast perception
+    - truevenom
+    - truevenom weapon
+    - weapon of energy
+  -
+    - adapt body
+    - catapsi
+    - metaconcert
+    - oak body
+    - psychofeedback
+  -
+    - breath of the black dragon
+    - dispelling buffer
+    - form of doom
+    - 'mind blank, personal'
+    - suspend life

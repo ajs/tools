@@ -1,0 +1,985 @@
+# This is the primary table used to determine what treasure a given CR creature
+# will have. Index this table by CR to get the list of three lookup tables:
+# one for coin, one for gems and art, and one for mundane and magical items.
+# Each table should be rolled on to determine what if any items should
+# be included.
+# Specials:
+# coin - look for a copper, silver, gold or plat string value which is
+#        the die roll to indicate how much of that coin is included.
+# gems, art, mundane, minor, medium, and major -
+#	all of these specials have a corresponding
+#	field by the same name which will indicate the die to roll to
+#	determine how many of that type of item is found. "minor",
+#	"medium" and "major" indicate that "level" of magic item.
+---
+-
+  -
+    - 14
+    - {}
+    - 29
+    - special: coin
+      copper: d6*1000
+    - 52
+    - special: coin
+      silver: d8*100
+    - 95
+    - special: coin
+      gold: 2d8*10
+    - 100
+    - special: coin
+      plat: d4*10
+  -
+    - 90
+    - {}
+    - 95
+    - special: gems
+      gems: 1
+    - 100
+    - special: art
+      art: 1
+  -
+    - 71
+    - {}
+    - 95
+    - special: mundane
+      mundane: 1
+    - 100
+    - special: minor
+      minor: 1
+-
+  -
+    - 13
+    - {}
+    - 23
+    - special: coin
+      copper: d10*1000
+    - 43
+    - special: coin
+      silver: 2d10*100
+    - 95
+    - special: coin
+      gold: 4d10*10
+    - 100
+    - special: coin
+      plat: 2d8*10
+  -
+    - 81
+    - {}
+    - 95
+    - special: gems
+      gems: d3
+    - 100
+    - special: art
+      art: d3
+  -
+    - 49
+    - {}
+    - 85
+    - special: mundane
+      mundane: 1
+    - 100
+    - special: minor
+      minor: 1
+-
+  -
+    - 11
+    - {}
+    - 21
+    - special: coin
+      copper: 2d10*1000
+    - 41
+    - special: coin
+      silver: 2d10*100
+    - 95
+    - special: coin
+      gold: d4*100
+    - 100
+    - special: coin
+      plat: d10*10
+  -
+    - 77
+    - {}
+    - 95
+    - special: gems
+      gems: d3
+    - 100
+    - special: art
+      art: d3
+  -
+    - 49
+    - {}
+    - 79
+    - special: mundane
+      mundane: d3
+    - 100
+    - special: minor
+      minor: 1
+-
+  -
+    - 11
+    - {}
+    - 21
+    - special: coin
+      copper: 3d10*1000
+    - 41
+    - special: coin
+      silver: 4d12*1000
+    - 95
+    - special: coin
+      gold: d6*100
+    - 100
+    - special: coin
+      plat: d8*10
+  -
+    - 70
+    - {}
+    - 95
+    - special: gems
+      gems: d4
+    - 100
+    - special: art
+      art: d3
+  -
+    - 42
+    - {}
+    - 62
+    - special: mundane
+      mundane: d4
+    - 100
+    - special: minor
+      minor: 1
+-
+  -
+    - 10
+    - {}
+    - 19
+    - special: coin
+      copper: 1d4*10000
+    - 38
+    - special: coin
+      silver: d6*1000
+    - 95
+    - special: coin
+      gold: d8*100
+    - 100
+    - special: coin
+      plat: d10*10
+  -
+    - 60
+    - {}
+    - 95
+    - special: gems
+      gems: d4
+    - 100
+    - special: art
+      art: d4
+  -
+    - 57
+    - {}
+    - 67
+    - special: mundane
+      mundane: d4
+    - 100
+    - special: minor
+      minor: d3
+-
+  -
+    - 10
+    - {}
+    - 18
+    - special: coin
+      copper: d6*10000
+    - 37
+    - special: coin
+      silver: d8*1000
+    - 95
+    - special: coin
+      gold: d10*100
+    - 100
+    - special: coin
+      plat: d12*10
+  -
+    - 56
+    - {}
+    - 92
+    - special: gems
+      gems: d4
+    - 100
+    - special: art
+      art: d4
+  -
+    - 54
+    - {}
+    - 59
+    - special: mundane
+      mundane: d4
+    - 99
+    - special: minor
+      minor: d3
+    - 100
+    - special: medium
+      medium: 1
+-
+  -
+    - 11
+    - {}
+    - 18
+    - special: coin
+      copper: d10*10000
+    - 35
+    - special: coin
+      silver: d12*1000
+    - 93
+    - special: coin
+      gold: 2d6*100
+    - 100
+    - special: coin
+      plat: 3d4*10
+  -
+    - 48
+    - {}
+    - 88
+    - special: gems
+      gems: d4
+    - 100
+    - special: art
+      art: d4
+  -
+    - 51
+    - {}
+    - 97
+    - special: minor
+      minor: d3
+    - 100
+    - special: medium
+      medium: 1
+-
+  -
+    - 10
+    - {}
+    - 15
+    - special: coin
+      copper: d12*10000
+    - 29
+    - special: coin
+      silver: 2d6*1000
+    - 87
+    - special: coin
+      gold: 2d8*100
+    - 100
+    - special: coin
+      plat: 3d6*10
+  -
+    - 45
+    - {}
+    - 85
+    - special: gems
+      gems: d6
+    - 100
+    - special: art
+      art: d4
+  -
+    - 48
+    - {}
+    - 96
+    - special: minor
+      minor: d4
+    - 100
+    - special: medium
+      medium: 1
+-
+  -
+    - 10
+    - {}
+    - 15
+    - special: coin
+      copper: 2d6*10000
+    - 29
+    - special: coin
+      silver: 2d8*1000
+    - 85
+    - special: coin
+      gold: 5d4*100
+    - 100
+    - special: coin
+      plat: 2d12*10
+  -
+    - 40
+    - {}
+    - 80
+    - special: gems
+      gems: d8
+    - 100
+    - special: art
+      art: d4
+  -
+    - 43
+    - {}
+    - 91
+    - special: minor
+      minor: d4
+    - 100
+    - special: medium
+      medium: 1
+-
+  -
+    - 10
+    - {}
+    - 24
+    - special: coin
+      silver: 2d10*1000
+    - 79
+    - special: coin
+      gold: 6d4*100
+    - 100
+    - special: coin
+      plat: 5d6*10
+  -
+    - 35
+    - {}
+    - 79
+    - special: gems
+      gems: d8
+    - 100
+    - special: art
+      art: d6
+  -
+    - 40
+    - {}
+    - 88
+    - special: minor
+      minor: d4
+    - 99
+    - special: medium
+      medium: 1
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 8
+    - {}
+    - 14
+    - special: coin
+      silver: 3d10*1000
+    - 75
+    - special: coin
+      gold: 4d8*100
+    - 100
+    - special: coin
+      plat: 4d10*10
+  -
+    - 24
+    - {}
+    - 74
+    - special: gems
+      gems: d10
+    - 100
+    - special: art
+      art: d6
+  -
+    - 31
+    - {}
+    - 84
+    - special: minor
+      minor: d4
+    - 98
+    - special: medium
+      medium: 1
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 8
+    - {}
+    - 14
+    - special: coin
+      silver: 3d12*1000
+    - 75
+    - special: coin
+      gold: d4*1000
+    - 100
+    - special: coin
+      plat: d4*100
+  -
+    - 17
+    - {}
+    - 70
+    - special: gems
+      gems: d10
+    - 100
+    - special: art
+      art: d8
+  -
+    - 27
+    - {}
+    - 82
+    - special: minor
+      minor: d6
+    - 97
+    - special: medium
+      medium: 1
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 8
+    - {}
+    - 75
+    - special: coin
+      gold: d4*1000
+    - 100
+    - special: coin
+      plat: d10*100
+  -
+    - 11
+    - {}
+    - 66
+    - special: gems
+      gems: d12
+    - 100
+    - special: art
+      art: d10
+  -
+    - 19
+    - {}
+    - 73
+    - special: minor
+      minor: d6
+    - 95
+    - special: medium
+      medium: 1
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 8
+    - {}
+    - 75
+    - special: coin
+      gold: d6*1000
+    - 100
+    - special: coin
+      plat: d12*100
+  -
+    - 11
+    - {}
+    - 66
+    - special: gems
+      gems: 2d8
+    - 100
+    - special: art
+      art: 2d6
+  -
+    - 19
+    - {}
+    - 58
+    - special: minor
+      minor: d6
+    - 92
+    - special: medium
+      medium: 1
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 3
+    - {}
+    - 74
+    - special: coin
+      gold: d8*1000
+    - 100
+    - special: coin
+      plat: 3d4*100
+  -
+    - 9
+    - {}
+    - 65
+    - special: gems
+      gems: 2d10
+    - 100
+    - special: art
+      art: 2d8
+  -
+    - 11
+    - {}
+    - 46
+    - special: minor
+      minor: d10
+    - 90
+    - special: medium
+      medium: 1
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 3
+    - {}
+    - 74
+    - special: coin
+      gold: d12*1000
+    - 100
+    - special: coin
+      plat: 3d4*100
+  -
+    - 7
+    - {}
+    - 64
+    - special: gems
+      gems: 4d6
+    - 100
+    - special: art
+      art: 2d10
+  -
+    - 40
+    - {}
+    - 46
+    - special: minor
+      minor: d10
+    - 90
+    - special: medium
+      medium: d3
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 3
+    - {}
+    - 68
+    - special: coin
+      gold: d12*1000
+    - 100
+    - special: coin
+      plat: 3d4*100
+  -
+    - 4
+    - {}
+    - 63
+    - special: gems
+      gems: 4d6
+    - 100
+    - special: art
+      art: 2d10
+  -
+    - 33
+    - {}
+    - 83
+    - special: medium
+      medium: d3
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d6*1000
+    - 100
+    - special: coin
+      plat: 5d4*100
+  -
+    - 4
+    - {}
+    - 54
+    - special: gems
+      gems: 3d12
+    - 100
+    - special: art
+      art: 3d10
+  -
+    - 24
+    - {}
+    - 80
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 3
+    - {}
+    - 50
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 4
+    - {}
+    - 70
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 0
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 1
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 2
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 4
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 6
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 9
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 12
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 17
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 23
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 31
+-
+  -
+    - 2
+    - {}
+    - 65
+    - special: coin
+      gold: 3d8*1000
+    - 100
+    - special: coin
+      plat: 3d10*100
+  -
+    - 2
+    - {}
+    - 38
+    - special: gems
+      gems: 6d6
+    - 100
+    - special: art
+      art: 6d6
+  -
+    - 25
+    - {}
+    - 65
+    - special: medium
+      medium: d4
+    - 100
+    - special: major
+      major: d3
+  -
+    - 100
+    - special: major
+      major: 42

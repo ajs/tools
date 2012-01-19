@@ -1,0 +1,217 @@
+#!/usr/bin/perl
+use Getopt::Long;
+use strict;
+
+our %weapons = (
+'Handaxe' => 			{ type => 'LM', dmg => '1d4',  crit => [20,3] },
+'Kukri' => 			{ type => 'LM', dmg => '1d4',  crit => [18,2] },
+'Pick, light' => 		{ type => 'LM', dmg => '1d4',  crit => [20,4] },
+'Sap' =>			{ type => 'LM', dmg => '1d6',  crit => [20,2] },
+'Sword, short' => 		{ type => 'LM', dmg => '1d6',  crit => [19,2] },
+'Battleaxe' => 			{ type => 'OM', dmg => '1d8',  crit => [20,3] },
+'Longsword' =>			{ type => 'OM', dmg => '1d8',  crit => [19,2] },
+'Pick, heavy' =>		{ type => 'OM', dmg => '1d6',  crit => [20,4] },
+'Rapier' =>			{ type => 'OM', dmg => '1d6',  crit => [18,2] },
+'Falchion' =>			{ type => 'TM', dmg => '2d4',  crit => [18,2] },
+'Glaive' =>			{ type => 'TM', dmg => '1d10', crit => [20,3] },
+'Greataxe' =>			{ type => 'TM', dmg => '1d12', crit => [20,3] },
+'Greatclub' =>			{ type => 'TM', dmg => '1d10', crit => [20,2] },
+'Flail, heavy' =>		{ type => 'TM', dmg => '1d10', crit => [19,2] },
+'Greatsword' =>			{ type => 'TM', dmg => '2d6',  crit => [19,2] },
+'Scythe' =>			{ type => 'TM', dmg => '2d4',  crit => [20,4] },
+'Kama/Nunchaku/Siangham' =>	{ type => 'E',  dmg => '1d6',  crit => [20,2] },
+'Sai' =>			{ type => 'E',  dmg => '1d4',  crit => [20,2] },
+'Sword, bastard' =>		{ type => 'E',  dmg => '1d10', crit => [19,2] },
+'Waraxe, dwarven' =>		{ type => 'E',  dmg => '1d10', crit => [20,3] },
+'Whip' =>			{ type => 'E',  dmg => '1d3',  crit => [20,2] },
+'Chain, spiked' =>		{ type => 'E',  dmg => '2d4',  crit => [20,2] },
+'Quarterstaff' =>		{ type => 'D',  dmg => '1d6',  crit => [20,2] },
+'Axe, orc double' =>		{ type => 'D',  dmg => '1d8',  crit => [20,3] },
+'Hammer, gnome hooked (hammer)' =>
+				{ type => 'D',  dmg => '1d6',  crit => [20,3] },
+'Hammer, gnome hooked (hook)' =>
+				{ type => 'D',  dmg => '1d4',  crit => [20,4] },
+'Sword, two-bladed' =>		{ type => 'D',  dmg => '1d8',  crit => [19,2] },
+'Urgrosh, dwarven (axe)' =>	{ type => 'D',  dmg => '1d8',  crit => [20,3] },
+'Urgrosh, dwarven (spear)' =>	{ type => 'D',  dmg => '1d6',  crit => [20,3] },
+'Flail, dire' =>		{ type => '',   dmg => '1d8',  crit => [20,2] },
+'Guisarme' =>			{ type => '',   dmg => '2d4',  crit => [20,3] },
+'Halberd' =>			{ type => '',   dmg => '1d10', crit => [20,3] }
+);
+
+our %type_names = ( E => 'Exotic', TM => 'Two-handed', OM => 'One-handed',
+		    LM => 'Light one-handed', U => 'User requested' );
+
+my $dotype = 'LM';
+my $trials = 10_000;
+my $crit_bonus = 0;
+my $threat_bonus = 0;
+my $output_mode;
+my $output_file;
+my $hit_bonus = 0;
+my $dmg_bonus = 0;
+my $debug = 0;
+my $using;
+
+GetOptions ('debug' => \$debug,
+	    'type=s', \$dotype,
+	    'trials=i' => \$trials,
+	    'crit-bonus=i' => \$crit_bonus,
+	    'threat-bonus=i' => \$threat_bonus,
+	    'file=s' => \$output_file,
+	    'output=s' => \$output_mode,
+	    'hit-bonus=i' => \$hit_bonus,
+	    'damage-bonus=i' => \$dmg_bonus,
+	    'using=s' => \$using,
+	    'list' => sub {print join("\n", sort keys %weapons), "\n";
+			   exit 0;}
+);
+
+if ($using) {
+	my %new;
+	foreach my $set (split /\s*\;\s*/, $using) {
+		my %tmp = (
+			$set => { type=>'U',
+				  base => [ map {getweap(\%weapons,$_) or
+				                 die "No such weapon: $_\n"}
+				            split /\s*\/\s*/, $set ]
+				} );
+		@new{keys %tmp} = values %tmp;
+	}
+	%weapons = %new;
+	$dotype = 'U';
+} else {
+	%weapons = map {($_=>$weapons{$_})}
+	   	grep {$weapons{$_}{type} eq $dotype}
+	   	keys %weapons;
+}
+
+my $title_extra = '';
+if ($crit_bonus) {
+	$title_extra .= qq{\\nCritical range multiplier: $crit_bonus};
+}
+if ($threat_bonus) {
+	$title_extra .= qq{\\nCritical threat bonus: $threat_bonus};
+}
+if ($hit_bonus) {
+	$title_extra .= qq{\\nAttack roll bonus: $hit_bonus};
+}
+if ($dmg_bonus) {
+	$title_extra .= qq{\\nDamage roll bonus: $dmg_bonus};
+}
+
+print qq{set key outside\n} unless $using;
+print qq{set xlabel "Relative AC (AC bonus - Atk)"\n};
+print qq{set ylabel "Average damage"\n};
+print qq{set title "$type_names{$dotype} weapons: $trials trials$title_extra"\n};
+qq{"$"}; # Fixes vim syntax highlighting
+print qq{set grid xtics\nset grid ytics\n};
+print qq{set output "$output_file"\n} if $output_file;
+print qq{set terminal $output_mode\n} if $output_mode;
+print qq{plot },
+	join(", ", map {qq{"-" title "$_" with lines}} sort keys %weapons),
+	"\n";
+foreach my $weapon (sort keys %weapons) {
+	my $stats = $weapons{$weapon};
+	my (@dmg, @count, @extra, @die, @crit, @mult, @bonus);
+	if (exists $stats->{base}) {
+		foreach my $subweap (@{$stats->{base}}) {
+			push @dmg, $subweap->{dmg};
+			my($count,$die,$extra) = dmg_parse($dmg[-1]);
+			push @count, $count;
+			push @die, $die;
+			push @extra, $extra;
+			push @crit, $subweap->{crit}[0];
+			push @mult, $subweap->{crit}[1];
+			push @bonus, ($subweap->{atk_bonus} || 0);
+		}
+	} else {
+		@dmg = ($stats->{dmg});
+		my($count,$die,$extra) = dmg_parse($dmg[0]);
+		@count = ($count);
+		@die = ($die);
+		@extra = ($extra);
+		my($crit,$mult) = @{$stats->{crit}};
+		@crit = ($crit);
+		@mult = ($mult);
+		@bonus = ($stats->{atk_bonus} || 0);
+	}
+	if ($crit_bonus > 1) {
+		foreach (@crit) {
+			my $range = 21-$_;
+			$range *= $crit_bonus;
+			$_ = 21-$range;
+		}
+	}
+
+	for(my $ac = -15;$ac<=15;$ac++) {
+		my $total = 0;
+		for(my $i=0;$i<$trials;$i++) {
+			for(my $w=0;$w<@dmg;$w++) {
+				$total+=roll_dmg($ac,map {$_->[$w]}
+					\@die, \@count, \@extra, \@crit, \@mult,
+					\@bonus);
+			}
+		}
+		print " $ac\t", $total/$trials,"\n";
+	}
+	print "e\n";
+}
+
+sub getweap {
+	my $data = shift;
+	my $name = shift;
+	my $info = {};
+	if ($name =~ s/\s*\(\s*([+\-]?\d+)\s*(?:\|\s*([+\-]?\d+))?\)\s*$//) {
+		$info->{atk_bonus} = $1;
+		$info->{dmg_bonus} = $2 if defined $2;
+	}
+	return undef unless exists $data->{$name};
+	@{$info}{keys %{$data->{$name}}} = values %{$data->{$name}};
+	if (exists $info->{dmg_bonus}) {
+		my $b = $info->{dmg_bonus};
+		$b = "+$b" unless $b =~ /^[+\-]/;
+		$info->{dmg} .= $b;
+	}
+	return $info;
+}
+
+sub roll_dmg {
+	my($ac,$die,$count,$extra,$crit,$mult,$bonus) = @_;
+
+	my $roll = int(rand 20)+1;
+	my $do_dmg=0;
+	if ($roll != 1 && ($roll+$bonus+$hit_bonus >= $ac+10 || $roll == 20)) {
+		$do_dmg += int(rand($die)+1) foreach 1..$count;
+		$do_dmg += $extra+$dmg_bonus;
+		if ($roll >= $crit) {
+			my $threat = int(rand 20)+1;
+			my $threat_mod = $threat +
+				 	$threat_bonus +
+				 	$bonus + $hit_bonus;
+			if ($threat != 1 &&
+		    	    ($threat_mod >= $ac+10 ||
+		     	     $threat == 20)) {
+				my $crit_dmg = 0;
+				$crit_dmg += int(rand($die)+1)
+			  	foreach 1..$count*($mult-1);
+				print STDERR "crit: $crit_dmg\n" if $debug;
+				$do_dmg += $crit_dmg;
+			}
+		}
+	}
+	return $do_dmg;
+}
+
+sub dmg_parse {
+	my $roll = shift;
+	if ($roll =~ /^(\d+)d(\d+)(?:[+\-](\d+))?$/) {
+		my $cnt = $1;
+		my $die = $2;
+		my $extra = $3;
+		return($cnt,$die,($extra||0));
+	} else {
+		die "Cannot parse damage: '$roll'\n";
+	}
+}
+

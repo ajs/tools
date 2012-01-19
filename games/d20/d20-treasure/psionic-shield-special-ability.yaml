@@ -1,0 +1,91 @@
+---
+-
+  -
+    - 35
+    - 5
+    - 3
+  - name: heartening
+    price: 720
+  -
+    - 60
+    - 10
+    - 5
+  - name: ranged
+    plus: 1
+  -
+    - 89
+    - 15
+    - 10
+  - name: linked
+    price: 6000
+  -
+    - 97
+    - 35
+    - 24
+  - name: power resistance (13)
+    plus: 2
+  -
+    - 98
+    - 58
+    - 34
+  - name: manifester
+    price: 10800
+  -
+    - 99
+    - 88
+    - 44
+  - name: averter
+    price: 12960
+  -
+    - -1
+    - 92
+    - 54
+  - name: vanishing
+    plus: 3
+  -
+    - -1
+    - 96
+    - 64
+  - name: power resistance (15)
+    plus: 3
+  -
+    - -1
+    - 98
+    - 74
+  - name: wall
+    price: 20160
+  -
+    - -1
+    - 99
+    - 81
+  - name: mindarmor
+    price: 24000
+  -
+    - -1
+    - -1
+    - 88
+  - name: power resistance (17)
+    plus: 4
+  -
+    - -1
+    - -1
+    - 93
+  - name: aporter
+    price: 40320
+  -
+    - -1
+    - -1
+    - 96
+  - name: time buttress
+    plus: 5
+  -
+    - -1
+    - -1
+    - 99
+  - name: power resistance (19)
+    plus: 5
+  -
+    - 100
+    - 100
+    - 100
+  - special: two_abilities

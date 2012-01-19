@@ -1,0 +1,73 @@
+#!/usr/bin/perl
+#
+# Page a page-net customer. Alpha pagers are the only ones said to work,
+# but testing shows that numeric messages will be sent correctly to numeric
+# pagers.
+#
+# Written in 1998 (c) by Aaron Sherman. You may distribute this
+# code under the terms of the GNU General Public License, which
+# can be acquired from http://www.gnu.org/
+#
+# Version 1.0
+
+$0 =~ s/^.*\///;
+$usage = "Usage: $0 [--number <number>] [--pin <pin>] [--message <message>]\n";
+
+$request = "/usr/bin/lwp-request"; # You must install libwww-perl
+$number = "781-273-4535"; # One of many see http://www.pagenet.com/
+		          #                             sendpage/
+$message = undef; # Our message to be sent
+$pin = "5450584"; # Poor slob who gets default pages.
+$url = "http://www.pagenet.net/pagenet/page_gen"; # Submission URL
+$full = 0; # By default, truncate messages
+$msglen = 50; # to this length
+
+while(defined($arg = shift @ARGV)) {
+  if ($arg =~ s/^-//) {
+    if ($arg eq '-number' || $arg eq 'n') {
+      die $usage unless defined($number = shift @ARGV);
+    } elsif ($arg eq '-message' || $arg eq 'm') {
+      die $usage unless defined($message = shift @ARGV);
+    } elsif ($arg eq '-pin' || $arg eq 'p') {
+      die $usage unless defined($pin = shift @ARGV);
+    } elsif ($arg eq '-full' || $arg eq 'f') {
+      $full = 1;
+    } elsif ($arg eq '-length' || $arg eq 'l') {
+      die $usage unless defined($msglen = shift @ARGV);
+      $full = 1 if $msglen < 1;
+    } else {
+      die "Invalid argument: -$arg\n$usage";
+    }
+  } else {
+    die $usage;
+  }
+}
+
+die "You must supply a message (--message).\n$usage" unless defined $message;
+
+open(P,"|$request -d -m POST -a $url >/dev/null 2>&1") or die $!;
+%parameters = (
+	Response => 'pagenet/mail_sen.htm',
+	Error => 'pagenet/pnet_err.htm',
+	Partial => 'pagenet/pnet_err.htm',
+	submit1 => 'Send',
+	counter => 0
+);
+$parameters{SysID} = $number;
+$parameters{To} = $pin;
+if (!$full) {
+  $message = substr($message,0,$msglen);
+}
+#$message =~ s/([^\w .,])/sprintf("%%%02x",ord($1))/eg;
+$parameters{message} = $message;
+
+$form = join('&',map {
+		$x=$parameters{$_};
+		$x=~s/([^\w .,])/sprintf("%%%02x",ord($1))/eg;
+		"$_=$x"
+	} keys %parameters);
+
+print P "$form\n";
+close P;
+
+exit $?;

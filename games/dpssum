@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+use Date::Parse qw(str2time);
+use POSIX qw(strftime);
+use Getopt::Long;
+
+$p=60;
+$who="Deepone";
+$me=1;
+
+Getopt::Long::Configure('auto_abbrev','bundling');
+GetOptions(
+   'h|?|help' => sub {pod2usage(-verbose => 0)},
+   'man' => sub {pod2usage(-verbose => 2)},
+   'v|verbose' => sub {$::verbose=1;$::quiet=0},
+   'd|debug' => sub {$::verbose=1;$::debug=1;$::quiet=0},
+   'q|quiet' => sub {$::verbose=0;$::debug=0;$::quiet=1},
+   'c|character=s' => \$who,
+   'p|period=i' => \$p,
+   'o|other-player' => sub { $me = 0 }
+) or pod2usage(-verbose => 0);
+
+while(<>) {
+	next unless /damage/;
+	if (/^\[(.*?)\]/){
+		$t=str2time($1);
+	}
+	if ($d && $t-$st > $p) {
+		printf "%s - %s %ddmg(%.1fdps %.1fdps absolute)\n",
+			strftime("%Y-%m-%d %H:%M:%S",localtime $st),
+			strftime("%Y-%m-%d %H:%M:%S",localtime $et),
+			$d, ($md=$d/$p), $d/($et-$st+0.0001);
+		unless(defined($max) && $max > $md){
+			$max=$md;
+			$maxt=$et;
+			$max_line=$ml;
+		}
+		$d=0;
+		$et=$st=undef;
+	}
+	if(/\] $who \w+ .*? for (\d+) points/o ||
+	   ($me && /has taken (\d+) damage from your/)){
+	   	$ml=$_;
+		$d+=$1;
+		$st=$t unless defined $st;
+		$et=$t;
+	}
+}
+
+printf "Max sustained %dsec dps at %s: %.2f\n%s\n",
+	$p,strftime("%Y-%m-%d %H:%M:%S",localtime $maxt),$max,$max_line;
+
+__END__
+
+=head1 NAME
+
+dpssum - Parse EverQuest logs and summarize damage
+
+=head1 SYNOPSIS
+
+  dpssum [options] logfile...
+
+  options:
+
+  -c|--character NAME		The character to gather numbers for
+  -p|--period SECONDS		How much time is each summarized period
+  -o|--other-player		Don't count damage done by "you" or "your dot"
+
+=head1 DESCRIPTION
+
+dpssum reads an EverQuest log file and summaizes the damage done
+by a single character in a given period of time.
+
+Three numbers are produced:
+
+=over 5
+
+=item *
+
+The damage done in total hit points to all targets
+
+=item *
+
+The damage per second sustained over the entire period
+
+=item *
+
+The damage per second sustained over the time from the first damage seen
+during the period until the last damage seen during the period.
+
+=back
+
+=head1 AUTHOR
+
+Written in 2004 by Aaron Sherman <ajs@ajs.com> and distributed
+under the same terms as Perl itself (see http://www.perl.com/)
+
+=cut
+

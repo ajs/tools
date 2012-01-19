@@ -1,0 +1,100 @@
+---
+- 17
+-
+  - 12
+  - count: 1d4
+    name: alchemist's fire
+    price: 20
+  - 24
+  - count: 2d4
+    name: acid
+    price: 10
+  - 36
+  - count: 1d4
+    name: smokestick
+    price: 20
+  - 48
+  - count: 1d4
+    name: holy water
+    price: 25
+  - 62
+  - count: 1d4
+    name: antitoxin
+    price: 50
+  - 74
+  - name: everburning torch
+    price: 110
+  - 88
+  - count: 1d4
+    name: tanglefoot bag
+    price: 50
+  - 100
+  - count: 1d4
+    name: thunderstone
+    price: 30
+- 50
+- special: mundane_armor
+- 83
+- special: masterwork_weapon
+- 100
+-
+  - 3
+  - name: 'backpack, empty'
+    price: 2
+  - 6
+  - name: crowbar
+    price: 2
+  - 11
+  - name: 'lantern, bullseye'
+    price: 12
+  - 16
+  - name: 'lock, simple'
+    price: 20
+  - 21
+  - name: 'lock, average'
+    price: 40
+  - 28
+  - name: 'lock, good'
+    price: 80
+  - 35
+  - name: 'lock, superior'
+    price: 150
+  - 40
+  - name: 'manacles, masterwork'
+    price: 50
+  - 43
+  - name: 'mirror, small steel'
+    price: 10
+  - 46
+  - name: 'rope, silk (50 ft.)'
+    price: 10
+  - 53
+  - name: spyglass
+    price: 1000
+  - 58
+  - name: "artisan's tools, masterwork"
+    price: 55
+  - 63
+  - name: climber's kit
+    price: 80
+  - 68
+  - name: disguise kit
+    price: 50
+  - 73
+  - name: healer's kit
+    price: 50
+  - 77
+  - name: 'holy symbol, silver'
+    price: 25
+  - 81
+  - name: hourglass
+    price: 25
+  - 88
+  - name: magnifying glass
+    price: 100
+  - 95
+  - name: 'musical instrument, masterwork'
+    price: 100
+  - 100
+  - name: "thieves' tools, masterwork"
+    price: 50

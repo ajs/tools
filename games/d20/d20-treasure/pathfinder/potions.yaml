@@ -1,0 +1,512 @@
+---
+-
+  -
+    - 10
+    - -1
+    - -1
+  - name: cure light wounds (potion)
+    price: 50
+  -
+    - 13
+    - -1
+    - -1
+  - name: endure elements (potion)
+    price: 50
+  -
+    - 15
+    - -1
+    - -1
+  - name: hide from animals (potion)
+    price: 50
+  -
+    - 17
+    - -1
+    - -1
+  - name: hide from undead (potion)
+    price: 50
+  -
+    - 19
+    - -1
+    - -1
+  - name: jump (potion)
+    price: 50
+  -
+    - 22
+    - -1
+    - -1
+  - name: mage armor (potion)
+    price: 50
+  -
+    - 25
+    - -1
+    - -1
+  - name: magic fang (potion)
+    price: 50
+  -
+    - 26
+    - -1
+    - -1
+  - name: magic stone (oil)
+    price: 50
+  -
+    - 29
+    - -1
+    - -1
+  - name: magic weapon (oil)
+    price: 50
+  -
+    - 30
+    - -1
+    - -1
+  - name: pass without trace (potion)
+    price: 50
+  -
+    - 32
+    - -1
+    - -1
+  - name: protection from (alignment) (potion)
+    price: 50
+  -
+    - 34
+    - -1
+    - -1
+  - name: remove fear (potion)
+    price: 50
+  -
+    - 35
+    - -1
+    - -1
+  - name: sanctuary (potion)
+    price: 50
+  -
+    - 38
+    - -1
+    - -1
+  - name: shield of faith +2 (potion)
+    price: 50
+  -
+    - 39
+    - -1
+    - -1
+  - name: shillelagh (oil)
+    price: 50
+  -
+    - 41
+    - 2
+    - -1
+  - name: bless weapon (oil)
+    price: 100
+  -
+    - 44
+    - 4
+    - -1
+  - name: enlarge person (potion)
+    price: 250
+  -
+    - 45
+    - 5
+    - -1
+  - name: reduce person (potion)
+    price: 250
+  -
+    - 47
+    - 6
+    - -1
+  - name: aid (potion)
+    price: 300
+  -
+    - 50
+    - 7
+    - -1
+  - name: barkskin +2 (potion)
+    price: 300
+  -
+    - 53
+    - 10
+    - -1
+  - name: bear's endurance (potion)
+    price: 300
+  -
+    - 56
+    - 13
+    - 2
+  - name: blur (potion)
+    price: 300
+  -
+    - 59
+    - 16
+    - -1
+  - name: bull's strength (potion)
+    price: 300
+  -
+    - 62
+    - 19
+    - -1
+  - name: cat's grace (potion)
+    price: 300
+  -
+    - 67
+    - 27
+    - 7
+  - name: cure moderate wounds (potion)
+    price: 300
+  -
+    - 68
+    - 28
+    - -1
+  - name: darkness (oil)
+    price: 300
+  -
+    - 71
+    - 30
+    - 9
+  - name: darkvision (potion)
+    price: 300
+  -
+    - 74
+    - 31
+    - -1
+  - name: delay poison (potion)
+    price: 300
+  -
+    - 76
+    - 33
+    - -1
+  - name: eagle's splendor (potion)
+    price: 300
+  -
+    - 78
+    - 35
+    - -1
+  - name: fox's cunning (potion)
+    price: 300
+  -
+    - 81
+    - 37
+    - 11
+  - name: invisibility (potion or oil)
+    price: 300
+  -
+    - 84
+    - 38
+    - 12
+  - name: lesser restoration (potion)
+    price: 300
+  -
+    - 86
+    - 39
+    - -1
+  - name: levitate (potion or oil)
+    price: 300
+  -
+    - 87
+    - 40
+    - -1
+  - name: misdirection (potion)
+    price: 300
+  -
+    - 89
+    - 42
+    - -1
+  - name: owl's wisdom (potion)
+    price: 300
+  -
+    - 91
+    - 43
+    - -1
+  - name: protection from arrows 10/magic (potion)
+    price: 300
+  -
+    - 93
+    - 44
+    - 13
+  - name: remove paralysis (potion)
+    price: 300
+  -
+    - 96
+    - 46
+    - -1
+  - name: resist energy (type) 10 (potion)
+    price: 300
+  -
+    - 97
+    - 48
+    - 14
+  - name: shield of faith +3 (potion)
+    price: 300
+  -
+    - 99
+    - 49
+    - -1
+  - name: spider climb (potion)
+    price: 300
+  -
+    - 100
+    - 50
+    - 15
+  - name: undetectable alignment (potion)
+    price: 300
+  -
+    - -1
+    - 51
+    - 16
+  - name: barkskin +3 (potion)
+    price: 600
+  -
+    - -1
+    - 52
+    - 18
+  - name: shield of faith +4 (potion)
+    price: 600
+  -
+    - -1
+    - 55
+    - 20
+  - name: resist energy (type) 20 (potion)
+    price: 700
+  -
+    - -1
+    - 60
+    - 28
+  - name: cure serious wounds (potion)
+    price: 750
+  -
+    - -1
+    - 61
+    - 29
+  - name: daylight (oil)
+    price: 750
+  -
+    - -1
+    - 64
+    - 32
+  - name: displacement (potion)
+    price: 750
+  -
+    - -1
+    - 65
+    - 33
+  - name: flame arrow (oil)
+    price: 750
+  -
+    - -1
+    - 68
+    - 38
+  - name: fly (potion)
+    price: 750
+  -
+    - -1
+    - 69
+    - 39
+  - name: gaseous form (potion)
+    price: 750
+  -
+    - -1
+    - 71
+    - -1
+  - name: greater magic fang +1 (potion)
+    price: 750
+  -
+    - -1
+    - 73
+    - -1
+  - name: greater magic weapon +1 (oil)
+    price: 750
+  -
+    - -1
+    - 75
+    - 41
+  - name: haste (potion)
+    price: 750
+  -
+    - -1
+    - 78
+    - 44
+  - name: heroism (potion)
+    price: 750
+  -
+    - -1
+    - 80
+    - 46
+  - name: keen edge (oil)
+    price: 750
+  -
+    - -1
+    - 81
+    - 47
+  - name: magic circle against (alignment) (potion)
+    price: 750
+  -
+    - -1
+    - 83
+    - -1
+  - name: magic vestment +1 (oil)
+    price: 750
+  -
+    - -1
+    - 86
+    - 50
+  - name: neutralize poison (potion)
+    price: 750
+  -
+    - -1
+    - 88
+    - 52
+  - name: nondetection (potion)
+    price: 750
+  -
+    - -1
+    - 91
+    - 54
+  - name: protection from energy (type) (potion)
+    price: 750
+  -
+    - -1
+    - 93
+    - 55
+  - name: rage (potion)
+    price: 750
+  -
+    - -1
+    - 94
+    - 56
+  - name: remove blindness/deafness (potion)
+    price: 750
+  -
+    - -1
+    - 95
+    - 57
+  - name: remove curse (potion)
+    price: 750
+  -
+    - -1
+    - 96
+    - 58
+  - name: remove disease (potion)
+    price: 750
+  -
+    - -1
+    - 97
+    - 59
+  - name: tongues (potion)
+    price: 750
+  -
+    - -1
+    - 99
+    - 60
+  - name: water breathing (potion)
+    price: 750
+  -
+    - -1
+    - 100
+    - 61
+  - name: water walk (potion)
+    price: 750
+  -
+    - -1
+    - -1
+    - 63
+  - name: barkskin +4 (potion)
+    price: 900
+  -
+    - -1
+    - -1
+    - 64
+  - name: shield of faith +5 (potion)
+    price: 900
+  -
+    - -1
+    - -1
+    - 65
+  - name: good hope (potion)
+    price: 1050
+  -
+    - -1
+    - -1
+    - 68
+  - name: resist energy (type) 30 (potion)
+    price: 1100
+  -
+    - -1
+    - -1
+    - 69
+  - name: barkskin +5 (potion)
+    price: 1200
+  -
+    - -1
+    - -1
+    - 73
+  - name: greater magic fang +2 (potion)
+    price: 1200
+  -
+    - -1
+    - -1
+    - 77
+  - name: greater magic weapon +2 (oil)
+    price: 1200
+  -
+    - -1
+    - -1
+    - 81
+  - name: magic vestment +2 (oil)
+    price: 1200
+  -
+    - -1
+    - -1
+    - 82
+  - name: protection from arrows 15/magic (potion)
+    price: 1500
+  -
+    - -1
+    - -1
+    - 85
+  - name: greater magic fang +3 (potion)
+    price: 1800
+  -
+    - -1
+    - -1
+    - 88
+  - name: greater magic weapon +3 (oil)
+    price: 1800
+  -
+    - -1
+    - -1
+    - 91
+  - name: magic vestment +3 (oil)
+    price: 1800
+  -
+    - -1
+    - -1
+    - 93
+  - name: greater magic fang +4 (potion)
+    price: 2400
+  -
+    - -1
+    - -1
+    - 95
+  - name: greater magic weapon +4 (oil)
+    price: 2400
+  -
+    - -1
+    - -1
+    - 97
+  - name: magic vestment +4 (oil)
+    price: 2400
+  -
+    - -1
+    - -1
+    - 98
+  - name: greater magic fang +5 (potion)
+    price: 3000
+  -
+    - -1
+    - -1
+    - 99
+  - name: greater magic weapon +5 (oil)
+    price: 3000
+  -
+    - -1
+    - -1
+    - 100
+  - name: magic vestment +5 (oil)
+    price: 3000

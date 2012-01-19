@@ -1,0 +1,85 @@
+#!/usr/bin/perl
+
+use re 'eval';
+use Data::Dumper;
+use POSIX;
+use Time::HiRes;
+use YAML::Syck qw(Dump);
+
+use strict;
+
+use Inline Lua => q{
+    function lua_eval(s, variable)
+        ls = loadstring(s)
+	r = ls()
+	if not variable then
+	    return r
+        else
+	    return _G[variable]
+	end
+    end
+};
+
+$|=1; # don't buffer writes
+
+our @matched_fields=qw(
+	itemhash ilevel itype isub isequip price
+	tleft time name texture count quality
+	canuse ulevel minbid mininc buyout
+	curbid amhigh seller flag id itemid
+	suffix factor enchant seed);
+
+open(my $outfile, ">itemdata.yaml") or die "Cannot open itemdata.yaml: $!";
+our $start_time = Time::HiRes::time();
+my $s = join "", <>;
+my $data = lua_eval($s,"AucScanData");
+my $now = Time::HiRes::time();
+print "Read in and parsed first-pass in ",sprintf("%.3fsec",$now-$start_time),
+	"\n";
+
+my $scans = $data->{scans};
+my $scancount = 0;
+$start_time = Time::HiRes::time();
+foreach my $realm (sort keys %$scans) {
+    print "Realm: $realm\n";
+    foreach my $faction (sort keys %{$scans->{$realm}}) {
+	print "Faction: $faction\n";
+	my $image = $scans->{$realm}{$faction}{"image"};
+	my $imagedata;
+	if (ref($image) eq 'ARRAY') {
+	    $imagedata = $image;
+	} else {
+	    $imagedata = lua_eval($image,undef);
+	}
+	foreach my $hit (@$imagedata) {
+	    my %item;
+	    @item{@matched_fields} = @$hit;
+	    my $posix_time = $item{time};
+	    next unless $posix_time && ($posix_time =~ /^\d{8}/);
+	    $item{time} = strftime("%H:%M:%S",
+				   localtime($posix_time));
+	    $item{day} = strftime("%Y-%m-%d",
+				   localtime($posix_time));
+	    @item{qw(realm faction)} = ($realm,$faction);
+	    $item{price} = $item{buyout} || $item{curbid} || $item{minbid};
+	    next unless $item{price};
+	    print "." if $scancount++ % 100 == 0;
+	    if($scancount % 1000 == 0) {
+	    	printf "(%.1f/s)",
+		    1000/(($now=Time::HiRes::time())-$start_time);
+		$start_time = $now;
+	    }
+	    print $outfile yaml_array_add(Dump(\%item));
+	}
+	print "\n";
+    }
+}
+
+# Add the YAML item to a top-level array
+sub yaml_array_add {
+    my $yaml_data = shift @_;
+    $yaml_data =~ s/^/  /mg;
+    return "- \n" . $yaml_data;
+}
+
+__END__

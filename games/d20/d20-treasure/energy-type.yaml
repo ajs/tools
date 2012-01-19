@@ -1,0 +1,13 @@
+# Energy type for many items which can have a randomly selected energy
+# that they produce or protect from.
+---
+- 20
+- fire
+- 40
+- cold
+- 60
+- acid
+- 80
+- sonic
+- 100
+- electricity

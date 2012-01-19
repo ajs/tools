@@ -1,0 +1,74 @@
+# The base armor types to which magical attributes will be added.
+# Note that some have optional fields, "metal", "skin", and "wood".
+---
+- 1
+- name: padded
+  price: 155
+  type: light
+  weight: 10
+- 2
+- name: leather
+  price: 160
+  skin: 1
+  type: light
+  weight: 15
+- 17
+- name: studded leather
+  price: 175
+  skin: 1
+  type: light
+  weight: 20
+- 32
+- metal: 1
+  name: chain shirt
+  price: 250
+  type: light
+  weight: 25
+- 42
+- name: hide
+  price: 165
+  skin: 1
+  type: medium
+  weight: 25
+- 43
+- metal: 1
+  name: scale mail
+  price: 200
+  type: medium
+  weight: 30
+- 44
+- metal: 1
+  name: chainmail
+  price: 300
+  type: medium
+  weight: 40
+- 57
+- metal: 1
+  name: breastplate
+  price: 350
+  type: medium
+  weight: 30
+- 58
+- name: splint mail
+  price: 350
+  type: heavy
+  weight: 45
+  wood: 1
+- 59
+- metal: 1
+  name: banded mail
+  price: 400
+  type: heavy
+  weight: 35
+- 60
+- metal: 1
+  name: half-plate
+  price: 750
+  type: heavy
+  weight: 50
+- 100
+- metal: 1
+  name: full plate
+  price: 1650
+  type: heavy
+  weight: 50

@@ -1,0 +1,323 @@
+---
+- 1
+- name: 'feather token, anchor'
+  price: 50
+- 2
+- name: universal solvent
+  price: 50
+- 3
+- charges: -1
+  name: elixir of love
+  price: 150
+- 4
+- name: unguent of timelessness
+  charges: 8
+  price: 150
+- 5
+- name: 'feather token, fan'
+  price: 200
+- 6
+- charges: -1
+  name: dust of tracelessness
+  price: 250
+- 7
+- charges: -1
+  name: elixir of hiding
+  price: 250
+- 8
+- charges: -1
+  name: elixir of sneaking
+  price: 250
+- 9
+- charges: -1
+  name: elixir of swimming
+  price: 250
+- 10
+- charges: -1
+  name: elixir of vision
+  price: 250
+- 11
+- charges: -1
+  name: silversheen
+  price: 250
+- 12
+- name: 'feather token, bird'
+  price: 300
+- 13
+- name: 'feather token, tree'
+  price: 400
+- 14
+- name: 'feather token, swan boat'
+  price: 450
+- 15
+- charges: -1
+  name: elixir of truth
+  price: 500
+- 16
+- name: 'feather token, whip'
+  price: 500
+- 17
+- charges: -1
+  name: dust of dryness
+  price: 850
+- 18
+- charges: -1
+  name: 'bag of tricks, gray'
+  price: 900
+- 19
+- name: hand of the mage
+  price: 900
+- 20
+- name: bracers of armor +1
+  price: 1000
+- 21
+- name: cloak of resistance +1
+  price: 1000
+- 22
+- charges: -1
+  name: 'pearl of power, 1st-level spell'
+  price: 1000
+- 23
+- charges: -1
+  name: phylactery of faithfulness
+  price: 1000
+- 24
+- charges: -1
+  name: salve of slipperiness
+  price: 1000
+- 25
+- charges: -1
+  name: elixir of fire breath
+  price: 1100
+- 26
+- name: pipes of the sewers
+  price: 1150
+- 27
+- charges: -1
+  name: dust of illusion
+  price: 1200
+- 28
+- name: goggles of minute seeing
+  price: 1250
+- 29
+- name: brooch of shielding
+  price: 1500
+- 30
+- name: necklace of fireballs type I
+  price: 1650
+- 31
+- charges: -1
+  name: dust of appearance
+  price: 1800
+- 32
+- name: hat of disguise
+  price: 1800
+- 33
+- name: pipes of sounding
+  price: 1800
+- 34
+- name: efficient quiver
+  price: 1800
+- 35
+- name: amulet of natural armor +1
+  price: 2000
+- 36
+- name: handy haversack
+  price: 2000
+- 37
+- name: horn of fog
+  price: 2000
+- 38
+- name: elemental gem
+  price: 2250
+- 39
+- name: robe of bones
+  price: 2400
+- 40
+- name: sovereign glue
+  price: 2400
+- 41
+- name: bag of holding type I
+  price: 2500
+- 42
+- name: boots of elvenkind
+  price: 2500
+- 43
+- name: boots of the winterlands
+  price: 2500
+- 44
+- charges: -1
+  name: candle of truth
+  price: 2500
+- 45
+- name: cloak of elvenkind
+  price: 2500
+- 46
+- name: eyes of the eagle
+  price: 2500
+- 47
+- name: 'scarab, golembane'
+  price: 2500
+- 48
+- name: necklace of fireballs type II
+  price: 2700
+- 49
+- name: stone of alarm
+  price: 2700
+- 50
+- name: 'bag of tricks, rust'
+  price: 3000
+- 51
+- charges: -1
+  name: bead of force
+  price: 3000
+- 52
+- name: chime of opening
+  price: 3000
+- 53
+- name: horseshoes of speed
+  price: 3000
+- 54
+- name: rope of climbing
+  price: 3000
+- 55
+- charges: -1
+  name: dust of disappearance
+  price: 3500
+- 56
+- name: lens of detection
+  price: 3500
+- 57
+- name: 'figurine of wondrous power, silver raven'
+  price: 3800
+- 58
+- name: amulet of health +2
+  price: 4000
+- 59
+- name: bracers of armor +2
+  price: 4000
+- 60
+- name: cloak of charisma +2
+  price: 4000
+- 61
+- name: cloak of resistance +2
+  price: 4000
+- 62
+- name: gauntlets of ogre power
+  price: 4000
+- 63
+- name: gloves of arrow snaring
+  price: 4000
+- 64
+- name: gloves of dexterity +2
+  price: 4000
+- 65
+- name: headband of intellect +2
+  price: 4000
+- 66
+- name: 'ioun stone, clear spindle'
+  price: 4000
+- 67
+- name: restorative ointment
+  price: 4000
+- 68
+- name: marvelous pigments
+  price: 4000
+- 69
+- name: 'pearl of power, 2nd-level spell'
+  price: 4000
+- 70
+- name: periapt of wisdom +2
+  price: 4000
+- 71
+- name: stone salve
+  price: 4000
+- 72
+- name: necklace of fireballs type III
+  price: 4350
+- 73
+- name: circlet of persuasion
+  price: 4500
+- 74
+- name: slippers of spider climbing
+  price: 4800
+- 75
+- name: incense of meditation
+  price: 4900
+- 76
+- name: bag of holding type II
+  price: 5000
+- 77
+- name: 'bracers of archery, lesser'
+  price: 5000
+- 78
+- name: 'ioun stone, dusty rose prism'
+  price: 5000
+- 79
+- name: helm of comprehend languages and read magic
+  price: 5200
+- 80
+- name: vest of escape
+  price: 5200
+- 81
+- name: eversmoking bottle
+  price: 5400
+- 82
+- name: sustaining spoon
+  price: 5400
+- 83
+- name: necklace of fireballs type IV
+  price: 5400
+- 84
+- name: boots of striding and springing
+  price: 5500
+- 85
+- name: wind fan
+  price: 5500
+- 86
+- name: necklace of fireballs type V
+  price: 5850
+- 87
+- name: amulet of mighty fists +1
+  price: 6000
+- 88
+- name: horseshoes of a zephyr
+  price: 6000
+- 89
+- name: pipes of haunting
+  price: 6000
+- 90
+- name: gloves of swimming and climbing
+  price: 6250
+- 91
+- name: 'bag of tricks, tan'
+  price: 6300
+- 92
+- name: 'circlet of blasting, minor'
+  price: 6480
+- 93
+- name: horn of goodness/evil
+  price: 6500
+- 94
+- name: shrouds of disintegration
+  price: 6600
+- 95
+- name: robe of useful items
+  price: 7000
+  charges: -1
+  special: useful_items
+- 96
+- name: 'boat, folding'
+  price: 7200
+- 97
+- name: cloak of the manta ray
+  price: 7200
+- 98
+- name: bottle of air
+  price: 7250
+- 99
+- name: bag of holding type III
+  price: 7400
+- 100
+- name: periapt of health
+  price: 7400

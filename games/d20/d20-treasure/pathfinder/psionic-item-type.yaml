@@ -1,0 +1,42 @@
+---
+-
+  -
+    - 4
+    - 10
+    - 10
+  - special: psionic_armor
+  -
+    - 9
+    - 20
+    - 20
+  - special: psionic_weapon
+  -
+    - 41
+    - 40
+    - 35
+  - special: psionic_cognizance
+  -
+    - 49
+    - 50
+    - 45
+  - special: psionic_dorje
+  -
+    - 87
+    - 68
+    - 67
+  - special: psionic_power_stone
+  -
+    - -1
+    - 82
+    - 75
+  - special: psicrown
+  -
+    - 93
+    - 89
+    - 87
+  - special: psionic_tatoo
+  -
+    - 100
+    - 100
+    - 100
+  - special: psionic_universal_item

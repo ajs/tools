@@ -1,0 +1,86 @@
+# This table is the first consulted for magic armor. It is a fucking pain
+# in the ass, because it can determine that a special ability is to be
+# generated BEFORE you know what kind of armor it is. This gets to be
+# a MAJOR pain when you deal with psionic armor which has a different
+# sub-lookup for armor abilities and shield abilities (and you don't
+# know which one you're rolling on until you finish rolling on this
+# one). The solution is to generate placeholders here and then go back
+# and generate the final abilities once you've determined what type
+# of armor you're dealing with.
+---
+-
+  -
+    - 60
+    - 5
+    - -1
+  - plus: 1
+    type: shield
+  -
+    - 80
+    - 10
+    - -1
+  - plus: 1
+    type: armor
+  -
+    - 85
+    - 20
+    - -1
+  - plus: 2
+    type: shield
+  -
+    - 87
+    - 30
+    - -1
+  - plus: 2
+    type: armor
+  -
+    - -1
+    - 40
+    - 8
+  - plus: 3
+    type: shield
+  -
+    - -1
+    - 50
+    - 16
+  - plus: 3
+    type: armor
+  -
+    - -1
+    - 55
+    - 27
+  - plus: 4
+    type: shield
+  -
+    - -1
+    - 57
+    - 38
+  - plus: 4
+    type: armor
+  -
+    - -1
+    - -1
+    - 49
+  - plus: 5
+    type: shield
+  -
+    - -1
+    - -1
+    - 57
+  - plus: 5
+    type: armor
+  -
+    - 89
+    - 60
+    - 60
+  - specific armor
+  -
+    - 91
+    - 63
+    - 63
+  - specific shield
+  -
+    - 100
+    - 100
+    - 100
+  - special ability

@@ -1,0 +1,292 @@
+---
+-
+  -
+    - 18
+    - -1
+    - -1
+  - name: protection +1
+    price: 2000
+  -
+    - 28
+    - -1
+    - -1
+  - name: feather falling
+    price: 2200
+  -
+    - 36
+    - -1
+    - -1
+  - name: sustenance
+    price: 2500
+  -
+    - 44
+    - -1
+    - -1
+  - name: climbing
+    price: 2500
+  -
+    - 52
+    - -1
+    - -1
+  - name: jumping
+    price: 2500
+  -
+    - 60
+    - -1
+    - -1
+  - name: swimming
+    price: 2500
+  -
+    - 70
+    - 5
+    - -1
+  - name: counterspells
+    price: 4000
+  -
+    - 75
+    - 8
+    - -1
+  - name: mind shielding
+    price: 8000
+  -
+    - 80
+    - 18
+    - -1
+  - name: protection +2
+    price: 8000
+  -
+    - 85
+    - 23
+    - -1
+  - name: force shield
+    price: 8500
+  -
+    - 90
+    - 28
+    - -1
+  - charges: 50
+    name: ram
+    price: 8600
+  -
+    - -1
+    - 34
+    - -1
+  - name: 'climbing, improved'
+    price: 10000
+  -
+    - -1
+    - 40
+    - -1
+  - name: 'jumping, improved'
+    price: 10000
+  -
+    - -1
+    - 46
+    - -1
+  - name: 'swimming, improved'
+    price: 10000
+  -
+    - 93
+    - 51
+    - -1
+  - name: animal friendship
+    price: 10800
+  -
+    - 96
+    - 56
+    - 2
+  - name: 'energy resistance, minor'
+    price: 12000
+  -
+    - 98
+    - 61
+    - -1
+  - name: chameleon power
+    price: 12700
+  -
+    - 100
+    - 66
+    - -1
+  - name: water walking
+    price: 15000
+  -
+    - -1
+    - 71
+    - 7
+  - name: protection +3
+    price: 18000
+  -
+    - -1
+    - 76
+    - 10
+  - name: spell storing (minor)
+    price: 18000
+    special: spell_storing
+    spells_stored: 3
+  -
+    - -1
+    - 81
+    - 15
+  - name: invisibility
+    price: 20000
+  -
+    - -1
+    - 85
+    - 19
+  - name: wizardry (I)
+    price: 20000
+  -
+    - -1
+    - 89
+    - 25
+  - name: evasion
+    price: 25000
+  -
+    - -1
+    - 92
+    - 28
+  - name: x-ray vision
+    price: 25000
+  -
+    - -1
+    - 95
+    - 32
+  - name: blinking
+    price: 27000
+  -
+    - -1
+    - 98
+    - 36
+  - name: meld into stone
+    price: 27000
+  -
+    - -1
+    - 100
+    - 43
+  - name: 'energy resistance, major'
+    price: 28000
+  -
+    - -1
+    - -1
+    - 50
+  - name: protection +4
+    price: 32000
+  -
+    - -1
+    - -1
+    - 55
+  - name: wizardry (II)
+    price: 40000
+  -
+    - -1
+    - -1
+    - 60
+  - name: freedom of movement
+    price: 40000
+  -
+    - -1
+    - -1
+    - 63
+  - name: 'energy resistance, greater'
+    price: 44000
+  -
+    - -1
+    - -1
+    - 65
+  - name: friend shield (pair)
+    price: 50000
+  -
+    - -1
+    - -1
+    - 70
+  - name: protection +5
+    price: 50000
+  -
+    - -1
+    - -1
+    - 74
+  - name: shooting stars
+    price: 50000
+  -
+    - -1
+    - -1
+    - 79
+  - name: spell storing
+    price: 50000
+    special: spell_storing
+    spells_stored: 5
+  -
+    - -1
+    - -1
+    - 83
+  - name: wizardry (III)
+    price: 70000
+  -
+    - -1
+    - -1
+    - 86
+  - name: telekinesis
+    price: 75000
+  -
+    - -1
+    - -1
+    - 88
+  - name: regeneration
+    price: 90000
+  -
+    - -1
+    - -1
+    - 89
+  - charges: 3
+    name: wishes
+    price: 97950
+  -
+    - -1
+    - -1
+    - 92
+  - name: spell turning
+    price: 98280
+  -
+    - -1
+    - -1
+    - 94
+  - name: wizardry (IV)
+    price: 100000
+  -
+    - -1
+    - -1
+    - 95
+  - name: djinni calling
+    price: 125000
+  -
+    - -1
+    - -1
+    - 96
+  - name: elemental command (air)
+    price: 200000
+  -
+    - -1
+    - -1
+    - 97
+  - name: elemental command (earth)
+    price: 200000
+  -
+    - -1
+    - -1
+    - 98
+  - name: elemental command (fire)
+    price: 200000
+  -
+    - -1
+    - -1
+    - 99
+  - name: elemental command (water)
+    price: 200000
+  -
+    - -1
+    - -1
+    - 100
+  - name: spell storing (major)
+    price: 200000
+    special: spell_storing
+    spells_stored: 10

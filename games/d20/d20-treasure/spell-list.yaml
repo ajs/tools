@@ -1,0 +1,2225 @@
+---
+arcane:
+  -
+    - 4
+    - name: acid splash
+      price: 12.5
+    - 8
+    - name: arcane mark
+      price: 12.5
+    - 13
+    - name: dancing lights
+      price: 12.5
+    - 17
+    - name: daze
+      price: 12.5
+    - 24
+    - name: detect magic
+      price: 12.5
+    - 28
+    - name: detect poison
+      price: 12.5
+    - 32
+    - name: disrupt undead
+      price: 12.5
+    - 37
+    - name: flare
+      price: 12.5
+    - 42
+    - name: ghost sound
+      price: 12.5
+    - 44
+    - name: know direction
+      price: 12.5
+    - 50
+    - name: light
+      price: 12.5
+    - 52
+    - name: lullaby
+      price: 12.5
+    - 57
+    - name: mage hand
+      price: 12.5
+    - 62
+    - name: mending
+      price: 12.5
+    - 67
+    - name: message
+      price: 12.5
+    - 72
+    - name: open/close
+      price: 12.5
+    - 77
+    - name: prestidigitation
+      price: 12.5
+    - 81
+    - name: ray of frost
+      price: 12.5
+    - 87
+    - name: read magic
+      price: 12.5
+    - 94
+    - name: resistance
+      price: 12.5
+    - 96
+    - name: summon instrument
+      price: 12.5
+    - 100
+    - name: touch of fatigue
+      price: 12.5
+  -
+    - 3
+    - name: alarm
+      price: 25
+    - 5
+    - name: animate rope
+      price: 25
+    - 7
+    - name: burning hands
+      price: 25
+    - 9
+    - name: cause fear
+      price: 25
+    - 12
+    - name: charm person
+      price: 25
+    - 14
+    - name: chill touch
+      price: 25
+    - 16
+    - name: color spray
+      price: 25
+    - 19
+    - name: comprehend languages
+      price: 25
+    - 20
+    - name: 'confusion, lesser'
+      price: 50
+    - 21
+    - name: cure light wounds
+      price: 50
+    - 24
+    - name: detect secret doors
+      price: 25
+    - 26
+    - name: detect undead
+      price: 25
+    - 29
+    - name: disguise self
+      price: 25
+    - 32
+    - name: endure elements
+      price: 25
+    - 35
+    - name: enlarge person
+      price: 25
+    - 37
+    - name: erase
+      price: 25
+    - 40
+    - name: expeditious retreat
+      price: 25
+    - 41
+    - name: feather fall
+      price: 25
+    - 43
+    - name: grease
+      price: 25
+    - 45
+    - name: hold portal
+      price: 25
+    - 47
+    - name: hypnotism
+      price: 25
+    - 49
+    - name: identify
+      price: 125
+    - 51
+    - name: jump
+      price: 25
+    - 54
+    - name: mage armor
+      price: 25
+    - 56
+    - name: magic missile
+      price: 25
+    - 59
+    - name: magic weapon
+      price: 25
+    - 62
+    - name: mount
+      price: 25
+    - 64
+    - name: magic aura
+      price: 25
+    - 66
+    - name: obscuring mist
+      price: 25
+    - 74
+    - name: protection from chaos/evil/good/law
+      price: 25
+    - 76
+    - name: ray of enfeeblement
+      price: 25
+    - 78
+    - name: reduce person
+      price: 25
+    - 80
+    - name: remove fear
+      price: 50
+    - 82
+    - name: shield
+      price: 25
+    - 84
+    - name: shocking grasp
+      price: 25
+    - 86
+    - name: silent image
+      price: 25
+    - 88
+    - name: sleep
+      price: 25
+    - 90
+    - name: summon monster I
+      price: 25
+    - 93
+    - name: floating disk
+      price: 25
+    - 95
+    - name: true strike
+      price: 25
+    - 96
+    - name: undetectable alignment
+      price: 50
+    - 98
+    - name: unseen servant
+      price: 25
+    - 100
+    - name: ventriloquism
+      price: 25
+  -
+    - 1
+    - name: animal messenger
+      price: 200
+    - 2
+    - name: animal trance
+      price: 200
+    - 3
+    - name: arcane lock
+      price: 175
+    - 6
+    - name: bear's endurance
+      price: 150
+    - 8
+    - name: blindness/deafness
+      price: 150
+    - 10
+    - name: blur
+      price: 150
+    - 13
+    - name: bull's strength
+      price: 150
+    - 14
+    - name: calm emotions
+      price: 200
+    - 17
+    - name: cat's grace
+      price: 150
+    - 19
+    - name: command undead
+      price: 150
+    - 20
+    - name: continual flame
+      price: 200
+    - 21
+    - name: cure moderate wounds
+      price: 200
+    - 22
+    - name: darkness
+      price: 150
+    - 25
+    - name: darkvision
+      price: 150
+    - 26
+    - name: daze monster
+      price: 150
+    - 27
+    - name: delay poison
+      price: 200
+    - 29
+    - name: detect thoughts
+      price: 150
+    - 31
+    - name: disguise self
+      price: 150
+    - 34
+    - name: eagle's splendor
+      price: 150
+    - 35
+    - name: enthrall
+      price: 200
+    - 37
+    - name: false life
+      price: 150
+    - 39
+    - name: flaming sphere
+      price: 150
+    - 40
+    - name: fog cloud
+      price: 150
+    - 43
+    - name: fox's cunning
+      price: 150
+    - 44
+    - name: ghoul touch
+      price: 150
+    - 46
+    - name: glitterdust
+      price: 150
+    - 47
+    - name: gust of wind
+      price: 150
+    - 49
+    - name: hypnotic pattern
+      price: 150
+    - 52
+    - name: invisibility
+      price: 150
+    - 55
+    - name: knock
+      price: 150
+    - 56
+    - name: phantom trap
+      price: 200
+    - 58
+    - name: levitate
+      price: 150
+    - 59
+    - name: locate object
+      price: 150
+    - 60
+    - name: magic mouth
+      price: 160
+    - 62
+    - name: acid arrow
+      price: 150
+    - 63
+    - name: minor image
+      price: 150
+    - 65
+    - name: mirror image
+      price: 150
+    - 66
+    - name: misdirection
+      price: 150
+    - 67
+    - name: obscure object
+      price: 150
+    - 70
+    - name: owl's wisdom
+      price: 150
+    - 73
+    - name: protection from arrows
+      price: 150
+    - 75
+    - name: pyrotechnics
+      price: 150
+    - 78
+    - name: resist energy (type)
+      price: 150
+    - 79
+    - name: rope trick
+      price: 150
+    - 80
+    - name: scare
+      price: 150
+    - 82
+    - name: scorching ray
+      price: 150
+    - 85
+    - name: see invisibility
+      price: 150
+    - 86
+    - name: shatter
+      price: 150
+    - 87
+    - name: silence
+      price: 200
+    - 88
+    - name: sound burst
+      price: 200
+    - 89
+    - name: spectral hand
+      price: 150
+    - 91
+    - name: spider climb
+      price: 150
+    - 93
+    - name: summon monster II
+      price: 150
+    - 95
+    - name: summon swarm
+      price: 150
+    - 96
+    - name: hideous laughter
+      price: 150
+    - 97
+    - name: touch of idiocy
+      price: 150
+    - 99
+    - name: web
+      price: 150
+    - 100
+    - name: whispering wind
+      price: 150
+  -
+    - 2
+    - name: arcane sight
+      price: 375
+    - 4
+    - name: blink
+      price: 375
+    - 6
+    - name: clairaudience/clairvoyance
+      price: 375
+    - 7
+    - name: cure serious wounds
+      price: 525
+    - 10
+    - name: daylight
+      price: 525
+    - 12
+    - name: deep slumber
+      price: 375
+    - 15
+    - name: dispel magic
+      price: 375
+    - 17
+    - name: displacement
+      price: 375
+    - 18
+    - name: explosive runes
+      price: 375
+    - 20
+    - name: fireball
+      price: 375
+    - 22
+    - name: flame arrow
+      price: 375
+    - 25
+    - name: fly
+      price: 375
+    - 27
+    - name: gaseous form
+      price: 375
+    - 29
+    - name: gentle repose
+      price: 375
+    - 30
+    - name: glibness
+      price: 525
+    - 31
+    - name: good hope
+      price: 525
+    - 33
+    - name: halt undead
+      price: 375
+    - 36
+    - name: haste
+      price: 375
+    - 38
+    - name: heroism
+      price: 375
+    - 40
+    - name: hold person
+      price: 375
+    - 41
+    - name: illusory script
+      price: 425
+    - 44
+    - name: invisibility sphere
+      price: 375
+    - 47
+    - name: keen edge
+      price: 375
+    - 49
+    - name: tiny hut
+      price: 375
+    - 51
+    - name: lightning bolt
+      price: 375
+    - 59
+    - name: magic circle against chaos/evil/good/law
+      price: 375
+    - 62
+    - name: 'magic weapon, greater'
+      price: 375
+    - 64
+    - name: major image
+      price: 375
+    - 66
+    - name: nondetection
+      price: 425
+    - 68
+    - name: phantom steed
+      price: 375
+    - 71
+    - name: protection from energy (type)
+      price: 375
+    - 73
+    - name: rage
+      price: 375
+    - 75
+    - name: ray of exhaustion
+      price: 375
+    - 76
+    - name: sculpt sound
+      price: 525
+    - 77
+    - name: secret page
+      price: 375
+    - 78
+    - name: sepia snake sigil
+      price: 875
+    - 79
+    - name: shrink item
+      price: 375
+    - 81
+    - name: sleet storm
+      price: 375
+    - 83
+    - name: slow
+      price: 375
+    - 84
+    - name: speak with animals
+      price: 525
+    - 86
+    - name: stinking cloud
+      price: 375
+    - 88
+    - name: suggestion
+      price: 375
+    - 90
+    - name: summon monster III
+      price: 375
+    - 93
+    - name: tongues
+      price: 375
+    - 95
+    - name: vampiric touch
+      price: 375
+    - 98
+    - name: water breathing
+      price: 375
+    - 100
+    - name: wind wall
+      price: 375
+  -
+    - 2
+    - name: animate dead
+      price: 1050
+    - 5
+    - name: arcane eye
+      price: 700
+    - 7
+    - name: bestow curse
+      price: 700
+    - 10
+    - name: charm monster
+      price: 700
+    - 13
+    - name: confusion
+      price: 700
+    - 15
+    - name: contagion
+      price: 700
+    - 17
+    - name: crushing despair
+      price: 700
+    - 18
+    - name: cure critical wounds
+      price: 1000
+    - 19
+    - name: detect scrying
+      price: 700
+    - 23
+    - name: dimension door
+      price: 700
+    - 26
+    - name: dimensional anchor
+      price: 700
+    - 28
+    - name: enervation
+      price: 700
+    - 30
+    - name: 'enlarge person, mass'
+      price: 700
+    - 32
+    - name: black tentacles
+      price: 700
+    - 34
+    - name: fear
+      price: 700
+    - 37
+    - name: fire shield
+      price: 700
+    - 39
+    - name: fire trap
+      price: 725
+    - 42
+    - name: freedom of movement
+      price: 1000
+    - 43
+    - name: 'geas, lesser'
+      price: 700
+    - 46
+    - name: 'globe of invulnerability, lesser'
+      price: 700
+    - 48
+    - name: hallucinatory terrain
+      price: 700
+    - 50
+    - name: ice storm
+      price: 700
+    - 52
+    - name: illusory wall
+      price: 700
+    - 55
+    - name: 'invisibility, greater'
+      price: 700
+    - 57
+    - name: secure shelter
+      price: 700
+    - 58
+    - name: locate creature
+      price: 700
+    - 60
+    - name: minor creation
+      price: 700
+    - 61
+    - name: modify memory
+      price: 1000
+    - 62
+    - name: neutralize poison
+      price: 1000
+    - 64
+    - name: resilient sphere
+      price: 700
+    - 66
+    - name: phantasmal killer
+      price: 700
+    - 68
+    - name: polymorph
+      price: 700
+    - 70
+    - name: rainbow pattern
+      price: 700
+    - 71
+    - name: mnemonic enhancer
+      price: 700
+    - 73
+    - name: 'reduce person, mass'
+      price: 700
+    - 76
+    - name: remove curse
+      price: 700
+    - 77
+    - name: repel vermin
+      price: 1000
+    - 79
+    - name: scrying
+      price: 700
+    - 81
+    - name: shadow conjuration
+      price: 700
+    - 83
+    - name: shout
+      price: 700
+    - 85
+    - name: solid fog
+      price: 700
+    - 86
+    - name: speak with plants
+      price: 1000
+    - 88
+    - name: stone shape
+      price: 700
+    - 91
+    - name: stoneskin
+      price: 950
+    - 93
+    - name: summon monster IV
+      price: 700
+    - 96
+    - name: wall of fire
+      price: 700
+    - 99
+    - name: wall of ice
+      price: 700
+    - 100
+    - name: zone of silence
+      price: 1000
+  -
+    - 2
+    - name: animal growth
+      price: 1125
+    - 5
+    - name: baleful polymorph
+      price: 1125
+    - 7
+    - name: interposing hand
+      price: 1125
+    - 9
+    - name: blight
+      price: 1125
+    - 12
+    - name: break enchantment
+      price: 1125
+    - 14
+    - name: cloudkill
+      price: 1125
+    - 17
+    - name: cone of cold
+      price: 1125
+    - 19
+    - name: contact other plane
+      price: 1125
+    - 20
+    - name: 'cure light wounds, mass'
+      price: 1625
+    - 23
+    - name: dismissal
+      price: 1125
+    - 26
+    - name: 'dispel magic, greater'
+      price: 1625
+    - 28
+    - name: dominate person
+      price: 1125
+    - 29
+    - name: dream
+      price: 1125
+    - 31
+    - name: fabricate
+      price: 1125
+    - 33
+    - name: false vision
+      price: 1375
+    - 35
+    - name: feeblemind
+      price: 1125
+    - 39
+    - name: hold monster
+      price: 1125
+    - 40
+    - name: secret chest
+      price: 1125
+    - 41
+    - name: magic jar
+      price: 1125
+    - 43
+    - name: major creation
+      price: 1125
+    - 45
+    - name: mind fog
+      price: 1125
+    - 47
+    - name: mirage arcana
+      price: 1125
+    - 49
+    - name: mage's faithful hound
+      price: 1125
+    - 51
+    - name: mage's private sanctum
+      price: 1125
+    - 53
+    - name: nightmare
+      price: 1125
+    - 57
+    - name: overland flight
+      price: 1125
+    - 60
+    - name: passwall
+      price: 1125
+    - 61
+    - name: permanency
+      price: 10125
+    - 63
+    - name: persistent image
+      price: 1125
+    - 65
+    - name: 'planar binding, lesser'
+      price: 1125
+    - 67
+    - name: prying eyes
+      price: 1125
+    - 69
+    - name: telepathic bond
+      price: 1125
+    - 71
+    - name: seeming
+      price: 1125
+    - 74
+    - name: sending
+      price: 1125
+    - 76
+    - name: shadow evocation
+      price: 1125
+    - 77
+    - name: song of discord
+      price: 1625
+    - 79
+    - name: summon monster V
+      price: 1125
+    - 80
+    - name: symbol of pain
+      price: 2125
+    - 81
+    - name: symbol of sleep
+      price: 2125
+    - 83
+    - name: telekinesis
+      price: 1125
+    - 88
+    - name: teleport
+      price: 1125
+    - 90
+    - name: transmute mud to rock
+      price: 1125
+    - 92
+    - name: transmute rock to mud
+      price: 1125
+    - 95
+    - name: wall of force
+      price: 1125
+    - 98
+    - name: wall of stone
+      price: 1125
+    - 100
+    - name: waves of fatigue
+      price: 1125
+  -
+    - 2
+    - name: acid fog
+      price: 1650
+    - 5
+    - name: analyze dweomer
+      price: 1650
+    - 6
+    - name: animate objects
+      price: 2400
+    - 9
+    - name: antimagic field
+      price: 1650
+    - 12
+    - name: "bear's endurance, mass"
+      price: 1650
+    - 14
+    - name: forceful hand
+      price: 1650
+    - 17
+    - name: "bull's strength, mass"
+      price: 1650
+    - 20
+    - name: "cat's grace, mass"
+      price: 1650
+    - 23
+    - name: chain lightning
+      price: 1650
+    - 25
+    - name: circle of death
+      price: 2150
+    - 26
+    - name: contingency
+      price: 1650
+    - 28
+    - name: control water
+      price: 1650
+    - 29
+    - name: create undead
+      price: 2350
+    - 30
+    - name: 'cure moderate wounds, mass'
+      price: 2400
+    - 33
+    - name: disintegrate
+      price: 1650
+    - 37
+    - name: 'dispel magic, greater'
+      price: 1650
+    - 40
+    - name: "eagle's splendor, mass"
+      price: 1650
+    - 42
+    - name: eyebite
+      price: 1650
+    - 43
+    - name: find the path
+      price: 2400
+    - 45
+    - name: flesh to stone
+      price: 1650
+    - 48
+    - name: "fox's cunning, mass"
+      price: 1650
+    - 49
+    - name: geas/quest
+      price: 1650
+    - 52
+    - name: globe of invulnerability
+      price: 1650
+    - 53
+    - name: guards and wards
+      price: 1650
+    - 54
+    - name: heroes' feast
+      price: 2400
+    - 56
+    - name: 'heroism, greater'
+      price: 1650
+    - 57
+    - name: legend lore
+      price: 1900
+    - 59
+    - name: mislead
+      price: 1650
+    - 60
+    - name: mage's lucubration
+      price: 1650
+    - 62
+    - name: move earth
+      price: 1650
+    - 64
+    - name: freezing sphere
+      price: 1650
+    - 67
+    - name: "owl's wisdom, mass"
+      price: 1650
+    - 69
+    - name: permanent image
+      price: 1650
+    - 71
+    - name: planar binding
+      price: 1650
+    - 73
+    - name: programmed image
+      price: 1675
+    - 75
+    - name: repulsion
+      price: 1650
+    - 78
+    - name: shadow walk
+      price: 1650
+    - 81
+    - name: stone to flesh
+      price: 1650
+    - 83
+    - name: 'suggestion, mass'
+      price: 1650
+    - 85
+    - name: summon monster VI
+      price: 1650
+    - 86
+    - name: symbol of fear
+      price: 2650
+    - 87
+    - name: symbol of persuasion
+      price: 6650
+    - 88
+    - name: sympathetic vibration
+      price: 2400
+    - 90
+    - name: transformation
+      price: 1950
+    - 93
+    - name: true seeing
+      price: 1900
+    - 95
+    - name: undeath to death
+      price: 2150
+    - 97
+    - name: veil
+      price: 1650
+    - 100
+    - name: wall of iron
+      price: 1700
+  -
+    - 3
+    - name: 'arcane sight, greater'
+      price: 2275
+    - 7
+    - name: banishment
+      price: 2275
+    - 10
+    - name: grasping hand
+      price: 2275
+    - 13
+    - name: control undead
+      price: 2275
+    - 16
+    - name: control weather
+      price: 2275
+    - 19
+    - name: delayed blast fireball
+      price: 2275
+    - 21
+    - name: instant summons
+      price: 3275
+    - 25
+    - name: ethereal jaunt
+      price: 2275
+    - 28
+    - name: finger of death
+      price: 2275
+    - 31
+    - name: forcecage
+      price: 23775
+    - 35
+    - name: 'hold person, mass'
+      price: 2275
+    - 38
+    - name: insanity
+      price: 2275
+    - 42
+    - name: 'invisibility, mass'
+      price: 2275
+    - 43
+    - name: limited wish
+      price: 3775
+    - 45
+    - name: mage's magnificent mansion
+      price: 2275
+    - 48
+    - name: mage's sword
+      price: 2275
+    - 51
+    - name: phase door
+      price: 2275
+    - 54
+    - name: plane shift
+      price: 2275
+    - 57
+    - name: power word blind
+      price: 2275
+    - 61
+    - name: prismatic spray
+      price: 2275
+    - 64
+    - name: project image
+      price: 2280
+    - 67
+    - name: reverse gravity
+      price: 2275
+    - 70
+    - name: 'scrying, greater'
+      price: 2275
+    - 73
+    - name: sequester
+      price: 2275
+    - 76
+    - name: 'shadow conjuration, greater'
+      price: 2275
+    - 77
+    - name: simulacrum
+      price: 7275
+    - 80
+    - name: spell turning
+      price: 2275
+    - 82
+    - name: statue
+      price: 2275
+    - 85
+    - name: summon monster VII
+      price: 2275
+    - 86
+    - name: symbol of stunning
+      price: 7275
+    - 87
+    - name: symbol of weakness
+      price: 7275
+    - 90
+    - name: teleport object
+      price: 2275
+    - 95
+    - name: 'teleport, greater'
+      price: 2275
+    - 97
+    - name: vision
+      price: 2775
+    - 100
+    - name: waves of exhaustion
+      price: 2275
+  -
+    - 2
+    - name: antipathy
+      price: 3000
+    - 5
+    - name: clenched fist
+      price: 3000
+    - 8
+    - name: binding
+      price: 8500
+    - 12
+    - name: 'charm monster, mass'
+      price: 3000
+    - 13
+    - name: clone
+      price: 4000
+    - 16
+    - name: create greater undead
+      price: 3000
+    - 19
+    - name: demand
+      price: 3600
+    - 22
+    - name: dimensional lock
+      price: 3000
+    - 26
+    - name: discern location
+      price: 3000
+    - 29
+    - name: horrid wilting
+      price: 3000
+    - 32
+    - name: incendiary cloud
+      price: 3000
+    - 35
+    - name: iron body
+      price: 3000
+    - 38
+    - name: maze
+      price: 3000
+    - 41
+    - name: mind blank
+      price: 3000
+    - 44
+    - name: moment of prescience
+      price: 3000
+    - 48
+    - name: telekinetic sphere
+      price: 3000
+    - 51
+    - name: irresistible dance
+      price: 3000
+    - 54
+    - name: 'planar binding, greater'
+      price: 3000
+    - 57
+    - name: polar ray
+      price: 3000
+    - 60
+    - name: polymorph any object
+      price: 3000
+    - 63
+    - name: power word stun
+      price: 3000
+    - 66
+    - name: prismatic wall
+      price: 3000
+    - 70
+    - name: protection from spells
+      price: 3500
+    - 73
+    - name: 'prying eyes, greater'
+      price: 3000
+    - 76
+    - name: scintillating pattern
+      price: 3000
+    - 78
+    - name: screen
+      price: 3000
+    - 81
+    - name: 'shadow evocation, greater'
+      price: 3000
+    - 84
+    - name: 'shout, greater'
+      price: 3000
+    - 87
+    - name: summon monster VIII
+      price: 3000
+    - 90
+    - name: sunburst
+      price: 3000
+    - 91
+    - name: symbol of death
+      price: 8000
+    - 92
+    - name: symbol of insanity
+      price: 8000
+    - 94
+    - name: sympathy
+      price: 4500
+    - 98
+    - name: temporal stasis
+      price: 3500
+    - 100
+    - name: trap the soul
+      price: 13000
+  -
+    - 3
+    - name: astral projection
+      price: 4870
+    - 7
+    - name: crushing hand
+      price: 3825
+    - 12
+    - name: dominate monster
+      price: 3825
+    - 16
+    - name: energy drain
+      price: 3825
+    - 21
+    - name: etherealness
+      price: 3825
+    - 25
+    - name: foresight
+      price: 3825
+    - 31
+    - name: freedom
+      price: 3825
+    - 36
+    - name: gate
+      price: 8825
+    - 40
+    - name: 'hold monster, mass'
+      price: 3825
+    - 44
+    - name: imprisonment
+      price: 3825
+    - 49
+    - name: meteor swarm
+      price: 3825
+    - 53
+    - name: mage's disjunction
+      price: 3825
+    - 58
+    - name: power word kill
+      price: 3825
+    - 62
+    - name: prismatic sphere
+      price: 3825
+    - 66
+    - name: refuge
+      price: 3825
+    - 70
+    - name: shades
+      price: 3825
+    - 76
+    - name: shapechange
+      price: 3825
+    - 79
+    - name: soul bind
+      price: 3825
+    - 83
+    - name: summon monster IX
+      price: 3825
+    - 86
+    - name: teleportation circle
+      price: 4825
+    - 91
+    - name: time stop
+      price: 3825
+    - 95
+    - name: wail of the banshee
+      price: 3825
+    - 99
+    - name: weird
+      price: 3825
+    - 100
+    - name: wish
+      price: 28825
+divine:
+  -
+    - 7
+    - name: create water
+      price: 12.5
+    - 14
+    - name: cure minor wounds
+      price: 12.5
+    - 22
+    - name: detect magic
+      price: 12.5
+    - 29
+    - name: detect poison
+      price: 12.5
+    - 36
+    - name: flare
+      price: 12.5
+    - 43
+    - name: guidance
+      price: 12.5
+    - 50
+    - name: inflict minor wounds
+      price: 12.5
+    - 57
+    - name: know direction
+      price: 12.5
+    - 65
+    - name: light
+      price: 12.5
+    - 72
+    - name: mending
+      price: 12.5
+    - 79
+    - name: purify food and drink
+      price: 12.5
+    - 86
+    - name: read magic
+      price: 12.5
+    - 93
+    - name: resistance
+      price: 12.5
+    - 100
+    - name: virtue
+      price: 12.5
+  -
+    - 1
+    - name: alarm
+      price: 100
+    - 3
+    - name: bane
+      price: 25
+    - 6
+    - name: bless
+      price: 25
+    - 9
+    - name: bless water
+      price: 50
+    - 10
+    - name: bless weapon
+      price: 100
+    - 12
+    - name: calm animals
+      price: 25
+    - 14
+    - name: cause fear
+      price: 25
+    - 16
+    - name: charm animal
+      price: 25
+    - 19
+    - name: command
+      price: 25
+    - 21
+    - name: comprehend languages
+      price: 25
+    - 26
+    - name: cure light wounds
+      price: 25
+    - 28
+    - name: curse water
+      price: 50
+    - 30
+    - name: deathwatch
+      price: 25
+    - 32
+    - name: detect animals or plants
+      price: 25
+    - 35
+    - name: detect chaos/evil/good/law
+      price: 25
+    - 37
+    - name: detect snares and pits
+      price: 25
+    - 39
+    - name: detect undead
+      price: 25
+    - 41
+    - name: divine favor
+      price: 25
+    - 43
+    - name: doom
+      price: 25
+    - 48
+    - name: endure elements
+      price: 25
+    - 50
+    - name: entangle
+      price: 25
+    - 52
+    - name: entropic shield
+      price: 25
+    - 54
+    - name: faerie fire
+      price: 25
+    - 56
+    - name: goodberry
+      price: 25
+    - 58
+    - name: hide from animals
+      price: 25
+    - 60
+    - name: hide from undead
+      price: 25
+    - 62
+    - name: inflict light wounds
+      price: 25
+    - 64
+    - name: jump
+      price: 25
+    - 66
+    - name: longstrider
+      price: 25
+    - 68
+    - name: magic fang
+      price: 25
+    - 72
+    - name: magic stone
+      price: 25
+    - 74
+    - name: magic weapon
+      price: 25
+    - 78
+    - name: obscuring mist
+      price: 25
+    - 80
+    - name: pass without trace
+      price: 25
+    - 82
+    - name: produce flame
+      price: 25
+    - 86
+    - name: protection from chaos/evil/good/law
+      price: 25
+    - 88
+    - name: remove fear
+      price: 25
+    - 90
+    - name: sanctuary
+      price: 25
+    - 92
+    - name: shield of faith
+      price: 25
+    - 94
+    - name: shillelagh
+      price: 25
+    - 96
+    - name: speak with animals
+      price: 25
+    - 98
+    - name: summon monster I
+      price: 25
+    - 100
+    - name: summon nature's ally I
+      price: 25
+  -
+    - 1
+    - name: animal messenger
+      price: 150
+    - 2
+    - name: animal trance
+      price: 150
+    - 4
+    - name: augury
+      price: 175
+    - 6
+    - name: barkskin
+      price: 150
+    - 9
+    - name: bear's endurance
+      price: 150
+    - 12
+    - name: bull's strength
+      price: 150
+    - 14
+    - name: calm emotions
+      price: 150
+    - 17
+    - name: cat's grace
+      price: 150
+    - 18
+    - name: chill metal
+      price: 150
+    - 20
+    - name: consecrate
+      price: 200
+    - 24
+    - name: cure moderate wounds
+      price: 150
+    - 26
+    - name: darkness
+      price: 150
+    - 27
+    - name: death knell
+      price: 150
+    - 30
+    - name: delay poison
+      price: 150
+    - 32
+    - name: desecrate
+      price: 200
+    - 35
+    - name: eagle's splendor
+      price: 150
+    - 37
+    - name: enthrall
+      price: 150
+    - 39
+    - name: find traps
+      price: 150
+    - 40
+    - name: fire trap
+      price: 175
+    - 42
+    - name: flame blade
+      price: 150
+    - 44
+    - name: flaming sphere
+      price: 150
+    - 46
+    - name: fog cloud
+      price: 150
+    - 47
+    - name: gentle repose
+      price: 150
+    - 48
+    - name: gust of wind
+      price: 150
+    - 49
+    - name: heat metal
+      price: 150
+    - 51
+    - name: hold animal
+      price: 150
+    - 54
+    - name: hold person
+      price: 150
+    - 56
+    - name: inflict moderate wounds
+      price: 150
+    - 58
+    - name: make whole
+      price: 150
+    - 61
+    - name: owl's wisdom
+      price: 150
+    - 62
+    - name: reduce animal
+      price: 150
+    - 64
+    - name: remove paralysis
+      price: 150
+    - 67
+    - name: resist energy (type)
+      price: 150
+    - 70
+    - name: 'restoration, lesser'
+      price: 150
+    - 72
+    - name: shatter
+      price: 150
+    - 74
+    - name: shield other
+      price: 150
+    - 76
+    - name: silence
+      price: 150
+    - 77
+    - name: snare
+      price: 150
+    - 78
+    - name: soften earth and stone
+      price: 150
+    - 80
+    - name: sound burst
+      price: 150
+    - 81
+    - name: speak with plants
+      price: 150
+    - 83
+    - name: spider climb
+      price: 150
+    - 85
+    - name: spiritual weapon
+      price: 150
+    - 86
+    - name: status
+      price: 150
+    - 88
+    - name: summon monster II
+      price: 150
+    - 90
+    - name: summon nature's ally II
+      price: 150
+    - 92
+    - name: summon swarm
+      price: 150
+    - 93
+    - name: tree shape
+      price: 150
+    - 95
+    - name: undetectable alignment
+      price: 150
+    - 97
+    - name: warp wood
+      price: 150
+    - 98
+    - name: wood shape
+      price: 150
+    - 100
+    - name: zone of truth
+      price: 150
+  -
+    - 2
+    - name: animate dead
+      price: 625
+    - 4
+    - name: bestow curse
+      price: 375
+    - 6
+    - name: blindness/deafness
+      price: 375
+    - 8
+    - name: call lightning
+      price: 375
+    - 10
+    - name: contagion
+      price: 375
+    - 12
+    - name: continual flame
+      price: 425
+    - 14
+    - name: create food and water
+      price: 375
+    - 18
+    - name: cure serious wounds
+      price: 375
+    - 19
+    - name: darkvision
+      price: 375
+    - 21
+    - name: daylight
+      price: 375
+    - 23
+    - name: deeper darkness
+      price: 375
+    - 25
+    - name: diminish plants
+      price: 375
+    - 27
+    - name: dispel magic
+      price: 375
+    - 29
+    - name: dominate animal
+      price: 375
+    - 31
+    - name: glyph of warding
+      price: 575
+    - 32
+    - name: heal mount
+      price: 375
+    - 34
+    - name: helping hand
+      price: 375
+    - 36
+    - name: inflict serious wounds
+      price: 375
+    - 38
+    - name: invisibility purge
+      price: 375
+    - 40
+    - name: locate object
+      price: 375
+    - 46
+    - name: magic circle against chaos/evil/good/law
+      price: 375
+    - 48
+    - name: 'magic fang, greater'
+      price: 375
+    - 50
+    - name: magic vestment
+      price: 375
+    - 52
+    - name: meld into stone
+      price: 375
+    - 55
+    - name: neutralize poison
+      price: 375
+    - 57
+    - name: obscure object
+      price: 375
+    - 59
+    - name: plant growth
+      price: 375
+    - 62
+    - name: prayer
+      price: 375
+    - 64
+    - name: protection from energy (type)
+      price: 375
+    - 66
+    - name: quench
+      price: 375
+    - 69
+    - name: remove blindness/deafness
+      price: 375
+    - 71
+    - name: remove curse
+      price: 375
+    - 73
+    - name: remove disease
+      price: 375
+    - 76
+    - name: searing light
+      price: 375
+    - 78
+    - name: sleet storm
+      price: 375
+    - 80
+    - name: snare
+      price: 375
+    - 83
+    - name: speak with dead
+      price: 375
+    - 85
+    - name: speak with plants
+      price: 375
+    - 87
+    - name: spike growth
+      price: 375
+    - 89
+    - name: stone shape
+      price: 375
+    - 91
+    - name: summon monster III
+      price: 375
+    - 93
+    - name: summon nature's ally III
+      price: 375
+    - 96
+    - name: water breathing
+      price: 375
+    - 98
+    - name: water walk
+      price: 375
+    - 100
+    - name: wind wall
+      price: 375
+  -
+    - 5
+    - name: air walk
+      price: 700
+    - 7
+    - name: antiplant shell
+      price: 700
+    - 9
+    - name: blight
+      price: 700
+    - 11
+    - name: break enchantment
+      price: 700
+    - 13
+    - name: command plants
+      price: 700
+    - 15
+    - name: control water
+      price: 700
+    - 21
+    - name: cure critical wounds
+      price: 700
+    - 26
+    - name: death ward
+      price: 700
+    - 31
+    - name: dimensional anchor
+      price: 700
+    - 34
+    - name: discern lies
+      price: 700
+    - 37
+    - name: dismissal
+      price: 700
+    - 39
+    - name: divination
+      price: 725
+    - 42
+    - name: divine power
+      price: 700
+    - 47
+    - name: freedom of movement
+      price: 700
+    - 49
+    - name: giant vermin
+      price: 700
+    - 51
+    - name: holy sword
+      price: 700
+    - 54
+    - name: imbue with spell ability
+      price: 700
+    - 57
+    - name: inflict critical wounds
+      price: 700
+    - 60
+    - name: 'magic weapon, greater'
+      price: 700
+    - 62
+    - name: nondetection
+      price: 750
+    - 64
+    - name: 'planar ally, lesser'
+      price: 1200
+    - 67
+    - name: poison
+      price: 700
+    - 69
+    - name: reincarnate
+      price: 700
+    - 71
+    - name: repel vermin
+      price: 700
+    - 76
+    - name: restoration
+      price: 800
+    - 78
+    - name: rusting grasp
+      price: 700
+    - 81
+    - name: sending
+      price: 700
+    - 85
+    - name: spell immunity
+      price: 700
+    - 87
+    - name: spike stones
+      price: 700
+    - 90
+    - name: summon monster IV
+      price: 700
+    - 93
+    - name: summon nature's ally IV
+      price: 700
+    - 98
+    - name: tongues
+      price: 700
+    - 100
+    - name: tree stride
+      price: 700
+  -
+    - 3
+    - name: animal growth
+      price: 1125
+    - 5
+    - name: atonement
+      price: 3625
+    - 6
+    - name: awaken
+      price: 2375
+    - 9
+    - name: baleful polymorph
+      price: 1125
+    - 13
+    - name: break enchantment
+      price: 1125
+    - 16
+    - name: call lightning storm
+      price: 1125
+    - 20
+    - name: 'command, greater'
+      price: 1125
+    - 21
+    - name: commune
+      price: 1625
+    - 22
+    - name: commune with nature
+      price: 1125
+    - 24
+    - name: control winds
+      price: 1125
+    - 30
+    - name: 'cure light wounds, mass'
+      price: 1125
+    - 34
+    - name: dispel chaos/evil/good/law
+      price: 1125
+    - 38
+    - name: disrupting weapon
+      price: 1125
+    - 41
+    - name: flame strike
+      price: 1125
+    - 43
+    - name: hallow
+      price: 6125
+    - 46
+    - name: ice storm
+      price: 1125
+    - 49
+    - name: 'inflict light wounds, mass'
+      price: 1125
+    - 52
+    - name: insect plague
+      price: 1125
+    - 53
+    - name: mark of justice
+      price: 1125
+    - 56
+    - name: plane shift
+      price: 1125
+    - 58
+    - name: raise dead
+      price: 6125
+    - 61
+    - name: righteous might
+      price: 1125
+    - 63
+    - name: scrying
+      price: 1125
+    - 66
+    - name: slay living
+      price: 1125
+    - 69
+    - name: spell resistance
+      price: 1125
+    - 71
+    - name: stoneskin
+      price: 1375
+    - 74
+    - name: summon monster V
+      price: 1125
+    - 77
+    - name: summon nature's ally V
+      price: 1125
+    - 78
+    - name: symbol of pain
+      price: 2125
+    - 79
+    - name: symbol of sleep
+      price: 2125
+    - 82
+    - name: transmute mud to rock
+      price: 1125
+    - 85
+    - name: transmute rock to mud
+      price: 1125
+    - 89
+    - name: true seeing
+      price: 1375
+    - 91
+    - name: unhallow
+      price: 6125
+    - 94
+    - name: wall of fire
+      price: 1125
+    - 97
+    - name: wall of stone
+      price: 1125
+    - 100
+    - name: wall of thorns
+      price: 1125
+  -
+    - 3
+    - name: animate objects
+      price: 1650
+    - 6
+    - name: antilife shell
+      price: 1650
+    - 9
+    - name: banishment
+      price: 1650
+    - 13
+    - name: "bear's endurance, mass"
+      price: 1650
+    - 16
+    - name: blade barrier
+      price: 1650
+    - 20
+    - name: "bull's strength, mass"
+      price: 1650
+    - 24
+    - name: "cat's grace, mass"
+      price: 1650
+    - 25
+    - name: create undead
+      price: 1650
+    - 29
+    - name: 'cure moderate wounds, mass'
+      price: 1650
+    - 33
+    - name: 'dispel magic, greater'
+      price: 1650
+    - 37
+    - name: "eagle's splendor, mass"
+      price: 1650
+    - 40
+    - name: find the path
+      price: 1650
+    - 43
+    - name: fire seeds
+      price: 1650
+    - 44
+    - name: forbiddance
+      price: 4650
+    - 45
+    - name: geas/quest
+      price: 1650
+    - 46
+    - name: 'glyph of warding, greater'
+      price: 1650
+    - 49
+    - name: harm
+      price: 1650
+    - 52
+    - name: heal
+      price: 1650
+    - 55
+    - name: heroes' feast
+      price: 1650
+    - 58
+    - name: 'inflict moderate wounds, mass'
+      price: 1650
+    - 61
+    - name: ironwood
+      price: 1650
+    - 62
+    - name: liveoak
+      price: 1650
+    - 65
+    - name: move earth
+      price: 1650
+    - 69
+    - name: "owl's wisdom, mass"
+      price: 1650
+    - 71
+    - name: planar ally
+      price: 2400
+    - 74
+    - name: repel wood
+      price: 1650
+    - 77
+    - name: spellstaff
+      price: 1650
+    - 80
+    - name: stone tell
+      price: 1650
+    - 83
+    - name: summon monster VI
+      price: 1650
+    - 86
+    - name: summon nature's ally VI
+      price: 1650
+    - 87
+    - name: symbol of fear
+      price: 2650
+    - 88
+    - name: symbol of persuasion
+      price: 6650
+    - 91
+    - name: transport via plants
+      price: 1650
+    - 94
+    - name: undeath to death
+      price: 2150
+    - 97
+    - name: wind walk
+      price: 1650
+    - 100
+    - name: word of recall
+      price: 1650
+  -
+    - 5
+    - name: animate plants
+      price: 2275
+    - 9
+    - name: blasphemy
+      price: 2275
+    - 14
+    - name: changestaff
+      price: 2275
+    - 16
+    - name: control weather
+      price: 2275
+    - 21
+    - name: creeping doom
+      price: 2275
+    - 27
+    - name: 'cure serious wounds, mass'
+      price: 2275
+    - 32
+    - name: destruction
+      price: 2275
+    - 36
+    - name: dictum
+      price: 2275
+    - 41
+    - name: ethereal jaunt
+      price: 2275
+    - 45
+    - name: holy word
+      price: 2275
+    - 50
+    - name: 'inflict serious wounds, mass'
+      price: 2275
+    - 55
+    - name: refuge
+      price: 3775
+    - 60
+    - name: regenerate
+      price: 2275
+    - 65
+    - name: repulsion
+      price: 2275
+    - 69
+    - name: 'restoration, greater'
+      price: 4775
+    - 71
+    - name: resurrection
+      price: 12275
+    - 76
+    - name: 'scrying, greater'
+      price: 2275
+    - 81
+    - name: summon monster VII
+      price: 2275
+    - 85
+    - name: summon nature's ally VII
+      price: 2275
+    - 90
+    - name: sunbeam
+      price: 2275
+    - 91
+    - name: symbol of stunning
+      price: 7275
+    - 92
+    - name: symbol of weakness
+      price: 7275
+    - 97
+    - name: transmute metal to wood
+      price: 2275
+    - 100
+    - name: word of chaos
+      price: 2275
+  -
+    - 4
+    - name: animal shapes
+      price: 3000
+    - 10
+    - name: antimagic field
+      price: 3000
+    - 13
+    - name: cloak of chaos
+      price: 3000
+    - 17
+    - name: control plants
+      price: 3000
+    - 20
+    - name: create greater undead
+      price: 3600
+    - 27
+    - name: 'cure critical wounds, mass'
+      price: 3000
+    - 32
+    - name: dimensional lock
+      price: 3000
+    - 36
+    - name: discern location
+      price: 3000
+    - 41
+    - name: earthquake
+      price: 3000
+    - 45
+    - name: finger of death
+      price: 3000
+    - 49
+    - name: fire storm
+      price: 3000
+    - 52
+    - name: holy aura
+      price: 3000
+    - 56
+    - name: 'inflict critical wounds, mass'
+      price: 3000
+    - 60
+    - name: 'planar ally, greater'
+      price: 5500
+    - 65
+    - name: repel metal or stone
+      price: 3000
+    - 69
+    - name: reverse gravity
+      price: 3000
+    - 72
+    - name: shield of law
+      price: 3000
+    - 76
+    - name: 'spell immunity, greater'
+      price: 3000
+    - 80
+    - name: summon monster VIII
+      price: 3000
+    - 84
+    - name: summon nature's ally VIII
+      price: 3000
+    - 89
+    - name: sunburst
+      price: 3000
+    - 91
+    - name: symbol of death
+      price: 8000
+    - 93
+    - name: symbol of insanity
+      price: 8000
+    - 96
+    - name: unholy aura
+      price: 3000
+    - 100
+    - name: whirlwind
+      price: 3000
+  -
+    - 4
+    - name: antipathy
+      price: 3825
+    - 7
+    - name: astral projection
+      price: 4870
+    - 13
+    - name: elemental swarm
+      price: 3825
+    - 19
+    - name: energy drain
+      price: 3825
+    - 25
+    - name: etherealness
+      price: 3825
+    - 31
+    - name: foresight
+      price: 3825
+    - 37
+    - name: gate
+      price: 8825
+    - 46
+    - name: 'heal, mass'
+      price: 3825
+    - 53
+    - name: implosion
+      price: 3825
+    - 55
+    - name: miracle
+      price: 28825
+    - 61
+    - name: regenerate
+      price: 3825
+    - 66
+    - name: shambler
+      price: 3825
+    - 72
+    - name: shapechange
+      price: 3825
+    - 77
+    - name: soul bind
+      price: 3825
+    - 83
+    - name: storm of vengeance
+      price: 3825
+    - 89
+    - name: summon monster IX
+      price: 3825
+    - 95
+    - name: summon nature's ally IX
+      price: 3825
+    - 99
+    - name: sympathy
+      price: 5325
+    - 100
+    - name: true resurrection
+      price: 28825

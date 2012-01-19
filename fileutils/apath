@@ -1,0 +1,96 @@
+#!/usr/bin/perl
+
+# Simple symlink follower
+
+$0=~s/^\///;
+$usage = "Usage: $0 [-vue] <paths>...\n";
+$verbose = 0;
+$unique = 0;
+$exists = 0;
+$sep = undef;
+@stack = ();
+
+while(defined($arg = shift @stack) || defined($arg = shift @ARGV)) {
+	if ($arg =~ s/^-//) {
+		if ($arg !~ /^-/ && length($arg) > 1) {
+			push @stack, map {"-$_"} split '', $arg;
+			next;
+		}
+		if ($arg eq 'v') {
+			$verbose = 1; $unique = 0;
+		} elsif ($arg eq 'u') {
+			$unique = 1; $verbose = 0;
+		} elsif ($arg eq 'e') {
+			$exists = 1;
+		} elsif ($arg eq 's') {
+			$sep = shift @ARGV;
+		} elsif ($arg eq '-') {
+			last;
+		} else {
+			die "Unknown flag -$arg\n$usage";
+		}
+	} else {
+		unshift @ARGV, $arg;
+		last;
+	}
+}
+
+$|=1;
+
+my @inpaths = @ARGV;
+@inpaths = map { split /$sep/, $_ } @inpaths if $sep;
+foreach $file (@inpaths) {
+	next if $exists && !-e $file;
+	$path = resolve_path($file);
+	push @paths, $path if $unique;
+}
+
+my %seen;
+@paths = grep {! $seen{$_}++} @paths if $unique;
+$sep = "\n" unless defined $sep;
+print join($sep, @paths), "\n";
+exit 0;
+
+sub resolve_path {
+	my $path = shift;
+	print "$path:\n" if $verbose;
+	$path =~ s|//+|/|g;
+	my @parts = split /\//, $path;
+	return unless @parts && length($path);
+	my $sofar;
+	while(defined($next = shift @parts)) {
+		next if $next eq '.' && defined($sofar);
+		if (!defined($sofar) && $next eq '') {
+			$sofar = '/';
+		} else {
+			($sofar,@new) = reslink($sofar,$next);
+			unshift @parts, @new if @new;
+			last unless -e $sofar;
+		}
+	}
+	print "    " if $verbose;
+	return $sofar;
+}
+
+sub reslink {
+	my $prefix = shift;
+	my $entry = shift;
+	my $path;
+	if ($prefix eq '') {
+		$path = $entry;
+	} elsif ($prefix =~ /\/$/) {
+		$path = "$prefix$entry";
+	} else {
+		$path = "$prefix/$entry";
+	}
+	my $link;
+	if (defined($link = readlink($path))) {
+		print "\t$path => $link\n" if $verbose;
+		if ($link =~ /^\//) {
+			return (undef, split /\//, $link);
+		} else {
+			return ($prefix, split /\//, $link);
+		}
+	}
+	return $path;
+}

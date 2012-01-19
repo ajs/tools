@@ -1,0 +1,72 @@
+---
+-
+  -
+    - -1
+    - 20
+    - 9
+  - name: dominator
+    points: 450
+    price: 20250
+  -
+    - -1
+    - 51
+    - 20
+  - name: evader
+    points: 400
+    price: 28500
+  -
+    - -1
+    - 64
+    - 31
+  - name: cautious warrior
+    points: 450
+    price: 32063
+  -
+    - -1
+    - 79
+    - 41
+  - name: beast
+    points: 450
+    price: 33750
+  -
+    - -1
+    - 89
+    - 58
+  - name: great dominator
+    points: 750
+    price: 45000
+  -
+    - -1
+    - 97
+    - 68
+  - name: astral legion
+    points: 900
+    price: 47250
+  -
+    - -1
+    - 100
+    - 78
+  - name: discerning watcher
+    points: 450
+    price: 51469
+  -
+    - -1
+    - -1
+    - 89
+  - name: fiery ruin
+    points: 750
+    price: 67500
+  -
+    - -1
+    - -1
+    - 97
+  - name: traveler
+    points: 750
+    price: 80156
+  -
+    - -1
+    - -1
+    - 100
+  - name: temporal juggler
+    points: 850
+    price: 95625

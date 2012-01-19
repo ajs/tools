@@ -1,0 +1,67 @@
+---
+-
+ -
+   - 20
+   - 15
+   - -1
+ - name: teleporting
+   plus: 1
+ -
+   - 40
+   - 30
+   - -1
+ - name: psychokinetic
+   plus: 1
+ -
+   - 100
+   - 45
+   - 30
+ - name: collision
+   plus: 2
+ -
+   - -1
+   - 50
+   - 40
+ - name: suppression
+   plus: 2
+ -
+   - -1
+   - 66
+   - 65
+ - name: psychokinetic burst
+   plus: 2
+ -
+   - -1
+   - 74
+   - 69
+ - name: psibane
+   plus: 2
+ -
+   - -1
+   - 78
+   - 73
+ - name: manifester
+   price: 16000
+ -
+   - -1
+   - 82
+   - 79
+ - name: dislocator
+   plus: 3
+ -
+   - -1
+   - 98
+   - 90
+ - name: great dislocator
+   plus: 4
+ -
+   - -1
+   - -1
+   - 97
+ - name: coup de grace
+   plus: 5
+ -
+   - -1
+   - 100
+   - 100
+ - special: two_abilities

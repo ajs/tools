@@ -1,0 +1,10 @@
+#!/usr/bin/perl
+
+system "apt-get update -q >/dev/null";
+open P, "apt-get dist-upgrade -q -d 2>&1 |" or die "Fork: $!";
+while(<P>) {
+	if (/(?:ftp|http):\S+\s+\S+\s+(\S+)\s+(\S+)/) {
+		print "Upgrade available: $1-$2\n";
+	}
+}
+close P or die "Failed to close apt-get pipeline: $!\n";

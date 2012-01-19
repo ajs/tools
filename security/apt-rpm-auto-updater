@@ -1,0 +1,29 @@
+#!/bin/bash
+
+error() {
+	echo $* 1>&2
+	exit 1
+}
+
+aptlog() {
+	touch /var/log/apt.log
+	$* >> /var/log/atp.log 2>&1
+}
+
+id | grep root >/dev/null || error "You must run this program as root"
+
+PATH=/sbin:/usr/sbin:/usr/bin:/bin
+export PATH
+
+tmpf1=/tmp/apt-updater-before.$$
+tmpf2=/tmp/apt-updater-after.$$
+rpm -qa > $tmpf1
+aptlog apt-get update -q
+aptlog apt-get dist-upgrade -q -y
+rpm -qa > $tmpf2
+if diff $tmpf1 $tmpf2 &>/dev/null ; then
+	echo "No updates performed"
+else
+	echo "Update differences found... scheduling reboot"
+	shutdown -r +20 "System rebooting after update. 'shutdown -c' to stop"
+fi

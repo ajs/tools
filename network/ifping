@@ -1,0 +1,50 @@
+#!/usr/bin/perl -w
+
+$0 =~ s/^.*\///;
+$usage = "Usage: $0 [-i <ifconfig-program>] [-p <ping-program>] [<interface>]\n";
+$interface = 'ppp0';
+$ifconfig = 'ifconfig';
+$ping = 'ping';
+$ENV{PATH}="/sbin:/usr/sbin:/usr/bin:/bin:$ENV{PATH}";
+
+while(defined($arg = shift @ARGV)) {
+	if ($arg =~ s/^-//) {
+		if ($arg eq 'p') {
+			die $usage unless defined($ping = shift @ARGV);
+		} elsif ($arg eq 'i') {
+			die $usage unless defined($ifconfig = shift @ARGV);
+		} elsif ($arg eq '-') {
+			last;
+		} else {
+			die "$0: Unknown argument, \"-$arg\"\n$usage";
+		}
+	} else {
+		unshift @ARGV, $arg;
+		last;
+	}
+}
+
+if (@ARGV == 1) {
+	$interface = shift @ARGV;
+} elsif (@ARGV != 0) {
+	die $usage;
+}
+
+($pid = open(P,"$ifconfig|")) || die("$0: Cannot fork: $!\n");
+$found = 0;
+while(<P>) {
+	if (/^$interface\s/) {
+		$found = 1;
+	} elsif ($found) {
+		kill 'TERM', $pid;
+		close P;
+		if (/P-t-P:\s*(\d+\.\d+\.\d+\.\d+)/) {
+			system("$ping $1");
+			exit(0);
+		}
+		die("$0: Address of remote server not found.\n");
+	}
+}
+close P;
+
+die("$0: Interface, \"$interface\", not found.\n");

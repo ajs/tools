@@ -1,0 +1,124 @@
+---
+- 5
+- name: incense of obsession
+  price: 200
+  type: wonder
+- 15
+- name: ring of clumsiness
+  price: 500
+  type: ring
+- 20
+- name: amulet of inescapable location
+  price: 1000
+  type: wonder
+- 25
+- name: stone of weight
+  price: 1000
+  type: wonder
+- 30
+- name: bracers of defenselessness
+  price: 1200
+  type: wonder
+- 35
+- name: gauntlets of fumbling
+  price: 1300
+  type: wonder
+- 40
+- name: '-2 sword, cursed'
+  price: 1500
+  subtype: melee
+  type: weapon
+- 43
+- name: armor of rage
+  price: 1600
+  type: armor
+- 46
+- name: medallion of thought projection
+  price: 1800
+  type: wonder
+- 52
+- name: flask of curses
+  price: 2100
+  type: wonder
+- 54
+- charges: -1
+  name: dust of sneezing and choking
+  price: 2400
+  type: wonder
+- 55
+- name: helm of opposite alignment
+  price: 4000
+  type: wonder
+- 60
+- name: potion of poison
+  price: 5000
+  type: potion
+- 61
+- name: broom of animated attack
+  price: 5200
+  type: wonder
+- 63
+- name: robe of powerlessness
+  price: 5500
+  type: wonder
+- 64
+- name: vacuous grimoire
+  price: 6000
+  type: wonder
+- 68
+- name: 'spear, cursed backbiter'
+  price: 7500
+  subtype: melee
+  type: weapon
+- 70
+- name: armor of arrow attraction
+  price: 9000
+  subtype: ammo
+  type: weapon
+- 72
+- name: net of snaring
+  price: 10000
+  subtype: ranged
+  type: weapon
+- 75
+- name: bag of devouring
+  price: 0
+  type: wonder
+- 80
+- name: mace of blood
+  price: 16000
+  subtype: melee
+  type: weapon
+- 85
+- name: robe of vermin
+  price: 16500
+  type: wonder
+- 88
+- name: periapt of foul rotting
+  price: 17000
+  type: wonder
+- 92
+- name: 'sword, berserking'
+  price: 17500
+  subtype: melee
+  type: weapon
+- 96
+- name: boots of dancing
+  price: 30000
+  type: wonder
+- 97
+- name: crystal hypnosis ball
+  price: 0
+  type: wonder
+- 98
+- name: necklace of strangulation
+  price: 60000
+  type: wonder
+- 99
+- name: cloak of poisonousness
+  price: 62000
+  type: wonder
+- 100
+- name: scarab of death
+  price: 80000
+  type: wonder

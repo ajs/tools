@@ -1,0 +1,226 @@
+# Armor special abilities. Not much of interest here other than
+# the fact that each may map to a price in gp or a plus (bonus)
+---
+-
+  -
+    - 25
+    - 5
+    - 3
+  - name: glamered
+    price: 2700
+  -
+    - 32
+    - 8
+    - 4
+  - name: fortification (light)
+    plus: 1
+  -
+    - 52
+    - 11
+    - -1
+  - name: slick
+    price: 3750
+  -
+    - 72
+    - 14
+    - -1
+  - name: shadow
+    price: 3750
+  -
+    - 92
+    - 17
+    - -1
+  - name: silent moves
+    price: 3750
+  -
+    - 96
+    - 19
+    - -1
+  - name: spell resistance (13)
+    plus: 2
+  -
+    - 97
+    - 29
+    - 7
+  - name: slick (improved)
+    price: 15000
+  -
+    - 98
+    - 39
+    - 10
+  - name: shadow (improved)
+    price: 15000
+  -
+    - 100
+    - 49
+    - 13
+  - name: silent moves (improved)
+    price: 15000
+  -
+    - -1
+    - 54
+    - 16
+  - name: acid resistance
+    price: 18000
+  -
+    - -1
+    - 59
+    - 19
+  - name: cold resistance
+    price: 18000
+  -
+    - -1
+    - 64
+    - 22
+  - name: electricity resistance
+    price: 18000
+  -
+    - -1
+    - 69
+    - 25
+  - name: fire resistance
+    price: 18000
+  -
+    - -1
+    - 74
+    - 28
+  - name: sonic resistance
+    price: 18000
+  -
+    - -1
+    - 79
+    - 33
+  - name: ghost touch
+    plus: 3
+  -
+    - -1
+    - 84
+    - 35
+  - name: invulnerability
+    plus: 3
+  -
+    - -1
+    - 89
+    - 40
+  - name: fortification (moderate)
+    plus: 3
+  -
+    - -1
+    - 94
+    - 42
+  - name: spell resistance (15)
+    plus: 3
+  -
+    - -1
+    - 100
+    - 43
+  - name: wild
+    plus: 3
+  -
+    - -1
+    - -1
+    - 48
+  - name: slick (greater)
+    price: 33750
+  -
+    - -1
+    - -1
+    - 53
+  - name: shadow (greater)
+    price: 33750
+  -
+    - -1
+    - -1
+    - 58
+  - name: silent moves (greater)
+    price: 33750
+  -
+    - -1
+    - -1
+    - 63
+  - name: acid resistance (improved)
+    price: 42000
+  -
+    - -1
+    - -1
+    - 68
+  - name: cold resistance (improved)
+    price: 42000
+  -
+    - -1
+    - -1
+    - 73
+  - name: electricity resistance (improved)
+    price: 42000
+  -
+    - -1
+    - -1
+    - 78
+  - name: fire resistance (improved)
+    price: 42000
+  -
+    - -1
+    - -1
+    - 83
+  - name: sonic resistance (improved)
+    price: 42000
+  -
+    - -1
+    - -1
+    - 88
+  - name: spell resistance (17)
+    plus: 4
+  -
+    - -1
+    - -1
+    - 89
+  - name: etherealness
+    price: 49000
+  -
+    - -1
+    - -1
+    - 90
+  - name: undead controlling
+    price: 49000
+  -
+    - -1
+    - -1
+    - 92
+  - name: fortification (heavy)
+    plus: 5
+  -
+    - -1
+    - -1
+    - 94
+  - name: spell resistance (19)
+    plus: 5
+  -
+    - -1
+    - -1
+    - 95
+  - name: acid resistance (greater)
+    price: 66000
+  -
+    - -1
+    - -1
+    - 96
+  - name: cold resistance (greater)
+    price: 66000
+  -
+    - -1
+    - -1
+    - 97
+  - name: electricity resistance (greater)
+    price: 66000
+  -
+    - -1
+    - -1
+    - 98
+  - name: fire resistance (greater)
+    price: 66000
+  -
+    - -1
+    - -1
+    - 100
+  - name: sonic resistance (greater)
+    price: 66000

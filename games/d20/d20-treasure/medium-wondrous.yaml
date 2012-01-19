@@ -1,0 +1,314 @@
+---
+- 1
+- name: boots of levitation
+  price: 7500
+- 2
+- name: harp of charming
+  price: 7500
+- 3
+- name: amulet of natural armor +2
+  price: 8000
+- 4
+- name: 'golem manual, flesh'
+  price: 8000
+  special: book
+- 5
+- name: hand of glory
+  price: 8000
+- 6
+- name: 'ioun stone, deep red sphere'
+  price: 8000
+- 7
+- name: 'ioun stone, incandescent blue sphere'
+  price: 8000
+- 8
+- name: 'ioun stone, pale blue rhomboid'
+  price: 8000
+- 9
+- name: 'ioun stone, pink and green sphere'
+  price: 8000
+- 10
+- name: 'ioun stone, pink rhomboid'
+  price: 8000
+- 11
+- name: 'ioun stone, scarlet and blue sphere'
+  price: 8000
+- 12
+- name: deck of illusions
+  special: deck_of_illusions
+- 13
+- name: necklace of fireballs type VI
+  price: 8100
+- 14
+- charges: -1
+  name: candle of invocation
+  price: 8400
+- 15
+- name: necklace of fireballs type VII
+  price: 8700
+- 16
+- name: bracers of armor +3
+  price: 9000
+- 17
+- name: cloak of resistance +3
+  price: 9000
+- 18
+- name: decanter of endless water
+  price: 9000
+- 19
+- name: necklace of adaptation
+  price: 9000
+- 20
+- name: 'pearl of power, 3rd-level spell'
+  price: 9000
+- 21
+- name: 'figurine of wondrous power, serpentine owl'
+  price: 9100
+- 22
+- name: 'strand of prayer beads, lesser'
+  price: 9600
+- 23
+- name: bag of holding type IV
+  price: 10000
+- 24
+- name: 'figurine of wondrous power, bronze griffon'
+  price: 10000
+- 25
+- name: 'figurine of wondrous power, ebony fly'
+  price: 10000
+- 26
+- name: glove of storing
+  price: 10000
+- 27
+- name: 'ioun stone, dark blue rhomboid'
+  price: 10000
+- 28
+- name: 'stone horse, courser'
+  price: 10000
+- 29
+- name: "vestment, druid's"
+  price: 10000
+- 30
+- name: cape of the mountebank
+  price: 10080
+- 31
+- name: phylactery of undead turning
+  price: 11000
+- 32
+- name: gauntlet of rust
+  price: 11500
+- 33
+- name: boots of speed
+  price: 12000
+- 34
+- name: goggles of night
+  price: 12000
+- 35
+- name: 'golem manual, clay'
+  price: 12000
+  special: book
+- 36
+- name: medallion of thoughts
+  price: 12000
+- 37
+- name: pipes of pain
+  price: 12000
+- 38
+- name: blessed book
+  price: 12500
+  special: book
+- 39
+- name: "belt, monk's"
+  price: 13000
+- 40
+- charges: 50
+  name: gem of brightness
+  price: 13000
+- 41
+- name: lyre of building
+  price: 13000
+- 42
+- name: cloak of arachnida
+  price: 14000
+- 43
+- name: 'stone horse, destrier'
+  price: 14800
+- 44
+- name: belt of dwarvenkind
+  price: 14900
+- 45
+- name: periapt of wound closure
+  price: 15000
+- 46
+- name: horn of the tritons
+  price: 15100
+- 47
+- name: pearl of the sirines
+  price: 15300
+- 48
+- name: 'figurine of wondrous power, onyx dog'
+  price: 15500
+- 49
+- name: amulet of health +4
+  price: 16000
+- 50
+- name: belt of giant strength +4
+  price: 16000
+- 51
+- name: 'boots, winged'
+  price: 16000
+- 52
+- name: bracers of armor +4
+  price: 16000
+- 53
+- name: cloak of charisma +4
+  price: 16000
+- 54
+- name: cloak of resistance +4
+  price: 16000
+- 55
+- name: gloves of dexterity +4
+  price: 16000
+- 56
+- name: headband of intellect +4
+  price: 16000
+- 57
+- name: 'pearl of power, 4th-level spell'
+  price: 16000
+- 58
+- name: periapt of wisdom +4
+  price: 16000
+- 59
+- name: scabbard of keen edges
+  price: 16000
+- 60
+- name: 'figurine of wondrous power, golden lions'
+  price: 16500
+- 61
+- name: chime of interruption
+  price: 16800
+- 62
+- name: broom of flying
+  price: 17000
+- 63
+- name: 'figurine of wondrous power, marble elephant'
+  price: 17000
+- 64
+- name: amulet of natural armor +3
+  price: 18000
+- 65
+- name: 'ioun stone, iridescent spindle'
+  price: 18000
+- 66
+- charges: 4
+  name: bracelet of friends
+  price: 19000
+- 67
+- name: 'carpet of flying, 5 ft. by 5 ft.'
+  price: 20000
+- 68
+- name: horn of blasting
+  price: 20000
+- 69
+- name: 'ioun stone, pale lavender ellipsoid'
+  price: 20000
+- 70
+- name: 'ioun stone, pearly white spindle'
+  price: 20000
+- 71
+- name: portable hole
+  price: 20000
+- 72
+- name: stone of good luck (luckstone)
+  price: 20000
+- 73
+- name: 'figurine of wondrous power, ivory goats'
+  price: 21000
+- 74
+- name: rope of entanglement
+  price: 21000
+- 75
+- name: 'golem manual, stone'
+  price: 22000
+  special: book
+- 76
+- name: mask of the skull
+  price: 22000
+- 77
+- name: mattock of the titans
+  price: 23348
+- 78
+- name: 'circlet of blasting, major'
+  price: 23760
+- 79
+- name: amulet of mighty fists +2
+  price: 24000
+- 80
+- name: 'cloak of displacement, minor'
+  price: 24000
+- 81
+- name: helm of underwater action
+  price: 24000
+- 82
+- name: 'bracers of archery, greater'
+  price: 25000
+- 83
+- name: bracers of armor +5
+  price: 25000
+- 84
+- name: cloak of resistance +5
+  price: 25000
+- 85
+- name: eyes of doom
+  price: 25000
+- 86
+- name: 'pearl of power, 5th-level spell'
+  price: 25000
+- 87
+- name: maul of the titans
+  price: 25305
+- 88
+- name: strand of prayer beads
+  price: 25800
+- 89
+- name: cloak of the bat
+  price: 26000
+- 90
+- name: iron bands of binding
+  price: 26000
+- 91
+- name: cube of frost resistance
+  price: 27000
+- 92
+- name: helm of telepathy
+  price: 27000
+- 93
+- name: periapt of proof against poison
+  price: 27000
+- 94
+- name: robe of scintillating colors
+  price: 27000
+- 95
+- name: manual of bodily health +1
+  price: 27500
+  special: book
+- 96
+- name: manual of gainful exercise +1
+  price: 27500
+  special: book
+- 97
+- name: manual of quickness in action +1
+  price: 27500
+  special: book
+- 98
+- name: tome of clear thought +1
+  price: 27500
+  special: book
+- 99
+- name: tome of leadership and influence +1
+  price: 27500
+  special: book
+- 100
+- name: tome of understanding +1
+  price: 27500
+  special: book

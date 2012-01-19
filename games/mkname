@@ -1,0 +1,279 @@
+#!/usr/bin/perl -w
+
+# If you don't have any of these, you should run "cpan Bundle::CPAN"
+use Getopt::Long;
+use Pod::Usage;
+use strict;
+use encoding 'utf8';
+use utf8;
+
+require 5.010;
+
+BEGIN{
+  # Try to find the best way to generate random numbers.
+  # Start with the Math::TrulyRandom module:
+  eval "use Math::TrulyRandom";
+  if ($@) {
+    foreach my $file (qw(/dev/urandom /dev/random)) {
+      if (-r $file) {
+	no  strict;
+	*truly_random_value = sub {
+	  local *F;
+	  open F, "<$file" or die "$file: $!";
+	  my $b;
+	  sysread(F,$b,4)==4 or die "$file: $!";
+	  close F;
+	  return unpack("I",$b);
+	};
+	last;
+      }
+    }
+    # Otherwise, we lose
+    if (!defined \&truly_random_value) {
+      die "No Math::TrulyRandom and no /dev/(u)random\n$@";
+    }
+  }
+}
+
+binmode(STDOUT,":utf8");
+
+srand(truly_random_value());
+sub mkrand($);
+sub uniq(@);
+
+our $verbose = 0;
+our $debug = 0;
+our $quiet = 0;
+our $wordlist_file = undef;
+our $minlen = 4;
+our $maxlen = 7;
+our $count = 1;
+our $dups_ok = 0;
+
+$|=1;
+
+Getopt::Long::Configure('auto_abbrev','bundling');
+GetOptions(
+	   'h|?|help' => sub {pod2usage(-verbose => 0)},
+	   'man' => sub {pod2usage(-verbose => 2)},
+	   'v|verbose' => sub {$::verbose=1;$::quiet=0},
+	   'd|debug' => sub {$::verbose=1;$::debug=1;$::quiet=0},
+	   'q|quiet' => sub {$::verbose=0;$::debug=0;$::quiet=1},
+	   'w|wordlist=s' => \$wordlist_file,
+	   'n|number=i' => \$count,
+           'D|dups-ok' => \$dups_ok,
+	   'M|max-length=i' => \$maxlen,
+	   'm|min-length=i' => \$minlen
+	  ) or pod2usage(-verbose => 0);
+
+my $word_list = getwords();
+our @words;
+
+my %seen;
+for(my $i=0;$i<$count;$i++) {
+        my $len = int(mkrand($maxlen-$minlen+1)) + $minlen;
+        my $pw = pseudo_word($len,$word_list);
+        redo if !$dups_ok && $seen{$pw}++;
+        print $pw, "\n";
+}
+exit 0;
+
+#######################
+
+sub getwords {
+  my $i;
+    $wordlist_file =
+      (defined($wordlist_file) and -f $wordlist_file and $wordlist_file) ||
+	(-f "/usr/dict/words" and "/usr/dict/words") ||
+	  (-f "/usr/share/dict/words" and "/usr/share/dict/words");
+    my %parts;
+    my %wordhash;
+    local *P;
+    # Read each word
+    open(P,"<:utf8",$wordlist_file) or die "Cannot open $wordlist_file: $!";
+    while(<P>) {
+        utf8::upgrade($_);
+        chomp;
+        next unless length >= $minlen;
+	$wordhash{$_}++;
+        # Score each part of each word
+	for(my $i=0;$i<=length($_)-3;$i++) {
+            if ($i == 0) {
+                my $part = substr($_,$i,3);
+                $parts{first}{$part}++;
+            } else {
+                if ($i == length($_)-3) {
+                    $parts{last}{substr($_,$i,2)}{substr($_,$i+2,1)}++;
+                } elsif ($i == length($_)-4) {
+                    $parts{nextlast}{substr($_,$i,2)}{substr($_,$i+2,1)}++;
+                } else {
+                    $parts{mid}{substr($_,$i,2)}{substr($_,$i+2,1)}++;
+                }
+            }
+	}
+    }
+    close P;
+    $parts{first} = [ sort {$parts{first}{$a} <=> $parts{first}{$b}}
+                      keys %{$parts{first}} ];
+    foreach my $loc (qw(nextlast last mid)) {
+        foreach my $prefix (keys %{$parts{$loc}}) {
+            my $nexts = $parts{$loc}{$prefix};
+            $parts{$loc}{$prefix} = [ sort {$nexts->{$a} <=> $nexts->{$b}}
+                                      keys %$nexts ];
+        }
+    }
+    return { words => \%wordhash, parts => \%parts };
+}
+
+# Take a length. Return a pseudo-word of the given length.
+sub pseudo_word {
+    my $n = shift;
+    my $word_data = shift;
+    my $parts = $word_data->{parts};
+    my $chunk;
+    die "Cannot make pseudo-word less than 2 chars\n" if $n < 2;
+  WORD_GEN:
+    until($chunk && !exists($word_data->{words}{$chunk})) {
+        $chunk = '';
+        my $nn=$n; # $n is total length, $nn is length left to go
+        print "\tNew word len=$nn\n" if $verbose;
+        while($nn) {
+            my $p;
+            if (length $chunk) {
+                my $last = substr($chunk,-2);
+                if ($nn == 1) {
+                    $p = $parts->{last}{$last} // undef;
+                } elsif ($nn == 2) {
+                    $p = $parts->{nextlast}{$last} // undef;
+                } else {
+                    $p = $parts->{mid}{$last} // undef;
+                }
+                unless ($p) {
+                    print "\tDead end at '$chunk'\n" if $verbose;
+                    if (length($chunk) > 5) {
+                        $chunk = substr($chunk,0,length($chunk)-2);
+                        $nn++;
+                        next;
+                    } else {
+                        $chunk = '';
+                        next WORD_GEN;
+                    }
+                }
+            } else {
+                $p = $parts->{first};
+            }
+            my $i = int sqrt(@$p * mkrand(scalar @$p));
+            print "Random index: $i out of ", scalar(@$p), "\n" if $debug;
+            die "Undefined index $i" unless exists $p->[$i];
+            my $piece = $p->[$i];
+            $chunk .= $piece;
+            $nn -= length($piece);
+            print "\t\tAdded piece $piece, $nn left\n" if $verbose;
+        }
+        my $clen = length($chunk);
+    }
+    return $chunk;
+}
+
+sub mkrand($) {
+  my $range = shift;
+  if (defined $range) {
+    return rand $range;
+  } else {
+    return rand;
+  }
+}
+
+__END__
+
+=head1 NAME
+
+mkname - A tool for the pseudo-random generation of name-like strings.
+
+=head1 SYNOPSIS
+
+  mkname [-dhqv] [-w|--wordlist FILE] [-n|--number N]
+        [-m|--min-length <len>] [-M|--max-length <len>]
+
+  options:
+
+	   -h|-?|--help		Print summary help
+	   --man		Show manual
+	   -v|--verbose		Verbose output
+	   -d|--debug		Debugging mode
+	   -q|--quiet		Suppress excess output
+	   -w|--wordlist FILE	Use FILE as a basis for name generation
+                                FILE should contain 1,000-30,000 names,
+                                repetition is allowed, and will influence
+                                the outcome (making certain word-parts
+                                more common).
+	   -n|--number N	Produce N names
+           -m|--min-length N    Produce names at least this long (4)
+           -M|--max-length N    Produce names no longer than this (7)
+
+=head1 DESCRIPTION
+
+This program generates a random name which sounds somewhat like a base
+list of names. It can be used for first or last names, male or female
+based solely on the input name list (C<-w> option).
+
+To run mkname, you should get the TrulyRandom package, which can be
+found on any CPAN site (see www.perl.com).
+
+=head1 ALGORITHM
+
+Name generation is done through a heuristic that selects letter groups based
+on their frequency in the given word list. The length I<must> be
+2 or more. The resulting word is likely to sound like the input
+words, so for the case of name generation, the result should
+have whatever regional, gender or language influences that the
+input list did, but will not be one of the input names.
+
+=head1 OPTIONS
+
+=over 5
+
+=item C<-d>
+
+Turn on debugging output. Intended for development purposes only.
+
+=item C<-n>
+
+Give a number of names that you wish to generate.
+
+=item C<-w>
+
+X<--wordlist>
+Give the full path to the word list to be used. This list should consist
+of single words, on to a line.
+
+=item C<-m>
+
+X<--min-length>
+Give the shortest length name to be generated. Defaults to 4.
+
+=item C<-M>
+
+X<--max-length>
+Give the longest length name to be generated. Defaults to 7.
+
+=back
+
+=head1 AUTHOR
+
+Originally based on mkpasswd by Aaron Sherman:
+
+Aaron Sherman (c) 1999,2005 and distributed under the terms of the GNU
+General Public License (see www.gnu.org) or, at the user's choice,
+the same terms as Perl itself (see www.perl.org).
+
+=cut
+
+/*
+ * -*-perl-*-
+ * Local variables:
+ * cperl-indent-level: 2
+ * End:
+ *
+ * vim: expandtab shiftwidth=2:
+*/

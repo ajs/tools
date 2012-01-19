@@ -1,0 +1,3 @@
+#!/bin/sh
+cd /home/ajs/misc/movies
+wget -m --level=1 -k http://www.flicker-fusion.com/animation.html

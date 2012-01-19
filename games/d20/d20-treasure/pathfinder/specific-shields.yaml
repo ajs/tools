@@ -1,0 +1,50 @@
+---
+-
+  -
+    - 30
+    - 20
+    - -1
+  - name: darkwood buckler
+    price: 205
+  -
+    - 80
+    - 45
+    - -1
+  - name: darkwood shield
+    price: 257
+  -
+    - 95
+    - 70
+    - -1
+  - name: mithral heavy shield
+    price: 1020
+  -
+    - 100
+    - 85
+    - 20
+  - name: caster's shield
+    price: 3153
+  -
+    - -1
+    - 90
+    - 40
+  - name: spined shield
+    price: 5580
+  -
+    - -1
+    - 95
+    - 60
+  - name: lion's shield
+    price: 9170
+  -
+    - -1
+    - 100
+    - 90
+  - name: winged shield
+    price: 17257
+  -
+    - -1
+    - -1
+    - 100
+  - name: absorbing shield
+    price: 50170

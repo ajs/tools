@@ -1,0 +1,50 @@
+# Various items can have "favored enemies" of a sort, either causing
+# extra damage (bane) or outright death (slaying). This table selects
+# the type of opponent for such items.
+---
+- 5
+- aberrations
+- 9
+- animals
+- 16
+- constructs
+- 22
+- dragons
+- 27
+- elementals
+- 32
+- fey
+- 39
+- giants
+- 42
+- 'humanoids, dwarf'
+- 44
+- 'humanoids, elf'
+- 49
+- 'humanoids, goblinoid'
+- 54
+- 'humanoids, human'
+- 57
+- 'humanoids, reptilian'
+- 60
+- 'humanoids, orc'
+- 65
+- magical beasts
+- 70
+- monstrous humanoids
+- 72
+- oozes
+- 76
+- 'outsiders, chaotic'
+- 80
+- 'outsiders, evil'
+- 84
+- 'outsiders, good'
+- 87
+- 'outsiders, lawful'
+- 90
+- plants
+- 98
+- undead
+- 100
+- vermin

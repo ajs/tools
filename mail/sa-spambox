@@ -1,0 +1,82 @@
+#!/usr/bin/perl
+
+use Getopt::Long;
+use Pod::Usage;
+
+our $spam = undef;
+our $delete = 0;
+our $verbose = 0;
+
+Getopt::Long::Configure('auto_abbrev','bundling');
+GetOptions(
+   'h|?|help' => sub {pod2usage(-verbose => 0)},
+   'man' => sub {pod2usage(-verbose => 2)},
+   'spam' => \$spam,
+   'ham' => sub {$spam = 0},
+   'delete' => \$delete,
+   'verbose' => \$verbose
+) or pod2usage(-verbose=>0);
+
+@ARGV or pod2usage("You must provide a mailbox to read");
+
+my @args = "--mbox";
+if ($spam) {
+	push @args, "--spam";
+} elsif (defined($spam)) {
+	push @args, "--ham";
+} else {
+	pod2usage("You must specify --ham or --spam");
+}
+
+$"=' ';
+print STDERR "spamassassin -R --mbox @ARGV\n" if $verbose;
+system(qw(spamassassin -R --mbox), @ARGV);
+print STDERR "sa-learn @args @ARGV\n" if $verbose;
+system('sa-learn',@args,@ARGV);
+if ($?) {
+	die "There was a problem running sa-learn\n";
+} elsif ($delete) {
+	print STDERR "Deleting folder(s)...\n" if $verbose;
+	foreach my $file (@ARGV) {
+		local *F;
+		open(F,">",$file) or warn "Unable to truncate $file: $!";
+		close F;
+	}
+}
+
+__END__
+
+=head1 NAME
+
+sa-spambox - Train SpamAssassin on a whole mailbox
+
+=head1 SYNOPSIS
+
+  sa-spambox [options] <mailbox>
+
+  options:
+
+    -h / --help		Print a usage description
+    --man		See full documentation
+    --spam		Train on a mailbox of spam
+    --ham		Train on a mailbox of mis-labeled good mail
+    --delete		Truncate the mailbox after learning
+
+=head1 DESCRIPTION
+
+This is a front-end to SpamAssassin's training facility. Primary reason
+for running sa-spambox is to train on a mailbox that the user has
+set aside as known spam or ham (ham in SA terminology is good mail).
+
+=head1 AUTHOR
+
+Written and (c) 2004 by Aaron Sherman.
+
+Distributed under the same terms as Perl itself. (see www.perl.com)
+
+=head1 SEE ALSO
+
+L<perl>, L<Mail::SpamAssassin>, L<sa-learn>
+
+=cut
+

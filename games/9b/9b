@@ -1,0 +1,274 @@
+#!/usr/bin/perl
+
+use strict;
+
+package Board;
+
+use strict;
+
+use constant mark_x => 1;
+use constant mark_o => 2;
+use constant mark_empty => 0;
+
+our @other_player = (mark_empty, mark_o, mark_x);
+
+use Class::Struct 'Board' => {
+    # A bit-vector of 2-bit values (mark_x, mark_o or mark_empty)
+    # corresponding to each of the 81 board positions.
+    cells => '*$',
+    force => '$',
+    winner => '$',
+    # A bit-vector of 4-bit values. An array indexed by the mark_*
+    # constants and then by the board number. The 4-bit value
+    # indicates how many threats that player is making on that
+    # board.
+    threats => '*$'
+};
+
+our @wins_one = ( [0,1,2], [3,4,5], [6,7,8],
+		  [0,3,6], [1,4,7], [2,5,8],
+		  [0,4,8], [2,4,6] );
+# $wins_by_board[0][1][2] is position 2 of win condition 1 on
+# board 0
+our @wins_by_board = map {
+    my $b = $_;
+    [ map { [ map { $b*9+$_ } @$_ ] } @wins_one ];
+} 0 .. 8;
+our @wins_all = map {@$_} @wins_by_board;
+
+sub clone {
+    my($self) = @_;
+    my $new = Board->new(cells => ${$self->cells()},
+			 winner => $self->winner(),
+			 threats => ${$self->threats()} );
+    return $new;
+}
+
+sub cell {
+    my($self,$index,$new) = @_;
+    my $cells = $self->cells;
+    $cells = "\0" x 81 unless defined $cells;
+    my $value = vec($$cells,$index,2);
+    if (@_ == 3) {
+	vec($$cells,$index,2) = $new;
+	my $b = boardof($index);
+	my $i = boardind($index);
+	$self->force($i); # Force next move on sub-board $i
+	foreach my $win (@wins_one) {
+	    last unless defined($new) && $new != mark_empty;
+	    my $relevant = 0;
+	    my @owner = (0,0,0);
+	    my $other = $other_player[$new];
+	    foreach my $pos (@$win) {
+		if ($pos == $i) {
+		    $relevant = 1;
+		    $owner[$new]++;
+		} else {
+		    $owner[$self->cell($b*9+$pos) + 0]++;
+		}
+	    }
+	    next unless $relevant;
+	    if ($owner[$new] == 3) {
+		$self->winner($new);
+		last;
+	    } elsif ($owner[$new] == 2 && $owner[$other] == 0) {
+		$self->threat_by_board($b,$new,1);
+	    } elsif ($owner[$new] == 1 && $owner[$other] == 2) {
+		$self->threat_by_board($b,$other,-1);
+	    }
+	}
+    }
+    return $value;
+}
+
+sub legal_moves {
+    my($self,$mark) = @_;
+    my @legal;
+    my $cells = $self->cells;
+    my $force = $self->force;
+    my ($min,$max);
+    if (defined $force) {
+	($min,$max) = ($force*9,($force+1)*9);
+    } else {
+	($min,$max) = (0,9*9);
+    }
+    for(my $i=$min;$i<$max;$i++) {
+        push @legal, $i if vec($$cells,$i,2) == mark_empty;
+    }
+    return @legal;
+}
+
+# $threat_count = $board->threat_by_board($boardnum,$player);
+# $board->threat_by_board($boardnum,$player,1); # increment
+# $board->threat_by_board($boardnum,$player,-1); # decrement
+sub threat_by_board {
+    my($self,$board,$mark,$value) = @_;
+    my $old = vec(${$self->threats},$board+9*$mark,4);
+    if (@_ == 4) {
+	vec(${$self->threats},$board+9*$mark,4) += $value;
+    }
+    return $old;
+}
+
+sub cell_byboard {
+    my($self,$board,$cell,$new) = @_;
+    my $index = $board*9+$cell;
+    if (@_ == 4) {
+	return $self->cell($index,$new);
+    } else {
+	return $self->cell($index);
+    }
+}
+
+sub stringify {
+    my $self = shift;
+    my $out = "";
+    for(my $outerrow = 0; $outerrow < 3; $outerrow++) {
+	for(my $innerrow = 0;$innerrow < 3; $innerrow++) {
+	    for(my $outercol = 0; $outercol < 3 ; $outercol++) {
+		for(my $innercol = 0;$innercol < 3; $innercol++) {
+		    my $cell = $self->cell_byboard($outerrow*3+$outercol,
+				    $innerrow*3+$innercol);
+		    my $char = ( $cell == mark_empty ? ' ' :
+				( $cell == mark_x ? 'x' : 'o' ) );
+		    $out .= " $char ";
+		    $out .= "|" unless $innercol == 2;
+		}
+		$out .= " " unless $outercol == 2;
+	    }
+	    $out .= "\n";
+	    $out .= join(" ", (join("+", (("---") x 3) )) x 3 ) . "\n" unless $innerrow == 2;
+	}
+	$out .= "\n" unless $outerrow == 2;
+    }
+    return $out;
+}
+
+# Utility functions
+sub boardof {
+    my($index) = @_;
+    return int($index/9);
+}
+sub boardind {
+    my($index) = @_;
+    return $index % 9;
+}
+sub coords_of {
+    my($index) = @_;
+    my $board = boardof($index);
+    my $boardind = boardind($index);
+    return "$board,$boardind";
+}
+
+sub player_name {
+    my($mark) = @_;
+    return ((!$mark || $mark == mark_empty) ? "none" :
+		    $mark == mark_x ? "X" : "O");
+}
+
+package main;
+
+use Time::HiRes qw(time);
+use List::Util qw(shuffle);
+
+my $board = Board->new(cells => "", threats => "");
+for(;;) {
+    move("X", Board::mark_x, $board);
+    last if $board->winner();
+    move("O", Board::mark_o, $board);
+    last if $board->winner();
+}
+print $board->stringify();
+my $win = $board->winner();
+print "Winner: ", ((!$win || $win == Board::mark_empty) ? "none" :
+		    $win == Board::mark_x ? "X" : "O"), "\n";
+
+exit 0;
+
+sub move {
+    my($name,$mark,$board) = @_;
+    my $player = Board::player_name($mark);
+    my $start = time();
+    my $move = best_move($mark,$board);
+    $board->cell($move,$mark);
+    my $end = time();
+    my $delta = sprintf "%.3f", $end-$start;
+    print "$player: Move calculated in $delta seconds\n";
+    #print $board->stringify(), "----\n";; sleep 1;
+}
+
+sub best_move {
+    my($mark,$board) = @_;
+    my $other = $Board::other_player[$mark];
+    my @moves = shuffle($board->legal_moves($mark));
+    my $force = $board->force();
+    my $player = Board::player_name($mark);
+    if (defined($force) && @moves == 0) {
+	$board->force(undef);
+	print "$player has no valid moves on board $force, playing anywhere\n";
+	return best_move($mark,$board);
+    } elsif (@moves == 0) {
+	print "$player declares a draw with no valid moves\n";
+	return undef;
+    }
+    my $nmoves = @moves;
+    print "$player: Found $nmoves valid moves available\n";
+    my $pos;
+    if (defined($force)) {
+	if ($board->threat_by_board($force,$mark)) {
+	    # We have a winning move to make
+	    if (($pos=winning_move($board,$force,$mark))) {
+		return $pos;
+	    }
+	}
+    }
+    print " current forcing: ", (defined($force)?$force:"none"), "\n";
+    for my $pos (@moves) {
+	my $boardnum = Board::boardof($pos);
+	my $boardindex = Board::boardind($pos);
+	# Get threats by opponent for next move
+	my $threat = $board->threat_by_board($boardindex, $other);
+	unless($threat) {
+	    print "$player: ", Board::coords_of($pos), "\n";
+	    return $pos;
+	} elsif ($boardnum == $boardindex) {
+	    my $next = $board->clone();
+	    $next->cell($pos, $mark);
+	    my $next_threat = $board->threat_by_board($boardindex, $other);
+	    if (!$next_threat) {
+		print "$player: eliminating threat on board $boardindex: ", Board::coords_of($pos), "\n";
+		return $pos;
+	    }
+	} else {
+	    my $othername = Board::player_name($other);
+	    print "$player: skipping ", Board::coords_of($pos), " due to threat from $othername\n";
+	}
+    }
+    print "No useful moves available for $player\n";
+    print $board->stringify();
+    print "Moving to ", Board::coords_of($moves[0]), "\n";
+    return $moves[0]; # return a random losing move if forced to
+}
+
+sub winning_move {
+    my($board,$bnum,$mark) = @_;
+    for my $win (@Board::wins_one) {
+	my $owned = 0;
+	my $empty = undef;
+	for my $pos (@$win) {
+	    my $cell = $board->cell_byboard($bnum,$pos);
+	    if ($cell == $mark) {
+		$owned++;
+	    } elsif ($cell == $Board::other_player[$mark]) {
+		$owned--;
+	    } else {
+		$empty = $pos;
+	    }
+	}
+	if ($owned == 2) {
+	    print Board::player_name($mark), ": Winning move found at $bnum,$empty\n";
+	    return $empty+$bnum*9;
+	}
+    }
+    return undef;
+}

@@ -1,0 +1,69 @@
+# Greater powers for an intelligent item, each of which can affect the price
+# of the final item.
+---
+- 6
+- name: Item can detect (opposing alignment) at will
+  price: 7200
+- 10
+- name: Item can detect undead at will
+  price: 7200
+- 13
+- name: Item can cause fear in an enemy at will
+  price: 7200
+- 18
+- name: Item can use dimensional anchor on a foe 1/day
+  price: 10000
+- 23
+- name: Item can use dismissal on a foe 1/day
+  price: 10000
+- 28
+- name: Item can use lesser globe of invulnerability 1/day
+  price: 10000
+- 33
+- name: Item can use arcane eye 1/day
+  price: 10000
+- 37
+- name: Item has continuous detect scrying effect
+  price: 10000
+- 41
+- name: Item creates wall of fire in a ring with the wielder at the center 1/day
+  price: 10000
+- 45
+- name: Item can use quench on fires 3/day
+  price: 16000
+- 50
+- name: 'Item has status effect, usable at will'
+  price: 11000
+- 54
+- name: Item can use gust of wind 3/day
+  price: 11000
+- 59
+- name: Item can use clairvoyance 3/day
+  price: 16000
+- 64
+- name: Item can create magic circle against (opposing alignment) at will
+  price: 16000
+- 68
+- name: Item can use haste on its owner 3/day
+  price: 16000
+- 73
+- name: Item can create daylight 3/day
+  price: 16000
+- 76
+- name: Item can create deeper darkness 3/day
+  price: 16000
+- 80
+- name: Item can use invisibility purge (30 ft. range) 3/day
+  price: 16000
+- 85
+- name: Item can use slow on its enemies 3/day
+  price: 16000
+- 91
+- name: Item can locate creature 3/day
+  price: 30000
+- 97
+- name: Item can use fear against foes 3/day
+  price: 30000
+- 100
+- name: Item can use detect thoughts at will
+  price: 44000

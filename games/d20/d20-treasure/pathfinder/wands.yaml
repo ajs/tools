@@ -1,0 +1,489 @@
+# Spells that can be in wands. Item fields include just name and price
+---
+-
+  -
+    - 2
+    - -1
+    - -1
+  - name: detect magic
+    price: 375
+  -
+    - 4
+    - -1
+    - -1
+  - name: light
+    price: 375
+  -
+    - 7
+    - -1
+    - -1
+  - name: burning hands
+    price: 750
+  -
+    - 10
+    - -1
+    - -1
+  - name: charm animal
+    price: 750
+  -
+    - 13
+    - -1
+    - -1
+  - name: charm person
+    price: 750
+  -
+    - 16
+    - -1
+    - -1
+  - name: color spray
+    price: 750
+  -
+    - 19
+    - -1
+    - -1
+  - name: cure light wounds
+    price: 750
+  -
+    - 22
+    - -1
+    - -1
+  - name: detect secret doors
+    price: 750
+  -
+    - 25
+    - -1
+    - -1
+  - name: enlarge person
+    price: 750
+  -
+    - 28
+    - -1
+    - -1
+  - name: magic missile (1st)
+    price: 750
+  -
+    - 31
+    - -1
+    - -1
+  - name: shocking grasp
+    price: 750
+  -
+    - 34
+    - -1
+    - -1
+  - name: summon monster I
+    price: 750
+  -
+    - 36
+    - -1
+    - -1
+  - name: magic missile (3rd)
+    price: 2250
+  -
+    - 37
+    - 3
+    - -1
+  - name: magic missile (5th)
+    price: 3750
+  -
+    - 40
+    - 7
+    - -1
+  - name: bear's endurance
+    price: 4500
+  -
+    - 43
+    - 11
+    - -1
+  - name: bull's strength
+    price: 4500
+  -
+    - 46
+    - 15
+    - -1
+  - name: cat's grace
+    price: 4500
+  -
+    - 49
+    - 20
+    - -1
+  - name: cure moderate wounds
+    price: 4500
+  -
+    - 51
+    - 22
+    - -1
+  - name: darkness
+    price: 4500
+  -
+    - 54
+    - 24
+    - -1
+  - name: daylight
+    price: 4500
+  -
+    - 57
+    - 27
+    - -1
+  - name: delay poison
+    price: 4500
+  -
+    - 60
+    - 31
+    - -1
+  - name: eagle's splendor
+    price: 4500
+  -
+    - 63
+    - 33
+    - -1
+  - name: false life
+    price: 4500
+  -
+    - 66
+    - 37
+    - -1
+  - name: fox's cunning
+    price: 4500
+  -
+    - 68
+    - 38
+    - -1
+  - name: ghoul touch
+    price: 4500
+  -
+    - 71
+    - 39
+    - -1
+  - name: hold person
+    price: 4500
+  -
+    - 74
+    - 42
+    - -1
+  - name: invisibility
+    price: 4500
+  -
+    - 77
+    - 44
+    - -1
+  - name: knock
+    price: 4500
+  -
+    - 80
+    - 45
+    - -1
+  - name: levitate
+    price: 4500
+  -
+    - 83
+    - 47
+    - -1
+  - name: acid arrow
+    price: 4500
+  -
+    - 86
+    - 49
+    - -1
+  - name: mirror image
+    price: 4500
+  -
+    - 89
+    - 53
+    - -1
+  - name: owl's wisdom
+    price: 4500
+  -
+    - 91
+    - 54
+    - -1
+  - name: shatter
+    price: 4500
+  -
+    - 94
+    - 56
+    - -1
+  - name: silence
+    price: 4500
+  -
+    - 97
+    - 57
+    - -1
+  - name: summon monster II
+    price: 4500
+  -
+    - 100
+    - 59
+    - -1
+  - name: web
+    price: 4500
+  -
+    - -1
+    - 62
+    - 2
+  - name: magic missile (7th)
+    price: 5250
+  -
+    - -1
+    - 64
+    - 5
+  - name: magic missile (9th)
+    price: 6750
+  -
+    - -1
+    - 67
+    - 7
+  - name: call lightning (5th)
+    price: 11250
+  -
+    - -1
+    - 68
+    - 8
+  - name: 'charm person, heightened (3rd-level spell)'
+    price: 11250
+  -
+    - -1
+    - 70
+    - 10
+  - name: contagion
+    price: 11250
+  -
+    - -1
+    - 74
+    - 13
+  - name: cure serious wounds
+    price: 11250
+  -
+    - -1
+    - 77
+    - 15
+  - name: dispel magic
+    price: 11250
+  -
+    - -1
+    - 81
+    - 17
+  - name: fireball (5th)
+    price: 11250
+  -
+    - -1
+    - 83
+    - 19
+  - name: keen edge
+    price: 11250
+  -
+    - -1
+    - 87
+    - 21
+  - name: lightning bolt (5th)
+    price: 11250
+  -
+    - -1
+    - 89
+    - 23
+  - name: major image
+    price: 11250
+  -
+    - -1
+    - 91
+    - 25
+  - name: slow
+    price: 11250
+  -
+    - -1
+    - 94
+    - 27
+  - name: suggestion
+    price: 11250
+  -
+    - -1
+    - 97
+    - 29
+  - name: summon monster III
+    price: 11250
+  -
+    - -1
+    - 98
+    - 31
+  - name: fireball (6th)
+    price: 13500
+  -
+    - -1
+    - 99
+    - 33
+  - name: lightning bolt (6th)
+    price: 13500
+  -
+    - -1
+    - 100
+    - 35
+  - name: searing light (6th)
+    price: 13500
+  -
+    - -1
+    - -1
+    - 37
+  - name: call lightning (8th)
+    price: 18000
+  -
+    - -1
+    - -1
+    - 39
+  - name: fireball (8th)
+    price: 18000
+  -
+    - -1
+    - -1
+    - 41
+  - name: lightning bolt (8th)
+    price: 18000
+  -
+    - -1
+    - -1
+    - 45
+  - name: charm monster
+    price: 21000
+  -
+    - -1
+    - -1
+    - 50
+  - name: cure critical wounds
+    price: 21000
+  -
+    - -1
+    - -1
+    - 52
+  - name: dimensional anchor
+    price: 21000
+  -
+    - -1
+    - -1
+    - 55
+  - name: fear
+    price: 21000
+  -
+    - -1
+    - -1
+    - 59
+  - name: greater invisibility
+    price: 21000
+  -
+    - -1
+    - -1
+    - 60
+  - name: 'hold person, heightened (4th level)'
+    price: 21000
+  -
+    - -1
+    - -1
+    - 65
+  - name: ice storm
+    price: 21000
+  -
+    - -1
+    - -1
+    - 68
+  - name: inflict critical wounds
+    price: 21000
+  -
+    - -1
+    - -1
+    - 72
+  - name: neutralize poison
+    price: 21000
+  -
+    - -1
+    - -1
+    - 74
+  - name: poison
+    price: 21000
+  -
+    - -1
+    - -1
+    - 77
+  - name: polymorph
+    price: 21000
+  -
+    - -1
+    - -1
+    - 78
+  - name: 'ray of enfeeblement, heightened (4th level)'
+    price: 21000
+  -
+    - -1
+    - -1
+    - 79
+  - name: 'suggestion, heightened (4th level)'
+    price: 21000
+  -
+    - -1
+    - -1
+    - 82
+  - name: summon monster IV
+    price: 21000
+  -
+    - -1
+    - -1
+    - 86
+  - name: wall of fire
+    price: 21000
+  -
+    - -1
+    - -1
+    - 90
+  - name: wall of ice
+    price: 21000
+  -
+    - -1
+    - -1
+    - 91
+  - name: dispel magic (10th)
+    price: 22500
+  -
+    - -1
+    - -1
+    - 92
+  - name: fireball (10th)
+    price: 22500
+  -
+    - -1
+    - -1
+    - 93
+  - name: lightning bolt (10th)
+    price: 22500
+  -
+    - -1
+    - -1
+    - 94
+  - name: chaos hammer (8th)
+    price: 24000
+  -
+    - -1
+    - -1
+    - 95
+  - name: holy smite (8th)
+    price: 24000
+  -
+    - -1
+    - -1
+    - 96
+  - name: order's wrath (8th)
+    price: 24000
+  -
+    - -1
+    - -1
+    - 97
+  - name: unholy blight (8th)
+    price: 24000
+  -
+    - -1
+    - -1
+    - 99
+  - name: restoration
+    price: 26000
+  -
+    - -1
+    - -1
+    - 100
+  - name: stoneskin
+    price: 33500

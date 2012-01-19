@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+
+$/=undef;
+$resdir = '/home/ajs/public_html';
+$reshtml = "$resdir/resume.html";
+$restxt = "$resdir/resume-printable.html";
+$resdoc = "$resdir/resume-msw.doc";
+open(F,"<$reshtml")||die($!);
+open(O,">$restxt")||die($!);
+while(<F>) {
+	s/NAV BAR.*?BODY/BODY/s;
+	s/REMOVE.*?END REMOVE//sg;
+	s/WARNING.*?END WARNING/WARNING DELETED/sg;
+	s/\<META.*?\>//sg;
+	s{
+		\<A\s+HREF="?([^">\s]+)\"?\s*\>
+			(.*?)
+		\<\/A\>
+	}{
+		$t = $2; $p = $1;
+		if ($t =~ /^(?:http|mailto):/) {
+			$t;
+		} elsif ($p =~ /^\w+:/) {
+			"$t ($p)"
+		} elsif ($p =~ /^\//) {
+			"$t (http://www.ajs.com$p)"
+		} else {
+			"$t (http://www.ajs.com/~ajs/$p)"
+		}
+		#substr($2,0,4) eq 'http' || substr($1,0,6) eq 'mailto'?
+		#	"$2":
+		#	"$2 ($1)"
+	}xeisg;
+	print O $_;
+}
+close F;
+close O;
+
+chmod(0644, $restxt);
+
+system("lynx -dump $restxt > $resdoc");
+chmod(0644, $resdoc);

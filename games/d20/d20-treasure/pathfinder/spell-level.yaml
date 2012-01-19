@@ -1,0 +1,62 @@
+---
+-
+  -
+    - 5
+    - -1
+    - -1
+  - caster: 1
+    spell: 0
+  -
+    - 50
+    - -1
+    - -1
+  - caster: 1
+    spell: 1
+  -
+    - 95
+    - 5
+    - -1
+  - caster: 3
+    spell: 2
+  -
+    - 100
+    - 65
+    - -1
+  - caster: 5
+    spell: 3
+  -
+    - -1
+    - 95
+    - 5
+  - caster: 7
+    spell: 4
+  -
+    - -1
+    - 100
+    - 50
+  - caster: 9
+    spell: 5
+  -
+    - -1
+    - -1
+    - 70
+  - caster: 11
+    spell: 6
+  -
+    - -1
+    - -1
+    - 85
+  - caster: 13
+    spell: 7
+  -
+    - -1
+    - -1
+    - 95
+  - caster: 15
+    spell: 8
+  -
+    - -1
+    - -1
+    - 100
+  - caster: 17
+    spell: 9

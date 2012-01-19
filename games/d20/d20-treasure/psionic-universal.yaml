@@ -1,0 +1,253 @@
+---
+-
+  - 4
+  - name: 'shard (+1, any one skill)'
+    price: 10
+  - 7
+  - name: 'shard (+2, any one skill)'
+    price: 40
+  - 10
+  - name: crawling tattoo (any 1st level)
+    price: 50
+  - 14
+  - name: crawling tattoo of concussion
+    price: 50
+  - 18
+  - name: 'shard (+3, any one skill)'
+    price: 90
+  - 21
+  - name: 'shard (+4, any one skill)'
+    price: 160
+  - 24
+  - name: 'shard (+5, any one skill)'
+    price: 250
+  - 28
+  - name: crawling tattoo (any 2nd level)
+    price: 300
+  - 31
+  - name: 'pearl, brain lock'
+    price: 300
+  - 35
+  - name: 'shard (+6, any one skill)'
+    price: 360
+  - 38
+  - name: 'shard (+7, any one skill)'
+    price: 490
+  - 41
+  - name: boots of stomping
+    price: 600
+  - 44
+  - name: 'shard (+8, any one skill)'
+    price: 640
+  - 47
+  - name: crawling tattoo (any 3rd level)
+    price: 750
+  - 50
+  - name: crawling tattoo of energy bolt
+    price: 750
+  - 53
+  - name: 'pearl, breath crisis'
+    price: 750
+  - 56
+  - name: 'shard (+9, any one skill)'
+    price: 810
+  - 59
+  - name: boots of landing
+    price: 1000
+  - 63
+  - name: 'psionic restraints, lesser'
+    price: 1000
+  - 67
+  - name: 'shard (+10, any one skill)'
+    price: 1000
+  - 71
+  - name: 'pearl, personality parasite'
+    price: 1400
+  - 75
+  - name: crystal mask of knowledge
+    price: 2500
+  - 79
+  - name: crystal mask of languages
+    price: 2500
+  - 85
+  - name: eyes of expanded vision
+    price: 3000
+  - 89
+  - name: gloves of object reading
+    price: 3000
+  - 92
+  - name: mirror of suggestion
+    price: 3600
+  - 94
+  - name: 'psionic restraints, average'
+    price: 6000
+  - 97
+  - name: torc of free will
+    price: 6000
+  - 100
+  - name: boots of skating
+    price: 7000
+-
+  - 4
+  - name: psionatrix of clairsentience
+    price: 8000
+  - 8
+  - name: psionatrix of metacreativity
+    price: 8000
+  - 12
+  - name: psionatrix of psychokinesis
+    price: 8000
+  - 16
+  - name: psionatrix of psychometabolism
+    price: 8000
+  - 20
+  - name: psionatrix of psychoportation
+    price: 8000
+  - 25
+  - name: psionatrix of telepathy
+    price: 8000
+  - 27
+  - name: third eye penetrate
+    price: 8000
+  - 29
+  - name: mirror of time hop
+    price: 9000
+  - 31
+  - name: crystal mask of detection
+    price: 10000
+  - 33
+  - name: crystal mask of discernment
+    price: 10000
+  - 35
+  - name: crystal mask of dread
+    price: 10000
+  - 38
+  - name: crystal mask of psionic craft
+    price: 10000
+  - 41
+  - name: ring of self-sufficiency
+    price: 10000
+  - 43
+  - name: skin of nimbleness
+    price: 10000
+  - 45
+  - name: third eye aware
+    price: 10000
+  - 47
+  - name: third eye concentrate
+    price: 10000
+  - 49
+  - name: third eye gather
+    price: 10000
+  - 52
+  - name: eyes of power leech
+    price: 10080
+  - 55
+  - name: third eye powerthieve
+    price: 10080
+  - 58
+  - name: third eye view
+    price: 10180
+  - 61
+  - name: crystal mask of mindarmor
+    price: 10667
+  - 63
+  - name: 'psionic restraints, greater'
+    price: 12000
+  - 65
+  - name: torc of leech freedom
+    price: 12000
+  - 68
+  - name: gloves of titan's grip
+    price: 14000
+  - 70
+  - name: skin of the claw
+    price: 16000
+  - 72
+  - name: amulet of catapsi
+    price: 16200
+  - 74
+  - name: skin of the chameleon
+    price: 18000
+  - 76
+  - name: 'pearl, mind seed'
+    price: 18500
+  - 78
+  - name: mirror of mind switch
+    price: 19800
+  - 80
+  - name: 'eyes of power leech, vampiric'
+    price: 20160
+  - 82
+  - name: crystal mask of insightful detection
+    price: 20250
+  - 84
+  - name: 'crystal anchor, body'
+    price: 24000
+  - 86
+  - name: 'crystal anchor, comprehension'
+    price: 24000
+  - 88
+  - name: 'crystal anchor, creation'
+    price: 24000
+  - 90
+  - name: 'crystal anchor, energy'
+    price: 24000
+  - 91
+  - name: 'crystal anchor, ghost'
+    price: 24000
+  - 93
+  - name: 'crystal anchor, mind'
+    price: 24000
+  - 95
+  - name: 'crystal anchor, travel'
+    price: 24000
+  - 97
+  - name: 'psionic restraints, damping'
+    price: 24000
+  - 100
+  - name: third eye sense
+    price: 24000
+-
+  - 8
+  - name: skin of the defender
+    price: 32000
+  - 16
+  - name: torc of power preservation
+    price: 36000
+  - 24
+  - name: boots of temporal acceleration
+    price: 43200
+  - 32
+  - name: third eye repudiate
+    price: 43200
+  - 40
+  - name: skin of fiery response
+    price: 60000
+  - 49
+  - name: skin of the troll
+    price: 61200
+  - 57
+  - name: skin of the hero
+    price: 77500
+  - 63
+  - name: skin of the spider
+    price: 79080
+  - 72
+  - name: skin of proteus
+    price: 84000
+  - 80
+  - name: third eye expose
+    price: 112000
+  - 87
+  - name: third eye conceal
+    price: 120000
+  - 92
+  - name: third eye dominate
+    price: 120000
+  - 97
+  - name: skin of iron
+    price: 129600
+  - 100
+  - name: skin of the psion
+    price: 151000

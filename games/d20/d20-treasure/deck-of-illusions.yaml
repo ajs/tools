@@ -1,0 +1,73 @@
+# The deck of illusions item can have a random number of cards missing,
+# so we need to have a lookup table containing all of the cards.
+---
+- 1
+- Ace of hearts / IV. The Emperor
+- 2
+- King of hearts / Knight of swords
+- 3
+- Queen of hearts / Queen of staves
+- 4
+- Jack of hearts / King of staves
+- 5
+- Ten of hearts / VII. The Chariot
+- 6
+- Nine of hearts / Page of staves
+- 7
+- Eight of hearts / Ace of cups
+- 8
+- Two of hearts / Five of staves
+- 9
+- Ace of diamonds / III. The Empress
+- 10
+- King of diamonds / Two of cups
+- 11
+- Queen of diamonds / Queen of swords
+- 12
+- Jack of diamonds / XIV. Temperance
+- 13
+- Ten of diamonds / Seven of staves
+- 14
+- Nine of diamonds / Four of pentacles
+- 15
+- Eight of diamonds / Ace of pentacles
+- 16
+- Two of diamonds / Six of pentacles
+- 17
+- Ace of spades / II. The High Priestess
+- 18
+- King of spades / Three of staves
+- 19
+- Queen of spades / Four of cups
+- 20
+- Jack of spades / Knight of pentacles
+- 21
+- Ten of spades / Seven of swords
+- 22
+- Nine of spades / Three of swords
+- 23
+- Eight of spades / Ace of swords
+- 24
+- Two of spades / Five of cups
+- 25
+- Ace of clubs / VIII. Strength
+- 26
+- King of clubs / Page of pentacles
+- 27
+- Queen of clubs / Ten of cups
+- 28
+- Jack of clubs / Nine of pentacles
+- 29
+- Ten of clubs / Nine of staves
+- 30
+- Nine of clubs / King of swords
+- 31
+- Eight of clubs / Ace of staves
+- 32
+- Two of clubs / Five of cups
+- 33
+- Joker 1 / Two of pentacles
+- 34
+- Joker 2 / Two of staves
+- 100
+- ~

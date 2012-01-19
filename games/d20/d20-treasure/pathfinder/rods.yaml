@@ -1,0 +1,222 @@
+---
+-
+  -
+    - -1
+    - 7
+    - -1
+  - name: 'metamagic, enlarge, lesser'
+    price: 3000
+  -
+    - -1
+    - 14
+    - -1
+  - name: 'metamagic, extend, lesser'
+    price: 3000
+  -
+    - -1
+    - 21
+    - -1
+  - name: 'metamagic, silent, lesser'
+    price: 3000
+  -
+    - -1
+    - 28
+    - -1
+  - name: immovable
+    the: 1
+    price: 5000
+  -
+    - -1
+    - 35
+    - -1
+  - name: 'metamagic, empower, lesser'
+    price: 9000
+  -
+    - -1
+    - 42
+    - -1
+  - name: metal and mineral detection
+    price: 10500
+  -
+    - -1
+    - 53
+    - 4
+  - name: cancellation
+    price: 11000
+  -
+    - -1
+    - 57
+    - 6
+  - name: 'metamagic, enlarge'
+    price: 11000
+  -
+    - -1
+    - 61
+    - 8
+  - name: 'metamagic, extend'
+    price: 11000
+  -
+    - -1
+    - 65
+    - 10
+  - name: 'metamagic, silent'
+    price: 11000
+  -
+    - -1
+    - 71
+    - 14
+  - name: wonder
+    price: 12000
+  -
+    - -1
+    - 79
+    - 18
+  - name: python
+    the: 1
+    price: 13000
+  -
+    - -1
+    - 83
+    - -1
+  - name: 'metamagic, maximize, lesser'
+    price: 14000
+  -
+    - -1
+    - 89
+    - 21
+  - charges: -1
+    name: flame extinguishing (10 charges)
+    price: 15000
+  -
+    - -1
+    - 97
+    - 25
+  - name: viper
+    the: 1
+    price: 19000
+  -
+    - -1
+    - -1
+    - 30
+  - name: enemy detection
+    price: 23500
+  -
+    - -1
+    - -1
+    - 36
+  - name: 'metamagic, enlarge, greater'
+    price: 24500
+  -
+    - -1
+    - -1
+    - 42
+  - name: 'metamagic, extend, greater'
+    price: 24500
+  -
+    - -1
+    - -1
+    - 48
+  - name: 'metamagic, silent, greater'
+    price: 24500
+  -
+    - -1
+    - -1
+    - 53
+  - name: splendor
+    price: 25000
+  -
+    - -1
+    - -1
+    - 58
+  - name: withering
+    price: 25000
+  -
+    - -1
+    - 99
+    - 64
+  - name: 'metamagic, empower'
+    price: 32500
+  -
+    - -1
+    - -1
+    - 69
+  - name: thunder and lightning
+    price: 33000
+  -
+    - -1
+    - 100
+    - 73
+  - name: 'metamagic, quicken, lesser'
+    price: 35000
+  -
+    - -1
+    - -1
+    - 77
+  - name: negation
+    price: 37000
+  -
+    - -1
+    - -1
+    - 80
+  - name: absorption
+    special: absorption
+  -
+    - -1
+    - -1
+    - 84
+  - name: flailing
+    price: 50000
+  -
+    - -1
+    - -1
+    - 86
+  - name: 'metamagic, maximize'
+    price: 54000
+  -
+    - -1
+    - -1
+    - 88
+  - name: rulership
+    price: 60000
+  -
+    - -1
+    - -1
+    - 90
+  - name: security
+    price: 61000
+  -
+    - -1
+    - -1
+    - 92
+  - name: lordly might
+    price: 70000
+  -
+    - -1
+    - -1
+    - 94
+  - name: 'metamagic, empower, greater'
+    price: 73000
+  -
+    - -1
+    - -1
+    - 96
+  - name: 'metamagic, quicken'
+    price: 75500
+  -
+    - -1
+    - -1
+    - 98
+  - name: alertness
+    price: 85000
+  -
+    - -1
+    - -1
+    - 99
+  - name: 'metamagic, maximize, greater'
+    price: 121500
+  -
+    - -1
+    - -1
+    - 100
+  - name: 'metamagic, quicken, greater'
+    price: 170000

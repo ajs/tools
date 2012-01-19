@@ -1,0 +1,71 @@
+
+Sand operators:
+
+	Associativity	Position	Operator
+	left		term		term, ...
+	left		infix		.
+	right		postcircumfix	(), []
+	nonassoc	prefix/suffix	++, --
+	right		infix		**
+	right		prefix		!, &, ::, +, -, ?
+	left		infix		~~, !~
+	left		infix		*, /, %, @
+	left		infix		+, -, ~
+	left		infix		<<, >>
+	left		infix		<, >, <=, >=, lt, gt, le, ge
+	left		infix		==, !=, <=>, eq, ne, cmp
+	left		infix		+&
+	left		infix		+|, +^
+	left		infix		&
+	left		infix		|
+	nonassoc	infix		.., ^.., ..^, ^..^
+	right		trinary-infix	?? !!
+	right		infix		=, +=, et al.
+	left		infix		","
+	left		infix		=>
+	right		prefix		not
+	left		infix		and
+	left		infix		or xor
+
+=item term
+
+Terms are any literal such as numbers and strings. In special circumstances
+(operators whose parameters are identifiers) an identifier can serve
+as a term. For example:
+
+	my Dog $spot;
+	$spot.breed(::beagle);
+
+In the above, Dog, breed and beagle are all examples of identifiers as terms,
+all of which are allowed because the my, () and :: operators allow for
+identifier parameters.
+
+=item ...
+
+... is the "yada" operator. It indicates unspecified code, and when executes,
+produces a runtime error. This is a helpful operator in many places, most
+especially in subroutine and method construction. A block whose body is
+the yada operator is a "stub". A class whose (non-auto-generated) methods are
+all stubs is called "virtual", and cannot be instantiated directly. A role
+whose methods are all stubs is called and "interface".
+
+ for *$list -> ($item) { ... } # placeholder code
+ sub unittest() { ... } # Subroutine stub to be defined later
+ role Canine { # All canines must provide a bark and a bite
+   method bark() { ... }
+   method bite() { ... }
+ }
+
+=item .
+
+Method invocation is performed with the . operator.
+
+ $a.b($c); # invoke $a's b method with parameter $c
+
+=item ()
+
+Used with an identifier as RHS, invokes the named subroutine.
+
+Used with a variable, indexing operation or parenthetical expression,
+invokes a subroutine based on either the name or subroutine reference
+returned by the resulting value of the RHS.

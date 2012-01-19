@@ -1,0 +1,30 @@
+[% INCLUDE wowstreet_header.tt2 %]
+[% USE HTML %]
+
+<h1>Item Detail[% context %]</h1>
+
+<p>Get details for [% HTML.escape(item.name) %] from:
+[% FOREACH e = external_list %]
+<a href="[% e.url %]">[% e.name %]</a>
+[% END %]
+</p>
+
+<img
+    src="[% imageurl %]"
+    width="[% imagewidth %]"
+    height="[% imageheight %]"
+    alt="Pricing database chart for [% HTML.escape(item.name) %]"/>
+
+<br style="clear: both;"/>
+
+<hr/>
+[% item = item_list.0 %]
+<p class="itemdata">
+Median price:
+    [% FOREACH p = item.price %]
+	<span class="price_[%p.type%]">[%p.ammount%]</span>
+    [% END %]<br/>
+Last seen: [%item.last_seen%]<br/>
+First seen: [%item.first_seen%]
+
+[% INCLUDE wowstreet_footer.tt2 %]

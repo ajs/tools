@@ -1,0 +1,103 @@
+---
+-
+  -
+    - 30
+    - 7
+    - 3
+  - name: quickness
+    plus: 1
+  -
+    - 74
+    - 30
+    - 5
+  - name: landing
+    price: 4000
+  -
+    - 80
+    - 46
+    - 10
+  - name: floating
+    price: 4000
+  -
+    - 96
+    - 55
+    - 20
+  - name: linked
+    price: 6000
+  -
+    - 97
+    - 66
+    - 30
+  - name: seeing
+    price: 6000
+  -
+    - 98
+    - 75
+    - 40
+  - name: power resistance (13)
+    plus: 2
+  -
+    - 99
+    - 83
+    - 50
+  - name: ectoplasmic
+    price: 10800
+  -
+    - -1
+    - 89
+    - 60
+  - name: gleaming
+    plus: 3
+  -
+    - -1
+    - 94
+    - 70
+  - name: power resistance (15)
+    plus: 3
+  -
+    - -1
+    - 98
+    - 77
+  - name: vanishing
+    plus: 3
+  -
+    - -1
+    - 99
+    - 83
+  - name: mindarmor
+    price: 24000
+  -
+    - -1
+    - -1
+    - 89
+  - name: power resistance (17)
+    plus: 4
+  -
+    - -1
+    - -1
+    - 94
+  - name: radiant
+    plus: 4
+  -
+    - -1
+    - -1
+    - 96
+  - name: aporter
+    price: 40320
+  -
+    - -1
+    - -1
+    - 98
+  - name: power resistance (19)
+    plus: 5
+  -
+    - -1
+    - -1
+    - 99
+  - name: phasing
+    price: 65520
+  -
+    - 100
+    - 100
+    - 100
+  - special: two_abilities

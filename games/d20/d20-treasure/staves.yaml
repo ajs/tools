@@ -1,0 +1,129 @@
+# Simple lookup for staff types
+---
+-
+  -
+    - -1
+    - 15
+    - 3
+  - name: charming
+    price: 16500
+  -
+    - -1
+    - 30
+    - 9
+  - name: fire
+    price: 17750
+  -
+    - -1
+    - 40
+    - 11
+  - name: swarming insects
+    price: 24750
+  -
+    - -1
+    - 60
+    - 17
+  - name: healing
+    price: 27750
+  -
+    - -1
+    - 75
+    - 19
+  - name: size alteration
+    price: 29000
+  -
+    - -1
+    - 90
+    - 24
+  - name: illumination
+    price: 48250
+  -
+    - -1
+    - 95
+    - 31
+  - name: frost
+    price: 56250
+  -
+    - -1
+    - 100
+    - 38
+  - name: defense
+    price: 58250
+  -
+    - -1
+    - -1
+    - 43
+  - name: abjuration
+    price: 65000
+  -
+    - -1
+    - -1
+    - 48
+  - name: conjuration
+    price: 65000
+  -
+    - -1
+    - -1
+    - 53
+  - name: enchantment
+    price: 65000
+  -
+    - -1
+    - -1
+    - 58
+  - name: evocation
+    price: 65000
+  -
+    - -1
+    - -1
+    - 63
+  - name: illusion
+    price: 65000
+  -
+    - -1
+    - -1
+    - 68
+  - name: necromancy
+    price: 65000
+  -
+    - -1
+    - -1
+    - 73
+  - name: transmutation
+    price: 65000
+  -
+    - -1
+    - -1
+    - 77
+  - name: divination
+    price: 73500
+  -
+    - -1
+    - -1
+    - 82
+  - name: earth and stone
+    price: 80500
+  -
+    - -1
+    - -1
+    - 87
+  - name: woodlands
+    price: 101250
+  -
+    - -1
+    - -1
+    - 92
+  - name: life
+    price: 155750
+  -
+    - -1
+    - -1
+    - 97
+  - name: passage
+    price: 170500
+  -
+    - -1
+    - -1
+    - 100
+  - name: power
+    price: 211000

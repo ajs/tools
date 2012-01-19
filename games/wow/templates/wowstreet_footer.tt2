@@ -1,0 +1,17 @@
+</td><td class="adcell">
+<div class="google_ad">[% INCLUDE Google_Ad.tt2 %]</div>
+</td>
+
+</tr></table>
+
+<br style="clear: both;"/><hr/>
+<div class="footer">The World of Warcraft item database search is a service of <a href="http://www.ajs.com/ajswiki/World_of_Warcraft:_Raiding_the_Metagame">Raiding the Metagame</a>.
+<br/>You can <a href="?report=badge">add pricing chart icons to your own site!</a>
+<br/>"The most valuable commodity I know of is information." -Gordon Gekko, <i>Wall Street</i> (1987)
+</div>
+
+[% INCLUDE Google_Analytics.tt2 %]
+
+</body>
+
+</html>

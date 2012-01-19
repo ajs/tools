@@ -1,0 +1,28 @@
+#!/usr/bin/perl
+
+use LWP::UserAgent;
+use HTTP::Request;
+use Time::HiRes qw(time);
+
+my $ua = LWP::UserAgent->new();
+$ua->timeout(30);
+
+foreach $url (@ARGV) {
+	my $r = HTTP::Request->new('GET', $url);
+	if ($r) {
+		$start = time();
+		$s = $ua->request($r);
+		$d = time() - $start;
+		$t = scalar localtime;
+		if ($s->is_error) {
+			$msg = $s->code . ": " . $s->message;
+			print "$url: $t: Error: $msg\n";
+		} elsif ($d > 8) {
+			printf "%s: %s: Long time: %.2f sec\n", $url, $t, $d;
+		}
+		undef $s;
+		undef $r;
+	} else {
+		print "$url: ", scalar(localtime), ": Cannot construct request.\n";
+	}
+}

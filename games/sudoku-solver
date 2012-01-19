@@ -1,0 +1,939 @@
+#!/usr/bin/perl
+#
+# A handy little sudoku-solver. Not a terribly bright version, but
+# it can at least make an attempt at an arbitrary size grid.
+
+use strict;
+use Storable qw(dclone); # Deep copy
+use Pod::Usage;
+
+our $section_size = 5; # The sub-grid size
+our $verbose = 0; # Output more status
+our $debug = 0; # Track progress
+our $board = {}; # The board context
+our $random = 0; # Randomize the attempts
+our $restart = undef; # Give up and re-start after secs
+our $restarts = 0; # Only restart this many times
+our $row_at_a_time = 0; # Solve one row at a time
+our $square_at_a_time = 0; # Solve one square at a time
+our $continue = 0; # Continue to search after solution?
+our $solved = 0; # Any solutions found?
+our $puzzle = 0; # Generate a solvable puzzle?
+our $progress = 0; # Show progress?
+our $peek = 0; # Give a periodic peek at board state?
+our $force = 0; # Force brute force solution
+our $puzzle_cache; # Caches solved states
+our @puzzles; # Board states from puzzle()
+our $max_puzzle; # Deepest puzzle board
+our $output_html=0; # Produce HTML output
+our $html_framing=0; # Produce full, HTML document
+$|=1;
+
+use Getopt::Long;
+ 
+my $state; # string state from command-line
+Getopt::Long::Configure('auto_abbrev','bundling');
+GetOptions(
+           'h|?|help' => sub {pod2usage(-verbose => 0)},
+           'man' => sub {pod2usage(-verbose => 2)},
+           'v|verbose' => sub {$verbose = 1},
+           'd|debug' => sub {$verbose = 1; $debug =1},
+           'size=i' => \$section_size,
+           'start-state=s' => \$state,
+           'random' => \$random,
+           'restart=i' => sub { $restart = $_[1]; $random = 1},
+           'restarts=i' => sub { $restarts = $_[1]; $random = 1},
+           'row|row-at-a-time' => \$row_at_a_time,
+           'square|square-at-a-time' => \$square_at_a_time,
+           'all|all-solutions' => sub {$continue = -1},
+           'solutions=i' => \$continue,
+           'puzzle' => sub {$puzzle=1;$random=1},
+           'puzzle-depth=i' => sub {$puzzle=$_[1];$random=1},
+           'progress' => \$progress,
+           'peek' => \$peek,
+	   'force' => \$force,
+           'html' => \$output_html,
+           'html-framing' => sub {$html_framing=$output_html=1}
+) or pod2usage(-verbose => 0);
+
+$restart = 10 if $restarts && !$restart;
+$restarts = -1 if $restart && !$restarts;
+our $size = $section_size**2;
+our $opuzzle = $puzzle; #original value
+
+die "Cannot have starting state in puzzle mode\n" if $puzzle && $state;
+die "Puzzles can be generated for size 2+\n" if $puzzle && $section_size < 2;
+
+our @allxy = shuffle(map {my $xx=$_;map {[$xx-1,$_-1]} 1..$size} 1..$size);
+our @square_cells;
+our @affected;
+our $acc = 0;
+our $backtrack = 0;
+our @positive_constraints;
+
+# Setup stuff first...
+{
+        # Initialize board state datastructures.
+        init_board($board,$size,$section_size);
+        for (my $x=0;$x<$size;$x+=$section_size) {
+                for (my $y=0;$y<$size;$y+=$section_size) {
+                        push @{$square_cells[$x][$y]}, map {
+                                my $xx=$_;
+                                map {[$xx,$_]} $y .. ($y+$section_size-1);
+                        } $x .. ($x+$section_size-1);
+                }
+        }
+
+	@affected = map {
+		my $x = $_;
+		[ map {
+			my $y = $_;
+		        [ [ (map {[$x,$_]} grep {$_ != $y} 0..$size-1) ], # Column
+			  [ (map {[$_,$y]} grep {$_ != $x} 0..$size-1) ], # Row
+			  [ (map { # Square
+				  my $sx = $_;
+				  map {[$sx,$_]} grep {$sx != $x || $_ != $y} 0..$section_size-1;
+			  } 0 .. $section_size - 1) ] ]
+		      } 0..$size-1
+		  ]
+	} 0..$size-1;
+
+        # expand user-provided starting state and stuff it into $board
+        my $ostate = $state;
+        if ($force && !$state) {
+                $state = '1';
+        } elsif (!$state && ($puzzle || !$continue)) {
+                # Set up the default "solution"
+                my @state = ();
+                my @all = (1..$size);
+                for (my $sqrrow = 0; $sqrrow<$section_size; $sqrrow++) {
+                        for (my $row = 0;$row<$section_size;$row++) {
+                                push @state, @all;
+                                push @all, splice @all, 0, $section_size;
+                        }
+                        push @all, shift @all;
+                }
+                $state = join ' ', @state;
+        }
+
+        if ($state) {
+                if ($state eq '-') {
+                        $state = join '', <STDIN>;
+                }
+                $state =~ s/^\s+//;
+                $state =~ s/\s+$//;
+                my @s = map {/([\d|x]+)_(\d+)/?(($1) x ($2)):($_)} split /\W+/, $state;
+                if (@s > $size * $size) {
+                        die "Too many starting cells for $size x $size board\n";
+                } elsif (@s != $size**2) {
+                        warn "Starting state ($state) is not a complete board\n" unless $force;
+                }
+                for (my $i=0;$i<@s;$i++) {
+                        my $x = $i % $size;
+                        my $y = int($i / $size);
+                        $board->{board}[$x][$y] = $s[$i] if $s[$i] =~ /^\d+$/;
+                }
+        }
+
+        if ($puzzle && $force && !$ostate) {
+                local($puzzle,$continue,$solved) = (0,0,0);
+                init_board($board);
+                die "Cannot solve initial start state\n" unless eval {solver($board)};
+                print "\n" if $debug || $progress;
+        }
+
+        if ($random && !$ostate) {
+                shuffle_board($board->{board},$size,$section_size);
+        }
+        # Now re-caclulate cached state.
+        init_board($board);
+
+        if ($verbose) {
+                print "Doing $size x $size grid in $section_size x $section_size blocks\n";
+                print "  ...in puzzle mode\n" if $puzzle;
+                if (($ostate || $puzzle) && ($peek || $debug)) {
+                        winner($board);
+                        print(("-" x $size), "\n");
+                }
+        }
+}
+
+# Puzzle mode means we start with a solved board and work
+# back to a board which has only one solution, using the
+# least numbers possible.
+if ($puzzle) {
+        $continue = 2;
+        foreach my $cell (shuffle(@allxy)) {
+                my($x,$y) = @$cell;
+                next unless $board->{board}[$x][$y];
+                $board->{board}[$x][$y] = undef;
+                init_board($board);
+                last;
+        }
+        if (puzzle($board)) {
+		print "\n" if $debug || $progress;
+                winner($puzzles[0]);
+                exit(0);
+        } else {
+		winner($board);
+                die "Cannot build a working puzzle!\n";
+        }
+}
+
+# When we're not in puzzle mode, just find a (or many) solution(s)
+my $oboard = dclone($board);
+while($acc == 0 || $restart) {
+        if ($restart) {
+                last unless $restarts;
+                $board = dclone($oboard);
+                $SIG{ALRM} = sub {die "restart"};
+                alarm($restart);
+        }
+        
+        # Call the solver with an empty board state, and it will search all permutations.
+        unless (eval {solver($board)}) {
+                if ($@) { # Check exception type
+                        if ($restart and $@ =~ /restart/) {
+                                alarm(0);
+                                $restarts--;
+                                $solved = 0;
+                                print "\nRe-starting random search after $restart seconds\n";
+                                last unless $restarts;
+                                next;
+                        }
+                        die $@; # Re-throw
+                }
+                print "\n" if $debug;
+                if ($continue && $solved) {
+                        my $s = ($solved==1?'':'s');
+                        print "Only $solved solution$s found\n";
+                } else {
+                        print "Cannot solve for given starting state\n";
+                }
+                exit(1);
+        } else {
+                unless ($continue) {
+                        print "\n" if $progress || $debug;
+                        winner($board);
+                        print "Solved in $acc steps ($backtrack backtracks)\n" if $verbose;
+                }
+                exit(0);
+        }
+}
+exit(1);
+
+# Take a board state and x/y coordinate. Try all board permutations starting
+# with this state. Calls itself recursively for each state of each cell.
+sub solver {
+        my $context = shift;
+        my $depth = shift; # Stack depth
+        my $status = $context->{status};
+        my $rowstatus = $status->{row};
+        my $colstatus = $status->{col};
+        my $sqrstatus = $status->{sqr};
+        my $board = $context->{board}; # Current board state
+        my $size = $context->{size}; # Board size
+        my $section_size = $context->{section_size}; # Sub-grid size (sqrt($size))
+        $depth = 0 unless defined $depth; # depth is optional
+        my $hint = shift;
+	my @hints = @_;
+
+	@positive_constraints = () if $depth == 0;
+        $acc++;
+        if ($debug || $peek || $progress) {
+                if($acc % 10000 == 0 && ($debug || $peek)) {
+                        print "\n"; winner($context);
+                }
+		if ($acc % 100 == 0 && ($debug || $progress)) {
+                	print "", (" " x 79), "",
+				("x" x int($depth*(79/($size**2))));
+		}
+        }
+
+	if ($puzzle) {
+		my $pattern = join "", map {pack "I*",@$_} @$board;
+		return $::puzzle_cache{$pattern} if exists $::puzzle_cache{$pattern};
+	}
+
+	print "1\n";
+        my $x; my $y;
+        my $options;
+        my $options_count;
+        my $done = 1;
+        my @all=(1..$size);
+	my @recheck;
+        # In square-at-a-time mode, we march through the board,
+        # one square at a time, only moving on when a square is full.
+        my $square_max = ($square_at_a_time ? $section_size : 1);
+      FINDNEXT:
+        for(my $sy = 0; (!$hint || @$hint == 2) && $sy< $square_max; $sy++) {
+                for (my $sx = 0; $sx < $square_max;$sx++) {
+                        my $sqr;
+                        my($minx,$miny,$maxx,$maxy);
+                        if ($square_at_a_time) {
+                                $sqr = $sqrstatus->[$sx][$sy];
+                                next if alloff($sqr);
+                                $minx = $sx*$section_size;
+                                $miny = $sy*$section_size;
+                                $maxx = $sx*$section_size+$section_size;
+                                $maxy = $sy*$section_size+$section_size;
+                        } else {
+                                $minx = $miny = 0;
+                                $maxx = $maxy = $size;
+                        }
+                        for ($y=$miny;$y<$maxy;$y++) {
+                                my $row = $rowstatus->[$y];
+				next if alloff($row);
+				# next unless sum(map {vec($row,$_-1,1)} @all);
+                                for ($x=$minx;$x<$maxx;$x++) {
+                                        next if $hint && ($x != $hint->[0] ||
+                                                           $y != $hint->[1]);
+                                        my $col = $colstatus->[$x];
+                                        unless($square_at_a_time) {
+                                                my $ssx = int($x/$section_size);
+                                                my $ssy = int($y/$section_size);
+                                                $sqr = $sqrstatus->[$ssx][$ssy];
+						if(alloff($sqr)) {
+							$x=($ssx+1)*$section_size-1;
+							next;
+						}
+                                        }
+                                        next if $board->[$x][$y];
+                                        $done = 0;
+                                        my $tmp = $col & $row & $sqr;
+                                        my $count = sum(map {vec($tmp,$_-1,1)} @all);
+					if ($puzzle && $depth == 0 && $count == 0) {
+						warn "Invalid puzzle state at $x,$y";
+						print(" Allowed in row: ",
+						      join(", ", grep {vec($row,$_-1,1)} @all),
+						      "\n");
+						print(" Allowed in col: ",
+						      join(", ", grep {vec($col,$_-1,1)} @all),
+						      "\n");
+						print(" Allowed in sqr: ",
+						      join(", ", grep {vec($sqr,$_-1,1)} @all),
+						      "\n");
+						winner($context);
+					}
+                                        return 0 unless $count;
+                                        if (!defined($options_count) || $count < $options_count) {
+						print "Neg: $x,$y\n";
+						push @hints, $options if $options_count == 1;
+                                                $options_count = $count;
+                                                $options = [$x,$y,$tmp];
+					} elsif ($count == 1) {
+						push @hints, [$x,$y,$tmp];
+					}
+					next if $count >= $size/2;
+					push @recheck, [$x,$y];
+				}
+                                last FINDNEXT if $row_at_a_time && defined($options);
+                        }
+			last FINDNEXT if $square_at_a_time && defined($options);
+                }
+        }
+	if ($hint && @$hint == 3) {
+		$options = $hint;
+		$options_count = 1;
+	} else {
+		shift @hints;
+	}
+        unless (defined $options) {
+                die "Cannot solve puzzle\n" unless $done || ($continue && $solved);
+                if ($continue) {
+                        print "\n----\n" if !$puzzle && $solved;
+                        $solved++;
+			print "\n" if !$puzzle && ($debug || $progress);
+                        winner($context) unless $puzzle;
+                        print "Solved in $acc steps ($backtrack backtracks)\n" if !$puzzle && $verbose;
+                        return 1 if $solved == $continue;
+                        return 0;
+                } else {
+                        return 1;
+                }
+        }
+	# Now test positive constraints
+	my $pfound = 0;
+      FIND_POSITIVE:
+	foreach my $pcell (@recheck) {
+		my($x,$y) = @$pcell;
+		next if $options_count == 1 && $options->[0] == $x && $options->[1] == $y;
+		next if @hints && grep {$_->[0] == $x && $_->[1] == $y} @hints;
+		next if $board->[$x][$y] || $positive_constraints[$x][$y];
+		my($acol,$arow,$asqr) = @{$affected[$x][$y]};
+		foreach my $set ($acol, $arow, $asqr) {
+			my $excl = '';
+			foreach my $cell (@$set) {
+				my($cx,$cy) = @$cell;
+				my $scx = int($cx/$section_size);
+				my $scy = int($cy/$section_size);
+				my $b = $board->[$cx][$cy];
+				if ($b) {
+					vec($excl,$b-1,1) = 1;
+				} else {
+					$excl |=
+					    $rowstatus->[$cy] &
+					    $colstatus->[$cx] &
+					    $sqrstatus->[$scx][$scy];
+				}
+			}
+			my @eop = grep {1 - vec($excl,$_-1,1)} @all;
+			my $ecount = @eop;
+			if ($ecount > 1) {
+				# Cannot be forced to make more than one play
+				return 0;
+			} elsif ($ecount == 1) {
+				my $etmp = '';
+				vec($etmp,$eop[0]-1,1) = 1;
+				print "Pos: $x,$y\n";
+				if ($pfound) {
+					push @hints, [$x,$y,$etmp];
+				} else {
+					if ($options_count == 1) {
+						push @hints, $options;
+					}
+					$options = [$x,$y,$etmp];
+					$options_count = $ecount;
+					$pfound = 1;
+				}
+			} else {
+				$positive_constraints[$x][$y] = 1;
+			}
+		}
+	}
+
+        ($x,$y,my $list) = @$options;
+        $list = [grep {vec($list,$_-1,1)} @all];
+        @$list = shuffle(@$list) if $random;
+        # print "Do $x,$y with possible values ",join(",",@$list),"\n" if $debug;
+        if ($board->[$x][$y]) {
+                die "Can't happen: board[$x][$y] is already set";
+        }
+
+	my $oldpc = dclone(\@positive_constraints);
+	$positive_constraints[$x][$y]=undef;
+	foreach my $dir (@{$affected[$x][$y]}) {
+		foreach my $cell (@$dir) {
+			my($pcx,$pcy) = @$cell;
+			unless ($board->[$x][$y]) {
+				$positive_constraints[$pcx][$pcy]=undef;
+				foreach my $dir2 (@{$affected[$x][$y]}) {
+					foreach my $cell2 (@$dir2) {
+						my($pcx2,$pcy2) = @$cell2;
+						next if $board->[$pcx2][$pcy2];
+						$positive_constraints[$pcx2][$pcy2]=undef;
+					}
+				}
+			}
+		}
+	}
+        foreach my $n (@$list) {
+                vec($colstatus->[$x],$n-1,1)=0;
+                vec($rowstatus->[$y],$n-1,1)=0;
+                vec($sqrstatus->[int($x/$section_size)][int($y/$section_size)],$n-1,1)=0;
+                my $oldval = $board->[$x][$y];
+                $board->[$x][$y] = $n;
+		my $out = solver($context,$depth+1,@hints);
+                $backtrack++ unless $out;
+		if (!$out || $puzzle) {
+			vec($colstatus->[$x],$n-1,1)=1;
+			vec($rowstatus->[$y],$n-1,1)=1;
+			vec($sqrstatus->[int($x/$section_size)][int($y/$section_size)],$n-1,1)=1;
+			$board->[$x][$y] = $oldval;
+		}
+		return 1 if $out;
+        }
+	#@positive_constraints = ();
+	@positive_constraints = @$oldpc;
+        return 0;
+}
+
+# Initialize the board with possible values for each x,y
+sub init_board {
+        my $context = shift;
+        my $status = $context->{status};
+        my $newboard;
+        if ($status) {
+                $newboard = 0;
+        } else {
+                $newboard = 1;
+        }
+	$status = $context->{status} = { row => [], col => [], sqr => [] };
+        my $board = $context->{board}; # Current board state
+        $board = $context->{board} = [] unless $board;
+        my $size = shift;
+        my $section_size = shift; # Sub-grid size (sqrt($size))
+        if (defined $size and defined $section_size) {
+                $context->{size} = $size;
+                $context->{section_size} = $section_size;
+        } elsif (defined $context->{size} and defined $context->{section_size}) {
+                $size = $context->{size};
+                $section_size = $context->{section_size};
+        } else {
+                die "Must provide a size and selection_size to init_board";
+        }
+
+        my $state = '';         # default state (all on)
+        foreach my $pos (1..$size) {
+                vec($state,$pos-1,1) = 1;
+        }
+        my $colstate = [map {$state} 1..$size];
+        my $rowstate = [map {$state} 1..$size];
+        my $sqrstate = [map {[map {$state} 1..$section_size]} 1..$section_size];
+        for (my $y = 0; $y < $size; $y++) {
+                $rowstate->[$y] = $state;
+                for (my $x = 0;$x < $size;$x++) {
+                        my $val = $board->[$x][$y];
+                        if ($val) {
+                                my $ysqr = int($y/$section_size);
+                                my $xsqr = int($x/$section_size);
+                                unless (vec($rowstate->[$y],$val-1,1) &&
+                                         vec($colstate->[$x],$val-1,1) &&
+                                         vec($sqrstate->[$xsqr][$ysqr],$val-1,1)) {
+                                        die "Cannot have $val at $x,$y\n";
+                                }
+                                vec($rowstate->[$y],$val-1,1) = 0;
+                                vec($colstate->[$x],$val-1,1) = 0;
+                                vec($sqrstate->[$xsqr][$ysqr],$val-1,1) = 0;
+                        }
+                }
+        }
+        @{$status}{qw(row col sqr)} = ($rowstate,$colstate,$sqrstate);
+        return $context;
+}
+
+# Print a winning board
+sub winner {
+        my $context = shift;
+        my $board = $context->{board}; # Current board state
+        my $size = $context->{size}; # Board size
+        my $section_size = $context->{section_size}; # Sub-grid size (sqrt($size))
+        if ($output_html) {
+                print "<html><head>\n" if $html_framing;
+                print "<style><!--\n";
+                print << 'END_STYLE';
+                table.sudoku-outer-table {
+                      border-collapse: collapse;
+                      border: 0;
+                      border-spacing: 0;
+                }
+                td.sudoku-outer-cell {
+                      border: solid 1pt;
+                      padding: 0;
+                      border-spacing: 0;
+                }
+                table.sudoku-inner-table {
+                      border-collapse: collapse;
+                      border: 0;
+                      padding 0;
+                      border-spacing: 0;
+                }
+                td.sudoku-inner-cell {
+                      font-family: monospace;
+                      font-size: xx-large;
+                      font-weight: bold;
+                      border-spacing: 0;
+                      border: solid 1pt;
+                }
+END_STYLE
+                print "--></style>\n";
+                print "</html></head><body>\n" if $html_framing;
+                my $sz = length($size);
+                my @steps = (0..$section_size-1);
+                print "<table class=\"sudoku-outer-table\">\n";
+                foreach my $sy (@steps) {
+                        print " <tr class=\"sudoku-outer-row\">\n";
+                        foreach my $sx (@steps) {
+                                print "  <td class=\"sudoku-outer-cell\">\n";
+                                print "   <table class=\"sudoku-inner-table\">\n";
+                                foreach my $y (map {$sy*$section_size+$_} @steps) {
+                                        print "    <tr class=\"sudoku-inner-row\">\n";
+                                        foreach my $x (map {$sx*$section_size+$_} @steps) {
+                                                print "     <td class=\"sudoku-inner-cell\">\n";
+                                                print "      <span class=\"sudoku-inner-cell\">\n";
+                                                if ($board->[$x][$y]) {
+                                                        my $n = $board->[$x][$y];
+                                                        my $nlen = length($n);
+                                                        print "&nbsp;" x ($sz-$nlen+1);
+                                                        print "$n";
+                                                } else {
+                                                        print "&nbsp;" x ($sz+1);
+                                                }
+                                                print "      </span>\n";
+                                                print "     </td>\n";
+                                                        
+                                        }
+                                        print "    </tr>\n";
+                                }
+                                print "   </table>\n  </td>\n";
+                        }
+                        print " </tr>\n";
+                }
+                print "</table>\n";
+                print "</body></html>\n" if $html_framing;
+                return;
+        }
+        for (my $y=0;$y<$size;$y++) {
+                print "\n" if $y % $section_size == 0 && $y !=0;
+                for (my $x=0;$x<$size;$x++) {
+                        my $cell = $board->[$x][$y];
+                        print " ";
+                        print " " if $x % $section_size == 0;
+                        if ($cell) {
+                                printf sprintf("%%%dd",length($size)), $board->[$x][$y];
+                        } else {
+                                printf sprintf("%%%ds",length($size)), 'X';
+                        }
+                }
+                print "\n";
+        }
+        print "\n";
+}
+
+# Given a fully solved board state, change it into a state
+# which has only one solution (the given starting state),
+# but is as unsolved as possible. The value of the global,
+# $puzzle is key to this function, as it specifies how many
+# times a valid solution should be seen before determining
+# which to call "good enough".
+sub puzzle {
+        my $context = shift;
+        my $board = $context->{board}; # Current board state
+        my $size = $context->{size}; # Board size
+        my $section_size = $context->{section_size}; # Sub-grid size (sqrt($size))
+        my $depth = shift;
+        my $prev = shift; # Array ref. Previous x,y
+	my($rowstate,$colstate,$sqrstate) = @{$context->{status}}{qw(row col sqr)};
+	die "Undefined state variables" if grep {!defined $_} $rowstate, $colstate, $sqrstate;
+        $depth = 0 unless defined $depth;
+        
+        die "Uninitialized board passed to puzzle()" unless $size && $section_size;
+        unless (eval {
+			local $peek = 0;
+			local $continue = 2;
+			local $solved = 0;
+			solver($context,0,$prev);
+		}) {
+		puzzle_cache_hit($context,0);
+                if ($@) { # Check exception type
+                        if ($@ =~ /\bsolve\b/i) {
+                                winner($context);
+				die "Cannot make puzzle from unsolvable state (depth=$depth)!\n";
+                        }
+                        die $@; # Re-throw
+                }
+                # print "\n" if $debug;
+                # Just one solution for current state
+                # print "Clearing a square and trying again...\n" if $debug;
+                foreach my $cell (shuffle(@allxy)) {
+                        my($x,$y) = @$cell;
+                        my $old = $board->[$x][$y];
+                        next unless $old;
+                        # print " ...clearing $x,$y (was $old)\n" if $debug;
+                        $board->[$x][$y] = undef;
+			my $xsqr = int($x/$section_size);
+			my $ysqr = int($y/$section_size);
+			vec($rowstate->[$y],$old-1,1) = 1;
+			vec($colstate->[$x],$old-1,1) = 1;
+			vec($sqrstate->[$xsqr][$ysqr],$old-1,1) = 1;
+                        my $return = puzzle($context,$depth+1,[$x,$y]);
+			vec($rowstate->[$y],$old-1,1) = 0;
+			vec($colstate->[$x],$old-1,1) = 0;
+			vec($sqrstate->[$xsqr][$ysqr],$old-1,1) = 0;
+                        $board->[$x][$y] = $old;
+                        if ($return) {
+				if (!defined($max_puzzle) || $depth > $max_puzzle) {
+					print "\nNew deepest solution at $depth\n" if $verbose;
+					winner($context),print("----\n") if $peek || $debug;
+					$max_puzzle = $depth;
+					@puzzles = ();
+				}
+				if ($depth == $max_puzzle) {
+					push @puzzles, dclone($context);
+				}
+				return 1 unless $puzzle && --$puzzle;
+                        }
+                }
+                return 0;
+        } else {
+                puzzle_cache_hit($context,1);
+                return 1;
+        }
+}
+
+sub puzzle_cache_hit {
+        my $context = shift;
+        my $board = $context->{board}; # Current board state
+        my $size = $context->{size}; # Board size
+        my $section_size = $context->{section_size}; # Sub-grid size (sqrt($size))
+	my $result = shift;
+	my $pattern = join "", map {pack "I*",@$_} @$board;
+	$::puzzle_cache{$pattern} = $result;
+}
+
+# Transform a board layout into another board layout which is also a valid
+# solution. Do this by swapping columns within squares, columns of squares,
+# rows within squares, rows of squares, and finally refecting the board
+# along the two diagonal axes. Any board layout that is a valid solution
+# to start will still be a valid board layout after transformation thusly
+sub shuffle_board {
+	my $board = shift;
+	my $size = shift;
+	my $section_size = shift;
+
+        my $seed = randseed();
+        srand($seed);
+        # Swap rows within squares
+	for (my $sy=0;$sy<$section_size;$sy++) {
+		my $basey = $sy*$section_size;
+		for (my $y=$basey;$y<$basey + $section_size;$y++) {
+			my $r = $basey + int rand $section_size;
+			next if $r == $y;
+			for (my $x = 0;$x<$size;$x++) {
+				($board->[$x][$y],$board->[$x][$r]) = 
+                                  ($board->[$x][$r],$board->[$x][$y]);
+			}
+		}
+	}
+        # Swap rows of squares
+	for (my $sy=0;$sy<$section_size;$sy++) {
+		my $basey = $sy*$section_size;
+		my $r = int rand $section_size;
+		next if $r == $sy;
+		my $baser = $r * $section_size;
+		for (my $yoff=0;$yoff < $section_size;$yoff++) {
+			for (my $x=0;$x<$size;$x++) {
+				($board->[$x][$basey+$yoff],$board->[$x][$baser+$yoff]) =
+                                  ($board->[$x][$baser+$yoff],$board->[$x][$basey+$yoff]);
+			}
+		}
+	}
+        # Swap columns within squares
+	for (my $sx=0;$sx<$section_size;$sx++) {
+		my $basex = $sx*$section_size;
+		for (my $x=$basex;$x<$basex + $section_size;$x++) {
+			my $r = $basex + int rand $section_size;
+			next if $r == $x;
+			@{$board}[$x,$r] = @{$board}[$r,$x];
+		}
+	}
+        # Swap columns of squares
+	for (my $sx=0;$sx<$section_size;$sx++) {
+		my $basex = $sx*$section_size;
+		my $r = int rand $section_size;
+		next if $r == $sx;
+		my $baser = $r * $section_size;
+		@{$board}[$basex..($basex+$section_size-1), $baser..($baser+$section_size-1)] =
+                  @{$board}[$baser..($baser+$section_size-1), $basex..($basex+$section_size-1)];
+	}
+        # Rotate board around the center 0-3 times
+        my $rotate = int rand 4;
+        for (my $i=0;$i<$rotate;$i++) {
+		my $new = [];
+		for (my $y = 0;$y < $size; $y++) {
+			for (my $x = 0;$x < $size; $x++) {
+				$new->[$size-($y+1)][$x] = $board->[$x][$y];
+			}
+		}
+		@$board = @$new;
+	}
+        # Rotate board along the horizontal axis
+	if (rand(2) >= 1) {
+		my $new = [];
+		for (my $y = 0;$y < $size; $y++) {
+			for (my $x = 0;$x < $size; $x++) {
+				$new->[$x][$size-($y+1)] = $board->[$x][$y];
+			}
+		}
+		@$board = @$new;
+	}
+}
+
+sub sum {
+        my $t = 0;
+        foreach my $n (@_) {
+                $t+=$n;
+        }
+        return $t;
+}
+
+sub alloff {
+	my $bits = shift;
+	my $len = length($bits);
+	if ($len%4 != 0) {
+		$bits .= "\0" x ($len%4);
+	}
+	for(my $i=0;$i<$len/4;$i++) {
+		return 0 if vec($bits,$i*4*8,32);
+	}
+	return 1;
+}
+
+sub shuffle {
+        my $len = @_;
+        srand(randseed());
+        for (my $i=0;$i<@_;$i++) {
+                my $r = int rand @_;
+                @_[$i,$r] = @_[$r,$i];
+        }
+        @_;
+}
+
+sub randseed {
+        local *R;
+        if (open(R,"</dev/urandom") && sysread(R,my $buf,4)) {
+                return unpack "I", $buf;
+        } else {
+                return(time() ^ $$ ^ (unpack("I",$0)<<8) ^ ((time()-$)<<16));
+        }
+}
+
+__END__
+
+=head1 NAME
+
+sudoku-solver - Given a board size, produce a sudoku game solution
+
+=head1 SYNOPSIS
+
+ sudoku-solver --help           Produce this help summary
+
+ sudoku-solver [options]
+
+ Options:
+
+        --verbose               verbose output
+        --size N                Grid size [5]
+        --start-state STATE     Starting state [empty]
+        --random                Randomly shuffle the solution [false]
+        --restart SEC           Start over every SEC secons [false]
+        --row-at-a-time         Solve each row in order [false]
+        --square-at-a-time      Solve each square in order [false]
+        --all-solutions         Print all solutions [false]
+        --solutions N           Print at most N solutions [1]
+        --puzzle                Generate a puzzle instead of solving [false]
+        --puzzle-depth          How hard should we try to reduce [1]
+        --progress              Print progress along the way [true if --debug]
+        --peek                  Print board state periodically [true if --debug]
+
+=head1 DESCRIPTION
+
+This is a solver for the class of problems that make up the game, "sudoku".
+
+The board is made up of square grids measuring 3 cells wide by default. The board
+is then squared. That is, in the 3x3 configuration 3x3 grids are combined to make
+an overall 9x9 grid. This default is called a "size 3 grid". To solve, each
+sub-grid (the 3x3s) must have no more than one occurance of each number from
+1 to 9, and no row or column in the overall 9x9 grid may contain a duplicate
+number. The size of the grid is controlled with the C<--size> parameter.
+
+Here is a sample solution:
+
+  1 2 3  4 5 6  7 8 9
+  4 5 6  7 8 9  1 2 3
+  7 8 9  1 2 3  4 5 6
+ 
+  2 1 4  3 6 5  8 9 7
+  3 6 5  8 9 7  2 1 4
+  8 9 7  2 1 4  3 6 5
+ 
+  5 3 1  6 4 2  9 7 8
+  6 4 2  9 7 8  5 3 1
+  9 7 8  5 3 1  6 4 2
+
+Notice that the numbers between 1 and 9 exist in each sub-grid once, and in each
+row and colum only once.
+
+If the entire board, reading left-to-right and then top-to-bottom is treated as
+a single number, this program finds the lowest value which matches the constraints.
+
+=head1 OPTIONS
+
+=over 5
+
+=item C<--all-solutions>
+
+Don't stop after printing one solution. Exhaust all solutions possible.
+
+=item C<--force>
+
+Force a solution to be found when dealing with an empty start state,
+rather than applying a simple default solution. Combine with
+C<--random> for best results.
+
+=item C<--help>
+
+Produce a short help message
+
+=item C<--puzzle>
+
+Generate a puzzle (board with some spaces filled in) which has
+only one solution.
+
+=item C<--puzzle-depth N>
+
+Same as C<--puzzle>, but specify how far to keep searching for
+an ideal puzzle. Each puzzle that can have no more numbers removed
+before causing there to be more than one solution is stored, and
+a better puzzle searched for. Up to N such intermediate puzzles
+are searched.
+
+=item C<--random>
+
+By default a list of ordered numbers is tried in each position. To find
+a more random solution, use this option to permute order of the list of
+numbers tried.
+
+=item C<--restart SEC>
+
+Restart the search ever SEC seconds. This option implies C<--random>,
+since re-starting an ordered search wouldn't try a different path.
+
+=item C<--restarts N>
+
+Stop after C<--restart> has caused us to restart N times. This option
+implies --restart which will default to 10 seconds.
+
+=item C<--size N>
+
+Generate solutions for a size N board. This is the size of the "sub-grids",
+that is a standard 9x9 board is considered to be "size 3", not "size 9".
+
+=item C<--solutions N>
+
+Don't stop until N solutions are found (or no more are possible).
+
+=item C<--start-state STATE>
+
+Start with certain cells of the board filled in. C<STATE> is a single string
+made up of numbers, the letter C<x> and spaces. For a sample 4x4 (size 2)
+board, here is a starting state that has the number 1 in both the first
+and last cell:
+
+  sudoku-solver --size 2 --start-state '1 x x x x x x x x x x x x x x x 1'
+
+That procudes the following board:
+
+  1 2  3 4
+  3 4  1 2
+ 
+  2 1  4 3
+  4 3  2 1
+
+As a shortcut, the above command-line can be given:
+
+  sudoku-solver --size 2 --start-state '1 x_14 1'
+
+where the C<_14> is a repeat count.
+
+=item C<--verbose>
+
+Turn on verbosity (announce initial state and board config).
+
+=back
+
+=head1 AUTHOR
+
+Written in 2005 by Aaron Sherman E<lt>ajs@itasoftware.comE<gt>
+
+=cut

@@ -1,0 +1,343 @@
+# The table of major wondrous items. Because there is no overlap between
+# major, medium and minor wondrous items, there's no point in shoving them
+# all into the same data file.
+---
+- 1
+- name: dimensional shackles
+  price: 28000
+- 2
+- name: 'figurine of wondrous power, obsidian steed'
+  price: 28500
+- 3
+- name: drums of panic
+  price: 30000
+- 4
+- name: 'ioun stone, orange'
+  price: 30000
+- 5
+- name: 'ioun stone, pale green prism'
+  price: 30000
+- 6
+- name: lantern of revealing
+  price: 30000
+- 7
+- name: robe of blending
+  price: 30000
+- 8
+- name: amulet of natural armor +4
+  price: 32000
+- 9
+- name: amulet of proof against detection and location
+  price: 35000
+- 10
+- name: 'carpet of flying, 5 ft. by 10 ft.'
+  price: 35000
+- 11
+# Note: Books are only special when using Dragon magazine info, in
+# which case they might get the "floating" ability which adds 500gp
+# to their value.
+- name: 'golem manual, iron'
+  price: 35000
+  special: book
+- 12
+- name: amulet of health +6
+  price: 36000
+- 13
+- name: belt of giant strength +6
+  price: 36000
+- 14
+- name: bracers of armor +6
+  price: 36000
+- 15
+- name: cloak of charisma +6
+  price: 36000
+- 16
+- name: gloves of dexterity +6
+  price: 36000
+- 17
+- name: headband of intellect +6
+  price: 36000
+- 18
+- name: 'ioun stone, vibrant purple prism'
+  price: 36000
+- 19
+- name: 'pearl of power, 6th-level spell'
+  price: 36000
+- 20
+- name: periapt of wisdom +6
+  price: 36000
+- 21
+- name: scarab of protection
+  price: 38000
+- 22
+- name: 'ioun stone, lavender and green ellipsoid'
+  price: 40000
+- 23
+- name: ring gates
+  price: 40000
+- 24
+- name: crystal ball
+  price: 42000
+- 25
+- name: 'golem manual, greater stone'
+  price: 44000
+  special: book
+- 26
+- name: orb of storms
+  price: 48000
+- 27
+- name: boots of teleportation
+  price: 49000
+- 28
+- name: bracers of armor +7
+  price: 49000
+- 29
+- name: 'pearl of power, 7th-level spell'
+  price: 49000
+- 30
+- name: amulet of natural armor +5
+  price: 50000
+- 31
+- name: 'cloak of displacement, major'
+  price: 50000
+- 32
+- name: crystal ball with see invisibility
+  price: 50000
+- 33
+# horn of valhalla has its own data file
+- name: horn of valhalla
+  price: 50000
+  special: horn_of_valhalla
+- 34
+- name: crystal ball with detect thoughts
+  price: 51000
+- 35
+- name: 'carpet of flying, 6 ft. by 9 ft.'
+  price: 53000
+- 36
+- name: amulet of mighty fists +3
+  price: 54000
+- 37
+- name: wings of flying
+  price: 54000
+- 38
+- name: cloak of etherealness
+  price: 55000
+- 39
+- name: instant fortress
+  price: 55000
+- 40
+- name: manual of bodily health +2
+  price: 55000
+  special: book
+- 41
+- name: manual of gainful exercise +2
+  price: 55000
+  special: book
+- 42
+- name: manual of quickness in action +2
+  price: 55000
+  special: book
+- 43
+- name: tome of clear thought +2
+  price: 55000
+  special: book
+- 44
+- name: tome of leadership and influence +2
+  price: 55000
+  special: book
+- 45
+- name: tome of understanding +2
+  price: 55000
+  special: book
+- 46
+- name: eyes of charming
+  price: 56000
+- 47
+- name: robe of stars
+  price: 58000
+- 48
+- name: 'carpet of flying, 10 ft. by 10 ft.'
+  price: 60000
+- 49
+- name: darkskull
+  price: 60000
+- 50
+- name: cube of force
+  price: 62000
+- 51
+- name: bracers of armor +8
+  price: 64000
+- 52
+- name: 'pearl of power, 8th-level spell'
+  price: 64000
+- 53
+- name: crystal ball with telepathy
+  price: 70000
+- 54
+- name: 'horn of blasting, greater'
+  price: 70000
+- 55
+# The two-spell version of pearl of power has two spells, each level 1-6
+- name: 'pearl of power, two spells'
+  price: 70000
+  special: pearl_of_power
+- 56
+- name: helm of teleportation
+  price: 73500
+- 57
+- name: gem of seeing
+  price: 75000
+- 58
+# robe of the archmagi has its own data file
+- name: robe of the archmagi
+  price: 75000
+  special: robe_of_the_archmagi
+- 59
+- name: mantle of faith
+  price: 76000
+- 60
+- name: crystal ball with true seeing
+  price: 80000
+- 61
+- name: 'pearl of power, 9th-level spell'
+  price: 81000
+- 62
+- name: well of many worlds
+  price: 82000
+- 63
+- name: manual of bodily health +3
+  price: 82500
+  special: book
+- 64
+- name: manual of gainful exercise +3
+  price: 82500
+  special: book
+- 65
+- name: manual of quickness in action +3
+  price: 82500
+  special: book
+- 66
+- name: tome of clear thought +3
+  price: 82500
+  special: book
+- 67
+- name: tome of leadership and influence +3
+  price: 82500
+  special: book
+- 68
+- name: tome of understanding +3
+  price: 82500
+  special: book
+- 69
+- name: apparatus of the crab
+  price: 90000
+- 70
+- name: mantle of spell resistance
+  price: 90000
+- 71
+- name: mirror of opposition
+  price: 92000
+- 72
+- name: 'strand of prayer beads, greater'
+  price: 95800
+- 73
+- name: amulet of mighty fists +4
+  price: 96000
+- 74
+- name: eyes of petrification
+  price: 98000
+- 75
+- name: bowl of commanding water elementals
+  price: 100000
+- 76
+- name: brazier of commanding fire elementals
+  price: 100000
+- 77
+- name: censer of controlling air elementals
+  price: 100000
+- 78
+- name: stone of controlling earth elementals
+  price: 100000
+- 79
+- name: manual of bodily health +4
+  price: 110000
+  special: book
+- 80
+- name: manual of gainful exercise +4
+  price: 110000
+  special: book
+- 81
+- name: manual of quickness in action +4
+  price: 110000
+  special: book
+- 82
+- name: tome of clear thought +4
+  price: 110000
+  special: book
+- 83
+- name: tome of leadership and influence +4
+  price: 110000
+  special: book
+- 84
+- name: tome of understanding +4
+  price: 110000
+  special: book
+- 85
+- name: amulet of the planes
+  price: 120000
+- 86
+- name: robe of eyes
+  price: 120000
+- 87
+- name: helm of brilliance
+  price: 125000
+- 89
+- name: manual of bodily health +5
+  price: 137500
+  special: book
+- 89
+- name: manual of gainful exercise +5
+  price: 137500
+  special: book
+- 90
+- name: manual of quickness in action +5
+  price: 137500
+  special: book
+- 91
+- name: tome of clear thought +5
+  price: 137500
+  special: book
+- 92
+- name: tome of leadership and influence +5
+  price: 137500
+  special: book
+- 93
+- name: tome of understanding +5
+  price: 137500
+  special: book
+- 94
+# efreeti bottle has its own data file
+- name: efreeti bottle
+  price: 145000
+  special: efreeti_bottle
+- 95
+- name: amulet of mighty fists +5
+  price: 150000
+- 96
+- name: chaos diamond
+  price: 160000
+- 97
+- name: cubic gate
+  price: 164000
+- 98
+# iron flask has its own data file
+- name: iron flask
+  price: 170000
+  special: iron_flask
+- 99
+- name: mirror of mental prowess
+  price: 175000
+- 100
+- name: mirror of life trapping
+  price: 200000

@@ -1,0 +1,57 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+<title>World of Warcraft Item Database Search[%context%]</title>
+<link rel="stylesheet" type="text/css" href="main.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<table class="bodystructure"><tr>
+<td class="sidebar">
+<div class="logo">
+    <a href="[%homeurl%]">
+	<img border=0 src="/images/wowstreetlogo.png"
+	    alt="Wowstreet at AJS.COM"/>
+    </a>
+</div>
+
+<br/>
+
+<div class="search">
+    [%form_start%]Search: [%searchbox%][%form_end%]
+</div>
+
+<br/>
+
+<tt><b>In the database:</b> [%item_count%] items<br/>
+    <b>Auctions scanned:</b> [%auction_count%]</tt><br/>
+
+<div class="headsummary">
+
+<tt>
+[<a href="[%horde_url%]">Horde</a>]
+[<a href="[%alliance_url%]">Alliance</a>]
+[<a href="[%all_url%]">All</a>]<br/><br/>
+
+[% FOREACH server = server_list %]
+    <a href="[% server.server_url %]">[% server.realm %]/[% server.faction %]</a><br/>
+[% END %]
+</tt>
+[% IF itemid %]<p> [<a href="[% backurl %]">back</a>] </p>[% END %]
+
+</div>
+
+<div class="google_search">
+[% INCLUDE Google_Search.tt2 %]
+</div>
+
+<p>Enjoy Wowstreet? Want to help? Send some gold my way if you can:</p>
+<dl><dt><b>Argent Dawn</b></dt><dd>Horde: Deepone<br/>Alliance: Blueish</dd>
+<dt><b>Thorium Brotherhood</b></dt><dd>Alliance: Aucperl</dd></dl>
+<p>If you're on another server, tell someone else about Wowstreet. Thanks! -The Management</p>
+
+</td><td class="bodycell">
+

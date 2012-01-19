@@ -1,0 +1,125 @@
+#!/usr/bin/perl
+
+use re 'eval';
+use Data::Dumper;
+use DBI;
+use strict;
+use POSIX;
+use Time::HiRes;
+
+use Inline Lua => q{
+    function lua_eval(s, variable)
+        ls = loadstring(s)
+	r = ls()
+	if not variable then
+	    return r
+        else
+	    return _G[variable]
+	end
+    end
+};
+
+$|=1; # don't buffer writes
+
+our @itemdb_fields =
+    qw(name quality ulevel itype isub item_count isequip texture);
+our @auction_fields =
+    qw(itemid suffix enchant unique count minbid buyout seller curbid amhigh tleft time expiration);
+our @itemkey_fields =
+    qw(itemid suffix enchant);
+our @sql_fields =
+    qw(
+ itemid ilevel itype isub isequip price tleft time day name texture count quality 
+ canuse ulevel minbid mininc buyout curbid amhigh seller id suffix factor
+ enchant seed realm faction);
+
+our $start_time = Time::HiRes::time();
+
+print "Checking AuctionConfig...\n";
+my $s = join "", <>;
+my $data = lua_eval($s,"AuctionConfig");
+my $version = $data->{version};
+print "Auctioneer verison $version\n";
+if ($version >= 40001) {
+    print " good to go. Reading ItemDB...\n";
+} else {
+    die "Data version too old\n";
+}
+$data = lua_eval($s,"AuctioneerItemDB");
+
+my $item_classes = $data->{auctionItemClasses};
+my $item_subclasses = $data->{auctionItemSubClasses};
+my $item_textures = $data->{textures};
+our %itemdb;
+foreach my $itemkey (keys %{$data->{items}}) {
+    my $item = {};
+    @{$item}{@itemkey_fields} = split(/:/,$itemkey,3);
+    @{$item}{@itemdb_fields} = split(/;/,$data->{items}{$itemkey},8);
+    $item->{itype} = $item_classes->[$item->{itype}];
+    $item->{isub} = $item_subclasses->[$item->{isub}];
+    $item->{texture} = $item_textures->[$item->{texture}];
+    $itemdb{$itemkey}=$item;
+}
+
+undef $item_classes;
+undef $item_subclasses;
+undef $item_textures;
+$data = lua_eval($s,"AuctioneerSnapshotDB");
+
+my $dbh = DBI->connect("DBI:mysql:database=wowitems","root",undef);
+die "Cannot connect to database: $DBI::errstr\n" unless $dbh;
+my $sql = "insert ignore into auc_scan_item (".
+    join(", ", map {"`$_`"} @sql_fields).") values (".
+    join(", ", map {"?"} @sql_fields).")";
+my $sth = $dbh->prepare($sql);
+die "SQL error: $DBI::errstr:\n\t$sql\n" unless $sth;
+
+foreach my $locality (sort keys %$data) {
+    my $key = $locality;
+    # make case match auctioneer advanced usage
+    $locality =~ s/(^|[ \-])([a-z])/$1\U$2\E/g;
+    print "Parsing $locality\n";
+    my($realm,$faction) = ($locality =~ /^(.*)-(.*)/);
+    my $auctions = $data->{$key}{auctions};
+    my @auctions;
+    if (ref($auctions) eq 'ARRAY' ) {
+	@auctions = @$auctions;
+    } elsif (ref($auctions) eq 'HASH') {
+	@auctions = values %$auctions;
+    } else {
+	die "Type of auctions list is '".ref($auctions)."'";
+    }
+    my $scancount = 0;
+    foreach my $auction (@{$data->{$key}{auctions}}) {
+	my %item;
+	next unless defined $auction; # why are there undefined entries?!
+	@item{@auction_fields} = split /;/, $auction;
+	my $itemkey = join ":", @item{@itemkey_fields};
+	@item{@itemdb_fields} = @{$itemdb{$itemkey}}{@itemdb_fields};
+	$item{realm} = $realm;
+	$item{faction} = $faction;
+	unless ($item{time} && $item{time} > 1000000000) {
+	    warn "Bad time value... data follows:\n".Dumper($auction);
+	    next;
+	}
+	my $posix_time = $item{time};
+	$item{time} = strftime("%Y-%m-%d %H:%M:%S",localtime $posix_time);
+	$item{day} = strftime("%Y-%m-%d",localtime $posix_time);
+	if ($item{buyout}) {
+	    $item{price} = $item{buyout};
+	} elsif ($item{curbid}) {
+	    $item{price} = $item{curbid};
+	} elsif ($item{minbid}) {
+	    $item{price} = $item{minbid};
+	} else {
+	    next;
+	}
+	print "." if $scancount++ % 100 == 0;
+	#print Dumper(\%item);
+	$sth->execute(@item{@sql_fields});
+    }
+    print "\n";
+}
+
+
+__END__

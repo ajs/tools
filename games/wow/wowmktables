@@ -1,0 +1,23 @@
+#!/bin/sh
+
+prep_temp_table() {
+    echo "drop table if exists ${1}_new;"
+    echo "create table ${1}_new like $1;"
+}
+untemp_table() {
+    echo "drop table if exists ${1}_backup;"
+    echo "rename table $1 to ${1}_backup, ${1}_new to $1;"
+}
+sqlcmds() {
+    # realm_faction_summary
+    prep_temp_table "realm_faction_summary"
+    echo 'insert into realm_faction_summary_new select realm, faction, count(*) as auction_count, max(`time`) as last_scanned, min(`time`) as first_scanned from auc_scan_item group by realm, faction;'
+    untemp_table "realm_faction_summary"
+
+    # metadata
+    prep_temp_table "auction_metadata"
+    echo 'insert into auction_metadata_new select count(*) as `count` from auc_scan_item;'
+    untemp_table "auction_metadata"
+}
+
+sqlcmds | mysql -u root wowitems

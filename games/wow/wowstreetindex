@@ -1,0 +1,189 @@
+#!/usr/bin/perl
+use strict;
+
+use Pod::Usage;
+use POSIX;
+use DBI;
+use URI;
+use IO::Handle;
+use List::Util qw(sum);
+use Date::Parse qw(str2time);
+use Getopt::Long;
+use Pod::Usage;
+use Data::Dumper;
+
+$|=1;
+
+my $database = 'wowitems';
+my $driver = 'mysql';
+my $host = 'localhost';
+my $user = 'root';
+my $pass = undef;
+my %sql_statement_handle_cache;
+my $dsn = "DBI:$driver:database=$database;host=$host";
+my $dbh = DBI->connect($dsn,$user,$pass) or die "$0:$dsn: Failed: $DBI::errstr";
+
+my $sth;
+my $row;
+
+GetOptions () or pod2usage(-verbose=>0);
+
+print "Prepping temporary tables and handles... ";
+prep_new($dbh,"market_index_components_by_item");
+prep_new($dbh,"market_index_components_by_faction");
+prep_new($dbh,"market_index_components_by_server");
+prep_new($dbh,"market_index_by_item");
+prep_new($dbh,"market_index_by_faction");
+prep_new($dbh,"market_index_by_server");
+
+print "Done.\n";
+
+
+my %todo;
+print "Primary update in progress... ";
+foreach my $type ([item => []], [faction => ["faction"]],
+		  [server => ["realm", "faction"]]) {
+    my($table,$fields) = @$type;
+    print "by $table... ";
+    my $extras = "";
+    my $extras_q = "";
+    $extras = join(", ", @$fields). ", " if @$fields;
+    $extras_q = join(", ", map {"?"} @$fields). ", " if @$fields;
+    $sth = call_sql($dbh, "get days list for $table",
+	qq{select distinct $extras day from price_history_by_$table
+	    order by day});
+    while(my $row = $sth->fetchrow_hashref) {
+	push @{$todo{$table}{$row->{day}}}, { map { $_ => $row->{$_} } @$fields };
+    }
+    my %done;
+    my $prev;
+    my $prev_value = 100_000;
+    # For every day we update the market index
+    foreach my $day (sort keys %{$todo{$table}}) {
+	# print "$day... ";
+	# For faction and server, we'll need to loop multiple times for each day
+	foreach my $state (@{$todo{$table}{$day}}) {
+	    my @values = map {$state->{$_}} @$fields;
+	    (my $month=$day) =~ s/-\d+$//;
+	    if ($done{$month}++) {
+		delete $todo{$table}{$day};
+		next;
+	    }
+	    my $where = "";
+	    $where = " and " . join(" and  ", map {"$_ = ?"} @$fields)
+		if @$fields;
+	    if ($prev) {
+		my $mapfields = sub {
+		    my($l,$r) = @_; # table prefixes
+		    if (@$fields) {
+			return join(" and ",
+			    map {"$l.$_ = $r.$_"} @$fields) . " and ";
+		    } else {
+			return "";
+		    }
+		};
+		my $mapwhere = sub {
+		    my $table = shift;
+		    if (@$fields) {
+			return " and " . join(" and ",
+			    map {"$table.$_ = ?"} @$fields);
+		    } else {
+			return "";
+		    }
+		};
+		call_sql($dbh, "drop temp date table",
+		    qq{drop table if exists date_map});
+		call_sql($dbh, "temporary date table by $table",
+		    qq{create table date_map
+			select max(day) as "day", $extras itemid
+			from price_history_by_$table
+			where day <= ? $where
+			group by $extras itemid}, $day, @values);
+		call_sql($dbh, "Add indexes to date table by $table",
+		    qq{alter table date_map add unique index
+			( $extras itemid )});
+		call_sql($dbh, "Add index on day to date table by $table",
+		    qq{alter table date_map add index (day)});
+		my $sth2 = call_sql($dbh, "current value by $table",
+		    qq{ select sum(i.rolling_50 * m.shares)
+			from price_history_by_$table i
+			    inner join date_map d
+				on } . $mapfields->("i","d") . qq{
+				    i.itemid = d.itemid and i.day = d.day
+			    inner join market_index_components_by_$table\_new m
+				on } . $mapfields->("i","m") . qq{
+				    i.itemid = m.itemid
+			where m.day = ? } . $mapwhere->("i"),
+		    $prev, @values );
+		($prev_value) = $sth2->fetchrow_array();
+	    }
+	    my $sth = call_sql($dbh, "get top 100 items by $table",
+		qq{ select itemid, rolling_auction_count, rolling_50
+		    from price_history_by_$table
+		    where day = ? $where
+		    order by rolling_auction_count desc
+		    limit 100 }, $day, @values );
+	    while((my $irow = $sth->fetchrow_hashref())) {
+		my $shares = $prev_value/100/$irow->{rolling_50};
+		call_sql($dbh, "update by day / $table",
+		    qq{ insert into market_index_components_by_$table\_new
+			($extras day, itemid, shares, value)
+			values ($extras_q ?, ?, ?, ?) },
+		    @values, $day, $irow->{itemid},
+		    $shares, $irow->{rolling_50} );
+	    }
+	    $prev = $day;
+	}
+    }
+}
+print "Done.\n";
+
+
+print "Installing newly updated tables.\n";
+install_new($dbh,"market_index_components_by_item");
+install_new($dbh,"market_index_components_by_faction");
+install_new($dbh,"market_index_components_by_server");
+install_new($dbh,"market_index_by_item");
+install_new($dbh,"market_index_by_faction");
+install_new($dbh,"market_index_by_server");
+
+sub prep_new {
+    my $dbh = shift;
+    my $table = shift;
+    my $new = "$table\_new";
+    call_sql($dbh,"prep new: drop $new","drop table if exists $new");
+    call_sql($dbh,"prep new: create $new","create table $new like $table");
+}
+
+sub install_new {
+    my $dbh = shift;
+    my $table = shift;
+    my $new = "$table\_new";
+    my $bak = "$table\_bak";
+    call_sql($dbh,"install new: drop $bak","drop table if exists $bak");
+    call_sql($dbh,"install new: rename $table","rename table $table to $bak,
+	$new to $table");
+}
+
+sub call_sql {
+  my $dbh = shift;
+  my $name = shift;
+  my $sql = shift;
+  my $sth;
+  if ($name =~ /^DEBUG:/) {
+    print "\n$name:\n$sql\n";
+  }
+  if (exists $sql_statement_handle_cache{$sql}) {
+    $sth = $sql_statement_handle_cache{$sql};
+  } else {
+    $sth = $sql_statement_handle_cache{$sql} =
+      $dbh->prepare($sql);
+    die "$0: Cannot parse SQL for $name: $DBI::errstr\n$sql\n" unless $sth;
+  }
+  $sth->execute(@_) or
+        die "$0: Failed to execute $name: $DBI::errstr\n$sql\n\t".
+	    "args: ".join(", ",map {"$_"} @_)."\n";
+  return $sth;
+}
+
+__END__

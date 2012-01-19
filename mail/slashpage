@@ -1,0 +1,53 @@
+#!/usr/bin/perl
+
+use IO;
+use POSIX qw(strftime);
+
+$early = 8; # Don't page before 8AM
+$late = 24; # Page right up till midnight
+$update_period = 120;
+addpath($ENV{HOME}."/bin");
+
+chdir($ENV{HOME}."/tmp") || die("chdir: $!");
+$tmpdir = ".slash";
+-d($tmpdir) || mkdir($tmpdir,0755) || die("$tmpdir: $!");
+chdir($tmpdir);
+
+$old = slashup();
+while(defined($old) && defined($new=slashup())) {
+	foreach $headline (keys %$new) {
+		sendpage($headline) unless exists $old->{$headline};
+	}
+	sleep $update_period;
+	sleep 60 while ((localtime)[2] < $early || (localtime)[2] >= $late);
+	$old = $new;
+}
+
+sub slashup {
+	system('wget -m http://slashdot.org/slashdot.rdf >/dev/null 2>&1');
+	my $f;
+	my %items;
+	if (($f = IO::File->new("<slashdot.org/slashdot.rdf"))) {
+		while(<$f>) {
+			if (/\<title\>(.*)\<\/title\>/) {
+				$items{$1} = 1;
+				# print "Title: $1\n";
+			}
+		}
+		return \%items;
+	} else {
+		return undef;
+	}
+}
+
+sub sendpage {
+	my $msg = shift;
+	system('pagenet', '--message', "Slashdot: $msg");
+}
+
+sub addpath {
+	my $dir = shift;
+	return unless -d $dir;
+	my @path = (split(':',$ENV{PATH}), $dir);
+	$ENV{PATH} = join ':', @path;
+}

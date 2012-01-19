@@ -1,0 +1,69 @@
+# Lesser powers for intelligent items, each of which can affect the price
+# of the final item.
+---
+- 5
+- name: Item can bless its allies 3/day
+  price: 1000
+- 10
+- name: Item can use faerie fire 3/day
+  price: 1100
+- 13
+- name: Item can cast minor image 1/day
+  price: 2200
+- 20
+- name: Item has deathwatch continually active
+  price: 2700
+- 25
+- name: Item can use detect magic at will
+  price: 3600
+- 31
+- name: Item has 10 ranks in Intimidate
+  price: 5000
+- 33
+- name: Item has 10 ranks in Decipher Script
+  price: 5000
+- 36
+- name: Item has 10 ranks in Knowledge (choose category)
+  price: 5000
+- 40
+- name: Item has 10 ranks in Search
+  price: 5000
+- 45
+- name: Item has 10 ranks in Spot
+  price: 5000
+- 50
+- name: Item has 10 ranks in Listen
+  price: 5000
+- 54
+- name: Item has 10 ranks in Spellcraft
+  price: 5000
+- 60
+- name: Item has 10 ranks in Sense Motive
+  price: 5000
+- 66
+- name: Item has 10 ranks in Bluff
+  price: 5000
+- 72
+- name: Item has 10 ranks in Diplomacy
+  price: 5000
+- 77
+- name: Item can cast major image 1/day
+  price: 5400
+- 80
+- name: Item can cast darkness 3/day
+  price: 6500
+- 83
+- name: Item can use hold person on an enemy 3/day
+  price: 6500
+- 86
+- name: Item can activate zone of truth 3/day
+  price: 6500
+- 89
+- name: Item can use daze monster 3/day
+  price: 6500
+- 95
+- name: Item can use locate object 3/day
+  price: 6500
+- 100
+- name: Item can use cure moderate wounds (2d8+3) on wielder 3/day
+  price: 6500

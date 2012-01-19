@@ -1,0 +1,64 @@
+# Abilities for intelligent items. Arranged as a simple percentile lookup
+# table of dictionaries of "ability" (the primary ability score),
+# "communication" (a string describing the primary mode of communication),
+# "greater_power" (the number of greater powers), "lesser_power"
+# (the number of lesser powers), "price" (the price added to the base
+# price of the item) and "senses" (the type of senses that the item
+# has).
+---
+- 34
+- ability: 12
+  communication: Empathy
+  greater_power: 0
+  lesser_power: 1
+  price: 1000
+  senses: 30 ft. vision and hearing
+- 59
+- ability: 13
+  communication: Empathy
+  greater_power: 0
+  lesser_power: 2
+  price: 2000
+  senses: 60 ft. vision and hearing
+- 79
+- ability: 14
+  communication: Speech
+  greater_power: 0
+  lesser_power: 2
+  price: 4000
+  senses: 120 ft. vision and hearing
+- 91
+- ability: 15
+  communication: Speech
+  greater_power: 0
+  lesser_power: 3
+  price: 5000
+  senses: 60 ft. darkvision and hearing
+- 97
+- ability: 16
+  communication: 'Speech, read'
+  greater_power: 0
+  lesser_power: 3
+  price: 6000
+  senses: 60 ft. darkvision and hearing
+- 98
+- ability: 17
+  communication: 'Speech, read, telepathy'
+  greater_power: 1
+  lesser_power: 3
+  price: 9000
+  senses: 120 ft. darkvision and hearing
+- 99
+- ability: 18
+  communication: 'Speech, read, read magic, telepathy'
+  greater_power: 2
+  lesser_power: 3
+  price: 12000
+  senses: '120 ft. darkvision, blindsense, and hearing'
+- 100
+- ability: 19
+  communication: 'Speech, read, read magic, telepathy'
+  greater_power: 3
+  lesser_power: 4
+  price: 15000
+  senses: '120 ft. darkvision, blindsense, and hearing'

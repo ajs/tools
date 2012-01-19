@@ -1,0 +1,40 @@
+# Bonuses and special abilities for weapons. It is possible to generate lots
+# of spedcial abilities for an item and then get the "specific weapon"
+# result and have to throw them all away. Oh well.
+---
+-
+  -
+    - 70
+    - 10
+    - -1
+  - 1
+  -
+    - 85
+    - 29
+    - -1
+  - 2
+  -
+    - -1
+    - 58
+    - 20
+  - 3
+  -
+    - -1
+    - 62
+    - 38
+  - 4
+  -
+    - -1
+    - -1
+    - 49
+  - 5
+  -
+    - 90
+    - 68
+    - 63
+  - specific
+  -
+    - 100
+    - 100
+    - 100
+  - special

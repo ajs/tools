@@ -1,0 +1,64 @@
+#!/usr/bin/perl
+                                                                                
+use Net::DNS;
+my $res   = Net::DNS::Resolver->new;
+$/="";
+                                                                                
+while(<>){
+        if(/^Received:[\s\S]+?\(((\S+)\s+\[(.*?)\])/m){
+                $host=$2;
+                $ip=$3;
+		if (ok_mx($host,$ip)) {
+			print "PASSED sender=$host\[$ip]\n";
+		} else {
+			print "FAILED sender=$host\[$ip]\n";
+		}
+	}
+}
+
+
+sub ok_mx {
+	my $host = shift;
+	my $ip = shift;
+	my $ans = $res->query($host,"MX");
+	my @ans;
+	if (!defined $ans || ((@ans = $ans->answer)==0)) {
+		while($host =~ /\./) {
+			$host =~ s/^[^.]*\.//;
+			if ($host !~ /\./) {
+				return 0;
+			}
+			$ans = $res->query($host,"SOA");
+			if (defined $ans) {
+				foreach my $auth ($ans->authority) {
+					return ok_mx($auth->name,$ip);
+				}
+				return 0;
+			}
+		}
+		return 0;
+	} else {
+		foreach $rr (@ans) {
+			if ($rr->type eq 'CNAME') {
+				return ok_mx($rr->cname(),$ip);
+			}
+			my $ex = $rr->exchange;
+			$ans = $res->search($ex);
+			if (defined $ans) {
+				my @answers = $ans->answer;
+				foreach my $a (@answers) {
+					if ($a->type eq 'A') {
+						my $addr = $a->address;
+						$addr =~ s/\.\d+$//;
+						if ($ip =~ /^\Q$addr\E/) {
+							return 1;
+						}
+					}
+				}
+				return(@answers?0:1);
+			}
+		}
+		return 0;
+	}
+	return 1;
+}

@@ -1,0 +1,170 @@
+# This table contains either dictionary or string values in several nested
+# tables that determine what kind of curse is placed on an item. The
+# curse generated can include completely replacing the existing generated
+# weapon.
+---
+- 15
+- delusion
+- 35
+- opposite effect or target
+- 45
+-
+  - 33
+  - unreliable
+  - 66
+  - left: 'dependent: '
+    right:
+      - 3
+      - temperature below freezing
+      - 5
+      - temperature above freezing
+      - 10
+      - during the day
+      - 15
+      - during the night
+      - 20
+      - in direct sunlight
+      - 25
+      - out of direct sunlight
+      - 34
+      - underwater
+      - 37
+      - out of water
+      - 45
+      - underground
+      - 55
+      - aboveground
+      - 60
+      - within 10 feet of a random creature type
+      - 64
+      - within 10 feet of a random race or kind of creature
+      - 72
+      - within 10 feet of an arcane spellcaster
+      - 80
+      - within 10 feet of a divine spellcaster
+      - 85
+      - in the hands of a nonspellcaster
+      - 90
+      - in the hands of a spellcaster
+      - 95
+      - in the hands of a creature of a particular alignment
+      - 96
+      - in the hands of a creature of particular gender
+      - 99
+      - on nonholy days or during particular astrological events
+      - 100
+      - more than 100 miles from a particular site
+    special: concatenate
+  - 100
+  - uncontrolled
+- 60
+-
+  - 5
+  - character must eat twice as much as normal.
+  - 11
+  - character must sleep twice as much as normal.
+  - 16
+  - character must undergo a specific quest.
+  - 22
+  - character must sacrifice (destroy) 100 gp worth of valuables per day.
+  - 27
+  - 'character must sacrifice (destroy) 2,000 gp worth of magic items each week.'
+  - 33
+  - character must swear fealty to a particular noble or his family.
+  - 38
+  - character must discard all other magic items.
+  - 44
+  - character must worship a particular deity.
+  - 50
+  - character must change her name to a specific name.
+  - 55
+  - character must add a specific class at the next opportunity if not of that class already.
+  - 61
+  - character must have a minimum number of ranks in a particular skill.
+  - 66
+  - character must sacrifice some part of her life energy (2 points of constitution).
+  - 72
+  - item must be cleansed with holy water each day.
+  - 77
+  - item must be used to kill a living creature each day.
+  - 83
+  - item must be bathed in volcanic lava once per month.
+  - 88
+  - "item must be used at least once a day, or it won't function again."
+  - 94
+  - name: item must draw blood when wielded.
+    type: weapon
+  - 100
+  - item must have a particular spell cast upon it each day.
+- 75
+- left: 'drawback '
+  right:
+    - 4
+    - character's hair grows 1 inch longer. only happens once.
+    - 9
+    -
+      - 50
+      - character shrinks ½ inch
+      - 100
+      - character grows ½ inch taller
+    - 13
+    - temperature around item is 10°F cooler than normal.
+    - 17
+    - temperature around item is 10°F warmer than normal.
+    - 21
+    - character's hair color changes.
+    - 25
+    - character's skin color changes.
+    - 29
+    - 'character now bears some identifying mark (tattoo, weird glow, or the like).'
+    - 32
+    - character's gender changes.
+    - 34
+    - character's race or kind changes.
+    - 35
+    - character is afflicted with a random disease that cannot be cured.
+    - 39
+    - 'item continually emits a disturbing sound (moaning, weeping, screaming, cursing, insults).'
+    - 40
+    - 'item looks ridiculous (garishly colored, silly shape, glows bright pink, . . .).'
+    - 45
+    - character becomes selfishly possessive about the item.
+    - 49
+    - character becomes paranoid about losing the item and afraid of damage occurring to it.
+    - 51
+    - character's alignment changes.
+    - 54
+    - 'character must attack nearest creature (5% chance [01-05 on d%] each day).'
+    - 57
+    - 'character is stunned for 1d4 rounds once item function is finished (or randomly, 1/day).'
+    - 60
+    - "character's vision is blurry (-2 penalty on attack rolls, saves, and skill checks requiring vision)."
+    - 64
+    - character gains one negative level.
+    - 65
+    - character gains two negative levels.
+    - 70
+    - character must make a will save each day or take 1 point of intelligence damage.
+    - 75
+    - character must make a will save each day or take 1 point of wisdom damage.
+    - 80
+    - character must make a will save each day or take 1 point of charisma damage.
+    - 85
+    - character must make a fortitude save each day or take 1 point of constitution damage.
+    - 90
+    - character must make a fortitude save each day or take 1 point of strength damage.
+    - 95
+    - character must make a fortitude save each day or take 1 point of dexterity damage.
+    - 96
+    - 'character is polymorphed into a specific creature (5% chance [01-05 on d%] each day).'
+    - 97
+    - character cannot cast arcane spells.
+    - 98
+    - character cannot cast divine spells.
+    - 100
+    - character cannot cast any spells.
+  special: concatenate
+- 90
+- completely different effect
+- 100
+- special: specific_cursed_item

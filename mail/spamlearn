@@ -1,0 +1,20 @@
+#!/usr/bin/perl
+
+#$saroot='/usr';
+$saroot='/home/ajs/sa';
+$/='';
+$headers = <>;
+if ($headers =~ /^X-Spam-Status:\s*Yes,\s*hits=(\d+(?:\.\d+)?)/mi and
+    $1 > 6) {
+	$saperl="$saroot/lib/site_perl/5.6.0";
+	$saconf="$saroot/share/spamassassin";
+	$ENV{PERL5LIB}="$saperl/auto:$saperl/i386-linux:$saperl";
+	$ENV{PATH}="$saroot/bin:$ENV{PATH}";
+    	close STDOUT; close STDERR; # 2>/dev/null
+    	open P, "spamassassin -d | sa-learn-spam -C $saconf --single" or die;
+	$/="\n";
+	select(P);
+	print $headers;
+	print while <>;
+	close P;
+}

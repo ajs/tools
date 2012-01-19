@@ -1,0 +1,14 @@
+# gp costs for each enhancement bonus level for weapons
+# This is just a straight array of values indexed by the bonus.
+---
+- ~
+- 2000
+- 8000
+- 18000
+- 32000
+- 50000
+- 72000
+- 98000
+- 128000
+- 162000
+- 200000

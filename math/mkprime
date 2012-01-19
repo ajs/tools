@@ -1,0 +1,611 @@
+#!/usr/bin/perl -w
+#
+# A quick-and-dirty example of how to generate primes.
+#
+# The advantage of this approach is that it is purely in Perl and uses
+# the Math::BigInt library to make the large-number handling transparent.
+# The result is that the code is fairly readable, and should be translatable
+# into just about any language (given that a large-number handling system
+# exists or is then written in that language).
+#
+# Written in 2001 (c) by Aaron Sherman. 
+# This code was based on algorithms from Applied Cryptography
+# Thank you, uncle Bruce!
+# This program may be distributed under the same terms as Perl itself.
+#
+# $Id$
+
+use lib $ENV{HOME}."/lib/perl";
+# Gives a warning if Math::BigInt::GMP isn't installed, but still works, just
+# much slower.
+use Math::BigInt lib => 'GMP';
+use Getopt::Long;
+use Pod::Usage;
+use threads;
+use threads::shared;
+
+sub tprint(@);
+
+# Global constants
+our $rm_passes=5;	# How many passes to make SURE the number is prime
+our $bits = 128;	# How many bits in the result
+our $count = 1;		# How many primes
+our $verbose = 0;	# How much tracing info
+our $strong = 0;	# Require strong primes?
+our $no_pseudo = 0;	# Allow pseudo-random numer generation?
+our $tab = '';		# Indentation for $verbose mode
+our $previous;		# Previous value
+our $sequential = 0;	# Do we return sequential primes?
+our $threads = undef;   # If defined, how many threads?
+our @work_results :shared;# Results of testing from workers
+our $printlock :shared; # For coordinated printing
+our $bigintlib;         # BigInt implementation
+
+our $two = Math::BigInt->new(2);
+
+# Static primes, found at the end of this file.
+# Slurp the whole list and split it on whitespace to get the primes.
+# We add 0 in order to force perl to cache the numeric representation
+# of each number now (for arguably no performance win, since perl
+# is pretty smart in this respect).
+our @static_primes = map {$_+0} grep {$_} split /\s+/,
+	join '', grep {/^\s+[\d\s]+$/} <DATA>;
+
+Getopt::Long::Configure('auto_abbrev','bundling');
+GetOptions(
+	'h|?|help' => sub {pod2usage(-verbose => 0)},
+	'man' => sub {pod2usage(-verbose => 2)},
+	'v|verbose' => \$verbose,
+	'V|extra-verbose' => sub {$verbose=2},
+        'B|bigint-library=s' => \$bigintlib,
+	'b|bits=i' => \$bits,
+	'c|count=i' => \$count,
+	'R|no-pseudorandom' => \$no_pseudo,
+	'r|rabin-miller-iterations|iterations=i' => \$rm_passes,
+	's|strong' => \$strong,
+	'S|sequential' => \$sequential,
+        't|threads=i' => \$threads,
+) or pod2usage(-verbose => 0);
+
+$| = 1 if $verbose;
+
+if ($threads && $threads > 1 && !$bigintlib) {
+        # XXX due to a bug in Math::BigInt::GMP which segfaults
+        # when run in parallel threads
+        $bigintlib = 'FastCalc';
+}
+if ($bigintlib) {
+        eval "use Math::BigInt lib => '$bigintlib'";
+}
+if ($strong && $verbose) {
+	print "Note: You reduce the overall number of primes available by using -s\n";
+}
+
+if (!$sequential && @ARGV) {
+        foreach $p (@ARGV) {
+                print "Prime given on command line: $p\n" if $verbose;
+                $p = Math::BigInt->new($p);
+                my($is,$why) = quick_prime_test($p);
+                if (defined($is)) {
+                        print "Quick test: $why\n" if $verbose;
+                } else {
+                        $is = is_prime($p) unless defined($is);
+                        print "\n" if $verbose == 1;
+                }
+                print "Number is ", ($is?"":"not "), "prime:\n$p\n";
+        }
+        exit(0);
+}
+
+if ($sequential && @ARGV) {
+        my $n = shift @ARGV;
+        warn "Only one seed used with -S\n" if @ARGV;
+        if (length($n) > 9) {
+                $n = Math::BigInt->new($n);
+        }
+        $bits = bits_in($n);
+        $n++ if $n % 2 == 0;
+        $previous = $n-2;
+        die "Sorry, starting point was too small\n" if $n < 1;
+}
+
+for($i=0;$i<$count;$i++) {
+	# Ask for a prime of the given bit-length
+        my $new = undef;
+        $new = $previous+2 if $previous;
+	$p = generate_prime($bits,$new);
+	$previous = $p if $sequential;
+	$p = "$p";
+	$p =~ s/^\+//;
+	if ($verbose>1) {
+		print "Generated ", ($strong?"cryptographically strong ":""), "prime: ";
+	} elsif ($verbose) {
+		print "\n";
+	}
+	print "$p\n";
+}
+
+if ($threads) {
+        $_->join() foreach threads->list();
+}
+
+exit 0;
+
+# Given a number of bits (default = 512) generate a prime of that bit-length and
+# return it.
+sub generate_prime {
+	my $bits = shift;
+	my $old = shift;
+	$bits = 512 unless defined $bits;
+	# Generate an initial random number
+	my $p = $old || p_random($bits);
+        # Set up the thread-tracking datastructure:
+        my @threads;
+	# Permute the number so that the high- and low-bits are set
+	unless ($old) { $p |= 1; $p |= (Math::BigInt->new(1)<<($bits-1)); }
+	print "Random starting point: $p\n" if $verbose > 1;
+	# Now loop over p, p+2, p+4, ... testing for primality
+	for(;;$p+=2) {
+                lock(@work_results);
+		if ($verbose > 1) {
+			$str = "$p";
+			$str =~ s/^\+?(\d{5}).*(\d{5})$/$1\[...\]$2/;
+			tprint "Testing potential prime ($str)\n";
+		} elsif ($verbose) {
+			tprint ".";
+		}
+                if ($threads && $threads > 1) {
+                        # Very basic thread management, here. No pooling, etc.
+                        my $result;
+                        if (@threads >= $threads) {
+                                cond_wait(@work_results) while @work_results==0;
+                                foreach $tid (@work_results) {
+                                        @threads = grep {$_->tid() != $tid}
+                                                @threads;
+                                        my $r_thread = threads->object($tid);
+                                        next unless $r_thread;
+                                        print "(-$r_thread)" if $verbose == 1;
+                                        $result ||= $r_thread->join();
+                                }
+                                @work_results = ();
+                        }
+                        if ($result) {
+                                $_->kill('KILL') foreach
+                                        grep {$_->is_running()} @threads;
+                                $_->join() foreach 
+                                        grep {$_->is_joinable()} @threads;
+                                return $result;
+                        }
+                        push @threads, threads->create(sub {
+                                $SIG{'KILL'} = sub { threads->exit() };
+                                my $is = is_prime($p,$bits);
+                                # flag intent to join
+                                lock(@work_results);
+                                push @work_results, threads->tid();
+                                cond_signal(@work_results);
+                                # return the new prime or zero
+                                return( $is ? $p : 0 );
+                        });
+                        print "($threads[$#threads])" if $verbose == 1;
+                } else {
+		        return $p if is_prime($p,$bits);
+                }
+	}
+	die "Can't get here?!";
+}
+
+# Test to see if p is prime. Return true/false
+sub is_prime {
+	my $p = shift;
+	my $bits = shift;
+        $bits = bits_in($p) unless $bits;
+	my $recursive = shift;
+	# Our quick test returns a true/false only if it's sure,
+	# otherwise we must test the long way.
+        my($is, $why) = quick_prime_test($p,$bits);
+        if (defined($is)) {
+                tprint " ", ($is?"":"Not "), "prime: $why\n" if $verbose > 1;
+                return $is;
+        }
+	if ((($is,$why)=rm_prime_test($p)) && $is) {
+                tprint " RM: is prime: $why\n" if $verbose > 1;
+		if (!$recursive && $strong) {
+			# If we require strong primes, test (p-1)/2 for primality too
+			if ($verbose > 1) {
+				$tab .= "\t";
+				tprint " Testing prime for strength\n";
+			} elsif ($verbose) {
+				tprint "(";
+			}
+			my $is_strong = is_prime(($p-1)>>1, $bits, 1);
+			$tab =~ s/.$// if $verbose;
+			tprint ")" if $verbose == 1;
+			return $is_strong;
+		} else {
+			return 1;
+		}
+	} elsif ($verbose > 1) {
+                tprint " RM: not prime: $why\n";
+        }
+	return 0;
+}
+
+# Return true/false if we're sure about the primality of the number.
+# Return undef if we're uncertain. The return value is in the form
+# of a list. The second value is a textual reason.
+sub quick_prime_test {
+	my $p = shift;
+	my $bits = shift;
+        $bits = bits_in($p) unless $bits;
+	my $last_static = $static_primes[-1];
+	my $static_bits = bits_in($last_static);
+	my $small = $bits < $static_bits+1 && $p <= $last_static;
+        return(0,"number is one: not prime") if $p == 1;
+	# Test for divisibility by a low prime
+	foreach my $sp (@static_primes) {
+		return(1,"known, small prime") if $bits < 11 && $p == $sp;
+		return(0,"divisible by small prime $sp") if (($p % $sp) == 0);
+	}
+	return(1,"small number, not prime divisible") if $p < $last_static ** 2;
+	return(undef,"unknown");
+}
+
+# Given a potential prime p, return 1 if the Rabin-Miller test says it's prime and
+# 0 if not. Return value is in the form of a list. Second value of the
+# list is the textual reason.
+sub rm_prime_test {
+	my $p = shift;
+        $p = Math::BigInt->new($p) unless ref($p);
+        # Generate b = the number of 2s in the prime factors of p-1
+	my $b;
+        my $pp = $p-1;
+	my $r = $pp->copy();
+	for($b=0;($r % 2) == 0 ;$b++) {
+		$r /= 2;
+	}
+	# Generate m = (p-1)/2**b
+	my $m = $pp/(Math::BigInt->new(1)<<$b);
+        my $i;
+	RABIN_MILLER_TEST:
+	for($i=0;$i<$rm_passes;$i++) {
+		tprint "$tab Rabin-Miller iteration ", $i+1, "\n" if $verbose>1;
+		tprint "R" if $verbose==1;
+		my $pass = 0;
+		# Generate random integer a < p
+		my $a = p_random(undef,$p);
+		tprint "$tab  a=$a\n" if $verbose>1;
+		my $j=0;
+		# Generate z=a**m mod p
+		$z = $a->copy()->bmodpow($m,$p);
+		if ($z==1 || $z == $pp) {
+                        tprint "*" if $verbose == 1;
+			next RABIN_MILLER_TEST; # Passed
+		}
+		RM_ITERATION:
+		for(;;) {
+			if ($j>0 && $z==1) {
+				tprint "$tab  Not prime\n" if $verbose>1;
+				tprint "-" if $verbose==1;
+				if ($i > 0) {
+					tprint "$tab Rare: ",$i+1,"passes in, Rabin-Miller failed\n" if $verbose>1;
+					tprint "^" if $verbose==1;
+				}
+				return(0,"RM failed on pass ".($i+1));
+			}
+			$j++;
+			if ($j<$b && $z != $pp) {
+				$z->bmodpow(2,$p);
+				tprint "$tab  Next pass\n" if $verbose>1;
+				tprint "+" if $verbose==1;
+				next RM_ITERATION;
+			}
+			if ($z == $pp) {
+				tprint "$tab  Probably prime\n" if $verbose>1;
+				tprint "!" if $verbose==1;
+				next RABIN_MILLER_TEST; # Passed
+			}
+			tprint "$tab  Not prime (dropped out)\n" if $verbose>1;
+			tprint "_" if $verbose==1;
+			if ($i > 0) {
+				tprint "$tab Rare: ",$i+1,"passes in, Rabin-Miller failed\n" if $verbose>1;
+				tprint "^" if $verbose==1;
+			}
+			return(0,"RM failed on pass ".($i+1));
+		}
+	}
+	# p is prime
+	return(1,"$i RM passes indicate primality");
+}
+
+# Returns number of bits in integer parameter (can be Math::BigInt)
+sub bits_in {
+        my($n) = @_;
+        if (ref($n)) {
+                return int($n->copy()->blog($two));
+        } else {
+                return int(log($n)/log(2));
+        }
+}
+			
+# Given a number of bits and an optional maximum value, generate a random number
+# of that many bits, optionally < the maximum.
+sub p_random {
+	my ($bits,$max) = @_;
+	$bits = 512 unless defined $bits;
+	if (defined($max)) {
+		$bits = bits_in($max);
+	}
+	# Read a number of bytes which will fit our required number of
+	# bits.
+	my $bytes = int($bits/8+1);
+	local *R;
+	local $_;
+	if ($no_pseudo || ! open(R,"</dev/urandom")) {
+		if (! open(R, "</dev/random")) {
+			die "$0: Cannot open /dev/random: $!\n";
+		}
+		warn "$0: Could not open /dev/urandom: $!\nMay block...\n"
+			unless $strong;
+	}
+	read(R,$_,$bytes);
+	close R;
+        my $binarystring = substr(unpack("B*", $_),0,$bits);
+        my $n = Math::BigInt->new('0b'.$binarystring);
+	if (defined($max) && $n > $max) {
+                tprint "<" if $verbose == 1;
+		goto &p_random;
+	}
+	return $n;
+}
+
+sub tprint(@) {
+        if ($threads && $threads > 1) {
+                lock($printlock);
+                print "(", threads->self()->tid(), ")" if $verbose > 1;
+                print @_;
+                $|=1;
+        } else {
+                print @_;
+        }
+}
+
+__END__
+
+=head1 NAME
+
+mkprime - Generate large prime numbers randomly
+
+=head1 SYNOPSIS
+
+  mkprime [--help] [--man] [-hvVRsS] [-b <bits>] [-c <count>]
+       [-t <nthreads>] [-r <rabin-miller-iterations>] [<number>]
+
+  mkprime [-v] [-V] [-S] [-r <iterations>] <number>...
+
+       -h              Usage summary
+       -m              Show manual page
+       -v              Verbose mode
+       -V              More vebosity
+       -B <library>    Math::BigInt implementation library name
+       -b <bits>       Number of bits in result [128]
+       -c <count>      Number of primes to generate [1]
+       -r <iterations> Number of iterations of Rabin-Miller prime test
+       -R              Force use of non-pseudorandom number gen
+       -s              Require cryptographically strong primes
+       -S              Sequential numbers instead of random
+       -t <nthreads>   Number of threads to run in parallel
+
+=head1 DESCRIPTION
+
+Gernate a large prime number. This algorithm is used to generate a
+random number which has a high degree of likelyhood to be prime.
+While it is very hard to determine that a number is prime (which
+would require proving that it cannot be factored, a problem believed
+to be as hard as actually factoring it), it is trivial to verify
+that a number is very likely to be prime using a sieve called the
+Rabin-Miller test.
+
+This program uses that test in 5 passess to virtually guarantee that
+the number is a prime. Finding a number that meets that requirement,
+however, can take some time.
+
+=head1 OPTIONS
+
+=over 5
+
+=item C<-h>
+
+=item C<--help>
+
+Generate a short usage summary.
+
+=item C<--man>
+
+Print this manual.
+
+=item C<-v>
+
+=item C<--verbose>
+
+=item C<-V>
+
+=item C<--extra-verbose>
+
+C<-v> or C<--verbose> will turn on some useful, but cryptic
+status information as generation procedes.
+
+C<-V> or C<--extra-verbose> will turn on very verbose output
+that will give a textual description of the progress.
+
+=item C<-B>
+
+=item C<--bigint-library>
+
+Given the name of a library such as FastCalc, force the use of that library.
+
+This primarily exists to override the workaround where C<--threads> disables
+the use of the GMP backend C<Math::BigInt::GMP>. The relevant bug is at:
+
+ https://rt.cpan.org/Ticket/Display.html?id=49336
+
+If that bug has been resolved in your installed version of
+C<Math::BigInt::GMP>, then you can use C<-B GMP -t n> to force the
+use of I<n> threads while continuing to use the fast backend.
+
+If that bug has not been fixed, then expect the above switches to cause
+a segentation fault (internal perl crash).
+
+=item C<-b>
+
+=item C<--bits>
+
+Takes an integer as a parameter and generates a prime of that many
+bits.
+
+=item C<-c>
+
+=item C<--count>
+
+Takes an integer as a parameter and generates that many primes.
+
+=item C<-R>
+
+=item C<--no-pseudorandom>
+
+Prevents the use of the system's pseudo-random number generation.
+This program relies on the system's F</dev/urandom> generator
+by default, but when using this option, the use of F</dev/random>
+is forced. The difference between the two is the behavior
+when the system's entropy pool is depleted. F</dev/random> will
+block, waiting for more entropy, while F</dev/urandom> will fall
+back to a pseudo-random generator, seeded by the last available
+entropy. For most purposes the default should be sufficient.
+
+=item C<-r>
+
+=item C<--rabin-miller-iterations>
+
+=item C<--iterations>
+
+Takes an integer as a parameter and sets the number of Rabin-Miller
+iterations to use to perform. This test is performed on any number
+which might be a prime, and each iteration increases the assurance
+that the number is, in fact a prime. The default is 5, which should
+be sufficient for most purposes.
+
+To quote Wolfram MathWorld:
+
+"Monier (1980) and Rabin (1980) have shown that a composite number
+passes the test for at most 1/4 of the possible bases I<C<a>>. If I<C<N>> multiple
+independent tests are performed on a composite number, then the
+probability that it passes each test is I<C<1/4^N>> or less."
+
+So, the probability of a number being composite after passing 5
+iterations would be 1/4^5 or about 0.01%, which is considered
+sufficient for this application, given that a static search of many
+low prime factors is also applied, further decreasing the chances
+of a false positive.
+
+=item C<-s>
+
+=item C<--strong>
+
+Turn on "strong" mode, where we test C<(p-1)/2> for primality too.
+If both I<C<p>> and I<C<(p-1)/2>> are prime, then the number is
+well suited for cryptographic applications.
+
+=item C<-S>
+
+=item C<--sequential>
+
+When used in combination with C<--count>, specifies that sequential
+primes should be generated, rather than picking a random starting point
+for each subsequent prime.
+
+Normally, when a number is specified on the command-line, it is tested
+for primality alone. However, with the C<--sequential> option, that
+number is treated as a the starting point, and sequential primes are
+searched for, from that point.
+
+See B<THREADING ISSUES> for information on the combination of
+C<--threads> and this argument.
+
+=item C<-t>
+
+=item C<--threads>
+
+Given a number, sets that number as the maximum number of threads. The
+default is 1. Each number to be considered is evaluated in its own thread.
+There is no thread pooling, but fairly few threads need to be created when
+compared the amount of raw computation going on, so the thread creation
+overhead should be very small.
+
+See B<THREADING ISSUES> for information on the combination of
+C<--threads> and this argument.
+
+=back
+
+=head1 THREADING ISSUES
+
+When using C<--threads> to test multiple potential primes at once, it is
+possible to also use C<--sequential>. However, when you use these two
+options together, the guarantees given buy C<--sequential> are modified.
+You are only guaranteed that each reported result will be larger than the
+previous. Intermediate results may be lost.
+
+This can be especially problematic when searching from a fixed point. For
+example, here is the result of C<mkprime -S -c 8 50>:
+
+ 53
+ 59
+ 61
+ 67
+ 71
+ 73
+ 79
+ 83
+
+Now here is the same command-line with C<-t 2> added:
+
+ 53
+ 59
+ 67
+ 71
+ 79
+ 83
+ 89
+ 101
+
+It is important to be aware of this limitation so that assertions are not
+made about the sequential nature of results when running in threaded mode.
+
+The results are otherwise just as correct, just not sequential.
+
+=head1 AUTHOR
+
+Written in 2001 by Aaron Sherman.
+
+Permission to use this program is granted under the the same terms
+as Perl itself (see L<http://perldoc.perl.org/perlartistic.html>)
+
+=head1 SEE ALSO
+
+L<perl>, L<Math::BigInt>, L<Math::Prime::XS> L<Crypt::Primes>
+
+=cut
+
+Primes:
+
+            3 5 7 9 11 13 15 17 19 23 25 29 31 35 37 41 43 47 49 53 59
+            61 67 71 73 79 83 89 97 101 103 107 109 113 121 127 131 137
+            139 143 149 151 157 163 167 169 173 179 181 191 193 197 199
+            211 223 227 229 233 239 241 251 257 263 269 271 277 281 283
+            289 293 307 311 313 317 323 331 337 347 349 353 359 361 367
+            373 379 383 389 397 401 409 419 421 431 433 439 443 449 457
+            461 463 467 479 487 491 499 503 509 521 523 541 547 557 563
+            569 571 577 587 593 599 601 607 613 617 619 631 641 643 647
+            653 659 661 673 677 683 691 701 709 719 727 733 739 743 751
+            757 761 769 773 787 797 809 811 821 823 827 829 839 853 857
+            859 863 877 881 883 887 907 911 919 929 937 941 947 953 967
+            971 977 983 991 997
+

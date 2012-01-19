@@ -1,0 +1,120 @@
+/* The core report table */
+table.itemtable {
+    border-collapse: collapse;
+    border-width: 1px;
+    border-style: outset;
+    font: small arial, helvetica, sans-serif;
+}
+
+table.itemtable th {
+    font: bold small arial, helvetica, sans-serif;
+    white-space: nowrap;
+    padding-right: 1em;
+    padding-left: 1em;
+    text-align: center;
+    border-style: outset;
+    border-width: 1px;
+    border-bottom-width: 2px;
+    background-color: #d0d0d0;
+}
+table.itemtable td {
+    font: small courier, "courier new", monospace;
+    white-space: nowrap;
+    padding-right: 1em;
+    padding-left: 1em;
+    padding-top: 0.25em;
+    border-style: outset;
+    text-align: right;
+    vertical-align: top;
+    border-width: 0px;
+}
+table.itemtable tr.even td {
+    background-color: #d0ffd0;
+}
+table.itemtable tr.odd td {
+    background-color: #ffffff;
+}
+
+table.itemtable td.namedata {
+    font: bold small arial, helvetica, sans-serif;
+    white-space: normal;
+    padding-right: 0.5em;
+    padding-left: 0.5em;
+    padding-top: 0.25em;
+    border-style: outset;
+    border-width: 0px;
+    text-align: left;
+    vertical-align: top;
+}
+
+/* Text presentation */
+.itemlink_0 { color: gray; }
+.itemlink_1 { color: black; }
+.itemlink_2 { color: green; }
+.itemlink_3 { color: blue; }
+.itemlink_4 { color: purple; }
+.itemlink_5 { color: orange; }
+.itemlink_6 { color: red; }
+.price_gold {
+    background: url("images/gold.png") center right no-repeat;
+    padding-right: 15px;
+}
+.price_silver {
+    background: url("images/silver.png") center right no-repeat;
+    padding-right: 15px;
+}
+.price_copper {
+    background: url("images/copper.png") center right no-repeat;
+    padding-right: 15px;
+}
+
+/* Graphics */
+.chartimage {
+    background-color: white;
+}
+
+/* Page structure */
+.sidebar {
+    vertical-align: top;
+    width: 20%;
+}
+.bodycell {
+    vertical-align: top;
+    width: 60%;
+}
+.adcell {
+    vertical-align: top;
+    width: 20%;
+}
+.logo {
+    margin: 2em;
+}
+.search {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.headsummary {
+    margin-top: 1em;
+    clear: both;
+    font-size: small;
+}
+.google_ad {
+    float: right;
+}
+.footnote {
+}
+.footer {
+    text-align: center;
+}
+
+.legal {
+    border: thin red solid;
+    margin: 1em;
+    padding: 1em;
+}
+
+.badgecode {
+    border: thin blue solid;
+    margin: 1em;
+    padding: 0.25em;
+}

@@ -1,0 +1,405 @@
+#!/usr/bin/perl
+use strict;
+
+use Pod::Usage;
+use POSIX;
+use DBI;
+use URI;
+use IO::Handle;
+use List::Util qw(sum);
+use Date::Parse qw(str2time);
+use Getopt::Long;
+use Pod::Usage;
+
+$|=1;
+
+my $database = 'wowitems';
+my $driver = 'mysql';
+my $host = 'localhost';
+my $user = 'root';
+my $pass = undef;
+my %sql_statement_handle_cache;
+my $dsn = "DBI:$driver:database=$database;host=$host";
+my $dbh = DBI->connect($dsn,$user,$pass) or die "$0:$dsn: Failed: $DBI::errstr";
+
+my $sth;
+my $row;
+
+our $test_mode;
+our $test_limit = "";
+GetOptions ( 'test=s' => \$test_mode,
+	     'limit=i' => \$test_limit
+) or pod2usage(-verbose=>0);
+
+if ($test_limit) {
+    $test_limit = "limit $test_limit";
+}
+
+my %byserver;
+my %byfaction;
+my %byitem;
+my $last; # Last processed date
+my $start_date = shift @ARGV;
+my $clear_table =  0;
+unless ($start_date) {
+    $start_date = '2006-01-01';
+    $clear_table = 1;
+}
+
+print "Prepping temporary tables and handles... ";
+prep_new($dbh,"price_history_by_server");
+prep_new($dbh,"price_history_by_faction");
+prep_new($dbh,"price_history_by_item");
+prep_new($dbh,"item_generic_byitem");
+prep_new($dbh,"item_generic_byfaction");
+prep_new($dbh,"item_generic_byserver");
+# XXX - for now, we're just doing the generic prices by itemid, but
+#       the code is here to start doing per-suffix/enchant pricing someday.
+#prep_new($dbh,"item_byitem");
+#prep_new($dbh,"item_byfaction");
+#prep_new($dbh,"item_byserver");
+prep_new($dbh,"item_base_names");
+unless($clear_table) {
+    call_sql($dbh,"copy old price history by item records",
+        qq{insert into price_history_by_item_new select * from price_history_by_item where `day` < ?}, $start_date);
+    call_sql($dbh,"copy old price history by faction records",
+        qq{insert into price_history_by_faction_new select * from price_history_by_faction where `day` < ?}, $start_date);
+    call_sql($dbh,"copy old price history by server records",
+        qq{insert into price_history_by_server_new select * from price_history_by_server where `day` < ?}, $start_date);
+}
+print "Done.\n";
+
+
+print "Creating item index tables:\n";
+print "\titem_base_names...\n";
+# Find the "base names". e.g. when an item is called "Foo of the Bear", the
+# base name associated with the itemid is "Foo", and "of the Bear" is added
+# on because it has a suffixid. When we insert the name into the item_generic
+# tables, it should just have the base name.
+my $sth_base = call_sql($dbh,"item base names",
+    qq{select distinct name, itemid, suffix from auc_scan_item where suffix != 0 and name != "" $test_limit});
+while((my $row = $sth_base->fetchrow_hashref())) {
+    my $name = $row->{name};
+    my $suf_sth = call_sql($dbh,"suffix select",qq{select name from item_suffix where id = ?}, $row->{suffix});
+    next unless $suf_sth;
+    (my $sname) = $suf_sth->fetchrow_array();
+    next unless $sname;
+    $name =~ s/\s*\Q$sname\E\s*$//i or next;
+    # XXX why do I need ignore, here? Shouldn't these be unique?
+    call_sql($dbh,"base name insert",
+	qq{insert ignore into item_base_names_new (itemid, name) values (?,?)},
+	$row->{itemid}, $name);
+}
+call_sql($dbh,"already base names insert",
+    qq{insert ignore into item_base_names_new select itemid, name from auc_scan_item where suffix = 0 and name != "" $test_limit});
+
+#print "\titem_byitem...\n";
+#call_sql($dbh,"item_byitem update",
+#	 q{
+#		insert into item_byitem_new
+#		select name, itemid, suffix, factor, enchant,
+# 			max(quality) as quality, min(itype) as itype,
+#		        min(isub) as isub, min(ulevel) as ulevel,
+#			min(ilevel) as ilevel, min(isequip) as isequip,
+#			min(day) as first_seen, max(day) as last_seen,
+#			count(*) as `count`
+#		from auc_scan_item
+#		group by name, itemid, suffix, factor, enchant});
+
+print "\titem_generic_byitem...\n";
+call_sql($dbh,"item_generic_byitem update",
+         qq{
+                insert into item_generic_byitem_new
+                select b.name as name, b.itemid,
+                        max(quality) as quality, min(itype) as itype,
+                        min(isub) as isub, min(ulevel) as ulevel,
+                        min(ilevel) as ilevel, min(isequip) as isequip,
+                        min(day) as first_seen, max(day) as last_seen,
+                        count(*) as `count`, stddev(price)/avg(price) as volatility, 0 as price
+                from auc_scan_item a inner join item_base_names_new b
+		    on a.itemid = b.itemid
+                group by b.name, b.itemid $test_limit});
+
+#print "\titem_byfaction...\n";
+#call_sql($dbh,"item_byfaction update",
+#         q{
+#                insert into item_byfaction_new
+#                select name, itemid, suffix, factor, enchant,
+#                        faction,
+#                        max(quality) as quality, min(itype) as itype,
+#                        min(isub) as isub, min(ulevel) as ulevel,
+#                        min(ilevel) as ilevel, min(isequip) as isequip,
+#                        min(day) as first_seen, max(day) as last_seen,
+#                        count(*) as `count`
+#                from auc_scan_item
+#                group by name, itemid, faction, suffix, factor, enchant});
+
+print "\titem_generic_byfaction...\n";
+call_sql($dbh,"item_generic_byfaction update",
+         qq{
+                insert into item_generic_byfaction_new
+                select b.name, b.itemid,
+                        a.faction,
+                        max(quality) as quality, min(itype) as itype,
+                        min(isub) as isub, min(ulevel) as ulevel,
+                        min(ilevel) as ilevel, min(isequip) as isequip,
+                        min(day) as first_seen, max(day) as last_seen,
+                        count(*) as `count`, stddev(price)/avg(price) as volatility, 0 as price
+                from auc_scan_item a inner join item_base_names_new b
+		    on a.itemid = b.itemid
+                group by b.name, b.itemid, a.faction $test_limit});
+
+#print "\titem_byserver...\n";
+#call_sql($dbh,"item_byserver update",
+#         q{
+#                insert into item_byserver_new
+#                select name, itemid, suffix, factor, enchant,
+#                        realm, faction,
+#                        max(quality) as quality, min(itype) as itype,
+#                        min(isub) as isub, min(ulevel) as ulevel,
+#                        min(ilevel) as ilevel, min(isequip) as isequip,
+#                        min(day) as first_seen, max(day) as last_seen,
+#                        count(*) as `count`
+#                from auc_scan_item
+#                group by name, itemid, realm, faction, suffix, factor, enchant});
+
+print "\titem_generic_byserver...\n";
+call_sql($dbh,"item_generic_byserver update",
+         qq{
+                insert into item_generic_byserver_new
+                select b.name, b.itemid,
+                        a.realm, a.faction,
+                        max(quality) as quality, min(itype) as itype,
+                        min(isub) as isub, min(ulevel) as ulevel,
+                        min(ilevel) as ilevel, min(isequip) as isequip,
+                        min(day) as first_seen, max(day) as last_seen,
+                        count(*) as `count`, stddev(price)/avg(price) as volatility, 0 as price
+                from auc_scan_item a inner join item_base_names_new b
+		    on a.itemid = b.itemid
+                group by b.name, b.itemid, a.realm, a.faction $test_limit});
+
+my $byserver_sth = $dbh->prepare("insert into price_history_by_server_new (itemid, realm, faction, day, rolling_25, rolling_50, rolling_75, rolling_average, rolling_standard_deviation, rolling_auction_count, average, standard_deviation, auction_count) values (?,?,?,?,?,?,?,?,?,?,?,?,?)") or die "Prepare byserver: $DBI::errstr";
+my $byfaction_sth = $dbh->prepare("insert into price_history_by_faction_new (itemid, faction, day, rolling_25, rolling_50, rolling_75, rolling_average, rolling_standard_deviation, rolling_auction_count, average, standard_deviation, auction_count) values (?,?,?,?,?,?,?,?,?,?,?,?)") or die "Prepare byfaction: $DBI::errstr";
+my $byitem_sth = $dbh->prepare("insert into price_history_by_item_new (itemid, day, rolling_25, rolling_50, rolling_75, rolling_average, rolling_standard_deviation, rolling_auction_count, average, standard_deviation, auction_count) values (?,?,?,?,?,?,?,?,?,?,?)") or die "Prepare byitem: $DBI::errstr";
+
+print "\nStarting primary select...\n";
+my $sth = call_sql($dbh, "big select",
+    qq{ select
+	itemid, realm, faction, price/`count`/10000.0 as `price`,
+	`day`, seller
+       from auc_scan_item
+       where
+	`day` >= date_sub(?, interval 20 day) and
+	realm > "" and price > 0
+       order by `day`
+       $test_limit
+      },$start_date);
+my $rowcount = 0;
+my %seentoday;
+while((my $row = $sth->fetchrow_hashref())) {
+    # Sanity check
+    next unless $row->{day} && $row->{realm} && $row->{seller};
+    my $realm = $row->{realm};
+    my $price = $row->{price};
+    my $faction = $row->{faction};
+    my $server = "$realm/$faction";
+    my $itemid = $row->{itemid};
+    my $day = $row->{day};
+    next if $seentoday{"$server:$row->{seller}:$itemid:$price"}++;
+    print "." if $rowcount++ % 1000 == 0;
+    if ($last && $last ne $day) {
+    	%seentoday = ();
+	foreach my $xserver (keys %byserver) {
+	    update_stats($byserver{$xserver},$byserver_sth,[split /\//, $xserver],$last);
+	}
+	foreach my $xfaction (keys %byfaction) {
+	    update_stats($byfaction{$xfaction},$byfaction_sth,[$xfaction],$last);
+	}
+	update_stats(\%byitem,$byitem_sth,[],$last);
+	print "$last updated\n";
+    }
+    # Simplify the hash for storage
+    push @{$byserver{$server}{$itemid}{$day}}, $row;
+    push @{$byfaction{$faction}{$itemid}{$day}}, $row;
+    push @{$byitem{$itemid}{$day}}, $row;
+    $last = $day;
+}
+if ($last) {
+    foreach my $xserver (keys %byserver) {
+	update_stats($byserver{$xserver},$byserver_sth,[split /\//, $xserver],$last);
+    }
+    foreach my $xfaction (keys %byfaction) {
+	update_stats($byfaction{$xfaction},$byfaction_sth,[$xfaction],$last);
+    }
+    update_stats(\%byitem,$byitem_sth,[],$last);
+
+} else {
+    print "\n";
+}
+
+print "\nUpdating latest pricing in item tables... ";
+foreach my $pass (["item", []], ["faction", ["faction"]],
+		  ["server", ["faction", "realm"]]) {
+    my($name, $fields) = @$pass;
+    print "by $name... ";
+    my $extras = join(", ", @$fields);
+    $extras .= ", " if $extras;
+    call_sql($dbh, "Item pricing update first pass by $name",
+	qq{
+	    create temporary table item_timeline_$name
+	    select $extras itemid,
+	    max(day) as `day`,
+	    max(rolling_50) as price,
+	    max(rolling_standard_deviation) as volatility
+	    from price_history_by_$name\_new
+	    where auction_count > 0
+	    group by $extras itemid
+	});
+    call_sql($dbh, "Adding indexes to pricing temp table",
+	     qq{ alter table item_timeline_$name add primary key (
+		    $extras itemid ),
+		 add index ( `day` ) });
+    my $join_extras = join(" and ", map { "t1.$_ = t2.$_" } @$fields);
+    $join_extras .= " and " if $join_extras;
+    call_sql($dbh, "Item pricing update second pass by $name",
+	qq{
+	    update item_timeline_$name t1
+		inner join price_history_by_$name\_new t2
+		    on t1.itemid = t2.itemid and $join_extras
+			t1.day = t2.day
+	    set
+		t1.price = t2.rolling_50,
+		t1.volatility = t2.rolling_standard_deviation /
+				t2.rolling_average
+	});
+    call_sql($dbh, "Item pricing update final pass by $name",
+	qq{
+	    update item_generic_by$name\_new t1
+		inner join item_timeline_$name t2
+		    on $join_extras t1.itemid = t2.itemid
+		    set
+			t1.last_seen = t2.day,
+			t1.price = t2.price,
+			t1.volatility = t2.volatility
+	});
+}
+print "Done.\n";
+
+print "Installing newly updated tables.\n";
+install_new($dbh,"item_base_names");
+install_new($dbh,"price_history_by_server");
+install_new($dbh,"price_history_by_faction");
+install_new($dbh,"price_history_by_item");
+install_new($dbh,"item_generic_byitem");
+install_new($dbh,"item_generic_byfaction");
+install_new($dbh,"item_generic_byserver");
+#install_new($dbh,"item_byitem");
+#install_new($dbh,"item_byfaction");
+#install_new($dbh,"item_byserver");
+
+sub prep_new {
+    my $dbh = shift;
+    my $table = shift;
+    my $new = "$table\_new";
+    call_sql($dbh,"prep new: drop $new","drop table if exists $new");
+    call_sql($dbh,"prep new: create $new","create table $new like $table");
+}
+
+sub install_new {
+    my $dbh = shift;
+    my $table = shift;
+    my $new = "$table\_new";
+    my $bak = "$table\_bak";
+    call_sql($dbh,"install new: drop $bak","drop table if exists $bak");
+    call_sql($dbh,"install new: rename $table","rename table $table to $bak,
+	$new to $table");
+}
+
+sub call_sql {
+  my $dbh = shift;
+  my $name = shift;
+  my $sql = shift;
+  my $sth;
+  if (exists $sql_statement_handle_cache{$sql}) {
+    $sth = $sql_statement_handle_cache{$sql};
+  } else {
+    $sth = $sql_statement_handle_cache{$sql} =
+      $dbh->prepare($sql);
+    die "$0: Cannot parse SQL for $name: $DBI::errstr\n" unless $sth;
+  }
+  $sth->execute(@_) or
+        die "$0: Failed to execute $name: $DBI::errstr\n";
+  return $sth;
+}
+
+sub update_stats {
+    my ($data,$sth,$extra,$last) = @_;
+    my $period = 60*60*24*20; # 20 days in seconds
+    my $prev = strftime("%Y-%m-%d",localtime(str2time($last)-$period));
+    foreach my $itemid (keys %$data) {
+	my $itemhist = $data->{$itemid};
+	# Throw away data after 1 period
+	my $item_last;
+	foreach my $date (sort keys %$itemhist) {
+	    if ($date le $prev) {
+		delete $itemhist->{$date};
+	    } else {
+		$item_last = $date;
+	    }
+	}
+	next if $last lt $start_date || !$item_last || $item_last le $prev;
+	my @prices = map {map {$_->{price}} @$_} values %$itemhist;
+	my $roll_count = @prices;
+	next unless $roll_count;
+	my($roll_25,$roll_50,$roll_75) = medians(\@prices);
+	my $roll_mean = mean(\@prices);
+	my $roll_stdd = stddev(\@prices,$roll_mean);
+	my($count,$mean,$stdd) = (0,0,0);
+	if (exists($itemhist->{$last}) && @{$itemhist->{$last}}) {
+	    @prices = map {$_->{price}} @{$itemhist->{$last}};
+	    $count = @prices;
+	    $mean = mean(\@prices);
+	    $stdd = stddev(\@prices,$mean);
+	}
+	$sth->execute($itemid,@$extra,$last,$roll_25,$roll_50,$roll_75,
+		      $roll_mean,$roll_stdd,$roll_count,$mean,$stdd,$count) or
+		warn "Error on insert: $DBI::errstr";
+    }
+}
+sub medians {
+    my $array = shift;
+    my @sorted = sort {$a<=>$b} @$array;
+    if (@sorted == 0) {
+	return (0,0,0);
+    } elsif (@sorted == 1) {
+	return (($sorted[0]) x 3);
+    } elsif (@sorted == 2) {
+	return ($sorted[0],$sorted[0],$sorted[1]);
+    } elsif (@sorted == 3) {
+	return (($sorted[1]) x 3);
+    }
+    my $i25 = int(@sorted/4);
+    my $i50 = int(@sorted/2);
+    my $i75 = int((@sorted/4)*3);
+    return @sorted[$i25,$i50,$i75];
+}
+sub mean {
+    my $array = shift;
+    my $count = @$array;
+    return 0 unless $count;
+    return $array->[0] if $count == 1;
+    my $total = 0;
+    $total += $_ foreach @$array;
+    return $total/$count;
+}
+sub stddev {
+    my $array = shift;
+    my $mean = shift;
+    my $count = @$array;
+    return 0 unless $count > 1;
+    $mean = mean($array) unless defined $mean;
+    my $total = 0;
+    $total += ($_-$mean)**2 foreach @$array;
+    return sqrt(abs($total/$count));
+}
+__END__

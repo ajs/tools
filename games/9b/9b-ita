@@ -1,0 +1,620 @@
+#!/usr/bin/perl
+
+use strict;
+$|=1; # line buffering on stdout
+our $verbose=0;
+
+main(); # See below, after the Board class
+exit(0);
+
+# First, define the class Board, which implements a board and simple
+# primatives for determing its state (threats, winning conditions, etc).
+# The primary interface to a board is the "cell" method which takes
+# a position and an optional player mark to place. It returns the
+# state of that cell.
+
+package Board;
+
+use strict;
+
+# Constants are part of the interface.
+use constant mark_x => 1;
+use constant mark_o => 2;
+use constant mark_empty => 0;
+use constant other_player => [mark_empty, mark_o, mark_x];
+use constant wins_one =>
+	[ [0,1,2], [3,4,5], [6,7,8],
+	  [0,3,6], [1,4,7], [2,5,8],
+	  [0,4,8], [2,4,6] ];
+use constant wins_by_board => [ map {
+    	my $b = $_;
+    	[ map { [ map { $b*9+$_ } @$_ ] } @{ wins_one; } ];
+    } 0 .. 8 ];
+use constant wins_all => [ map {@$_} @{ wins_by_board; } ];
+
+use Class::Struct 'Board' => {
+    # A bit-vector of 2-bit values (mark_x, mark_o or mark_empty)
+    # corresponding to each of the 81 board positions.
+    cells => '*$',
+    lastplayer => '$',
+    lastcell => '$',
+    force => '$',
+    winner => '$',
+    # A bit-vector of 4-bit values. An array indexed by the mark_*
+    # constants and then by the board number. The 4-bit value
+    # indicates how many threats that player is making on that
+    # board.
+    threats => '*$'
+};
+
+sub clone {
+    my($self) = @_;
+    my $new = Board->new(cells => ${$self->cells()},
+    			 lastplayer => $self->lastplayer,
+    			 lastcell => $self->lastcell,
+			 force => $self->force,
+			 winner => $self->winner(),
+			 threats => ${$self->threats()} );
+    return $new;
+}
+
+sub cell {
+    my($self,$index,$new,$noupdate) = @_;
+    my $cells = $self->cells;
+    $cells = "\0" x 81 unless defined $cells;
+    my $value = vec($$cells,$index,2);
+    if (@_ == 3 || @_ == 4) {
+	vec($$cells,$index,2) = $new;
+	my $b = boardof($index);
+	my $i = boardind($index);
+	unless($noupdate) {
+		$self->lastplayer($new);
+		$self->lastcell($index);
+		$self->force($i); # Force next move on sub-board $i
+	}
+	foreach my $win (@{ wins_one; }) {
+	    last unless defined($new) && $new != mark_empty;
+	    my $relevant = 0;
+	    my @owner = (0,0,0);
+	    my $other = Board::other_player->[$new];
+	    foreach my $pos (@$win) {
+		if ($pos == $i) {
+		    $relevant = 1;
+		    $owner[$new]++;
+		} else {
+		    $owner[$self->cell($b*9+$pos) + 0]++;
+		}
+	    }
+	    next unless $relevant;
+	    if ($owner[$new] == 3) {
+		$self->winner($new);
+		last;
+	    } elsif ($owner[$new] == 2 && $owner[$other] == 0) {
+		$self->threat_by_board($b,$new,1);
+	    } elsif ($owner[$new] == 1 && $owner[$other] == 2) {
+		$self->threat_by_board($b,$other,-1);
+	    }
+	}
+    }
+    return $value;
+}
+
+sub legal_moves {
+    my($self,$mark) = @_;
+    my @legal;
+    my $cells = $self->cells;
+    my $force = $self->force;
+    my ($min,$max);
+    if (defined $force) {
+	($min,$max) = ($force*9,($force+1)*9);
+    } else {
+	($min,$max) = (0,9*9);
+    }
+    for(my $i=$min;$i<$max;$i++) {
+        push @legal, $i if vec($$cells,$i,2) == mark_empty;
+    }
+    return @legal;
+}
+
+sub open_moves_on_board {
+    my($self,$board) = @_;
+    my $open = 0;
+    foreach my $ind (0 .. 8) {
+	#$open++ if $self->cell_byboard($board,$ind);
+	if (vec(${ $self->cells }, $board*9+$ind, 2) == mark_empty) {
+	    $open++;
+	}
+    }
+    return $open;
+}
+
+# $threat_count = $board->threat_by_board($boardnum,$player);
+# $board->threat_by_board($boardnum,$player,1); # increment
+# $board->threat_by_board($boardnum,$player,-1); # decrement
+sub threat_by_board {
+    my($self,$board,$mark,$value) = @_;
+    my $old = vec(${$self->threats},$board+9*$mark,4);
+    if (@_ == 4) {
+	vec(${$self->threats},$board+9*$mark,4) += $value;
+    }
+    return $old;
+}
+
+sub cell_byboard {
+    my($self,$board,$cell,$new) = @_;
+    my $index = $board*9+$cell;
+    if (@_ == 4) {
+	return $self->cell($index,$new);
+    } else {
+	return $self->cell($index);
+    }
+}
+
+# Return a string representation of the board for human viewing
+sub stringify {
+    my $self = shift;
+    my $out = "";
+    for(my $outerrow = 0; $outerrow < 3; $outerrow++) {
+	for(my $innerrow = 0;$innerrow < 3; $innerrow++) {
+	    for(my $outercol = 0; $outercol < 3 ; $outercol++) {
+		for(my $innercol = 0;$innercol < 3; $innercol++) {
+		    my $cell = $self->cell_byboard($outerrow*3+$outercol,
+				    $innerrow*3+$innercol);
+		    my $char = ( $cell == mark_empty ? ' ' :
+				( $cell == mark_x ? 'x' : 'o' ) );
+		    $out .= " $char ";
+		    $out .= "|" unless $innercol == 2;
+		}
+		$out .= " " unless $outercol == 2;
+	    }
+	    $out .= "\n";
+	    $out .= join(" ", (join("+", (("---") x 3) )) x 3 ) . "\n" unless $innerrow == 2;
+	}
+	$out .= "\n" unless $outerrow == 2;
+    }
+    return $out;
+}
+
+# Instantiate a new board from a string representation
+sub from_string {
+	my($self,$gamedata) = @_;
+	if ($gamedata =~ /^([XO]):(\d),(\d):(\d+)$/) {
+		my $lastplayer = $1;
+		my $lastboard = $2;
+		my $lastindex = $3;
+		my $raw = $4;
+		$lastplayer = (($lastplayer =~ /^x/i)?mark_x:mark_o);
+		my $new = $self->new(lastplayer=>$lastplayer,
+				     lastcell=>($lastboard*9+$lastindex),
+				     force=>$lastindex,
+				     cells => "",
+				     threats => "");
+		for(my $cell = 0;$cell<81;$cell++) {
+			my $state = substr($raw,$cell,1)+0;
+			$new->cell($cell,$state,1) if $state;
+		}
+		return $new;
+	} else {
+		die "Cannot read gamedata: $gamedata\n";
+	}
+}
+
+# Produce a string that from_string can read
+sub dump_string {
+	my($self) = @_;
+	my $state = "";
+	$state .= $self->cell($_) foreach 0 .. 80;
+	my $lastplayer = player_name($self->lastplayer);
+	return join ":", $lastplayer, coords_of($self->lastcell),
+		$state;
+}
+
+# Utility functions
+sub boardof {
+    my($index) = @_;
+    return int($index/9);
+}
+sub boardind {
+    my($index) = @_;
+    return $index % 9;
+}
+sub coords_of {
+    my($index) = @_;
+    my $board = boardof($index);
+    my $boardind = boardind($index);
+    return "$board,$boardind";
+}
+
+sub player_name {
+    my($mark) = @_;
+    return ((!$mark || $mark == mark_empty) ? "none" :
+		    $mark == mark_x ? "X" : "O");
+}
+
+package main;
+
+use Time::HiRes qw(time);
+use List::Util qw(shuffle);
+use IO::Socket::INET;
+use Socket;
+
+use constant SPECULATION_TRIALS => 2;
+
+# This routine is the top-level of the program,
+# and is called with the command-line args. It
+# implements ITA's 9BT3 protocol over a socket
+# to the host and port listed on the command-
+# line
+sub main {
+    use Getopt::Long;
+    my $play_self = 0;
+    my $resign=1000; # Almost never resign
+    my $board; # Will be initialized when we are told to start
+    my $dump_game = 0;
+    my $usage = "Usage: $0 [--verbose] [--solo] [--noresign]
+	[--pesimistic] [--resignation-factor=n]
+	[--game state]
+	[host:port]
+
+     --verbose		Verbose server-side echo
+     --solo		Play against myself (host:port not required)
+     --noresign		Never resign (even when no win exists)
+     --pessimistic	Resign if the game looks lost
+     --game state	Provide a game state to initialize a board
+     --dump-game	After performing a single move, game state
+     			will be dumped in the same format as --game
+			requires.
+     --resignation-facotr=N
+			A range from 5 (give up easy) up. 20 is
+			what --pessimistic sets. More than 50 is
+			probably pointless.
+    host:port		The host and port of the ITA 9B3T server.\n";
+
+    GetOptions(
+	'v|verbose' => \$verbose,
+	's|solo' => \$play_self,
+	'--game=s' => sub { $board = Board->from_string($_[1]) },
+	# Don't even resign if our next move forces us to lose
+	'noresign' => sub {$resign=0},
+	# Resign when it looks bleak
+	'pesimistic|surrender-monkey' => sub {$resign=20},
+	# Set an arbitrary resignation factor (~5 to 30 is useful)
+	'resignation-factor=i' => \$resign,
+	'game=s' => sub { $board = Board->from_string($_[1]);
+			  $play_self = 1 },
+	'dump-game' => sub { $dump_game = 1; $play_self = 1; }
+    ) or die "Usage: $0 [--verbose] host:port\n\tor $0 [--verbose] --solo\n";
+
+    if ($play_self) {
+	print "Solitare mode.\n";
+	$board = Board->new(cells => "", threats => "") unless $board;
+	for(;;) {
+	    if (!defined($board->lastplayer) ||
+	        $board->lastplayer == Board::mark_o) {
+	    	solo_move($board,Board::mark_x,$resign,$dump_game) || last;
+	    }
+	    solo_move($board,Board::mark_o,$resign,$dump_game) || last;
+	}
+	print $board->stringify();
+	my $win = $board->winner();
+	print "Winner: ", ((!$win || $win == Board::mark_empty) ? "none" :
+		$win == Board::mark_x ? "X" : "O"), "\n";
+	exit 0;
+    }
+    my($host,$port) = @ARGV;
+    if (!$port and $host =~ s/:(\d+)//) {
+	$port = $1;
+    }
+    my $sock = IO::Socket::INET->new(
+	PeerAddr => $host,
+	PeerPort => $port,
+	Proto    => "tcp",
+	Type     => SOCK_STREAM,
+	Blocking => 1);
+    die "Cannot connect to server: $!\n" unless $sock;
+    my $side;
+    my $side_str;
+    my $other_side;
+    my $timeleft;
+    my $reftime;
+    my $over = 0;
+    my $resigned = 0;
+    my $server_winner;
+    while(<$sock>) {
+	my $mymove;
+	print "Server: $_" if $verbose or /^\S|WIN|WON|LOSE|RESIG|TIME/;
+	if (/^\s/) {
+	    $server_winner = $1 if /\b([XO]) HAS WON/;
+	    next; # info line
+	} elsif (/^N ([XO]) (\d+)/) {
+	    $over = 0;
+	    $resigned = 0;
+	    $side_str = $1;
+	    $timeleft=$2;
+	    $reftime = time();
+	    $side = ($side_str eq 'X' ? Board::mark_x : Board::mark_o);
+	    $other_side = Board::other_player->[$side];
+	    print "We are $side_str with $timeleft miliseconds\n";
+	    $board = Board->new(cells => "", threats => "");
+	    # print $sock " Player $side_str is ajs_random_bot <ajs\@itasoftware.com>\n";
+	    if ($side_str eq "X") {
+		$mymove = move($side_str,$side,$board,$resign);
+	    }
+	    print "Server says to start. We are player $side_str ($timeleft ms)\n";
+	} elsif (/^C (\d+(?:\.\d+)?) (\d+(?:\.\d+)?)/) {
+	    if ($side_str eq 'X') {
+		$timeleft = $1;
+	    } else {
+		$timeleft = $2;
+	    }
+	    $reftime = time();
+	} elsif (/^Y (\d)(\d)/) {
+	    $board->cell_byboard($1-1,$2-1,$other_side);
+	    if ($over) {
+		print "SERVER ISSUED MOVE AFTER END, exiting\n";
+		last;
+	    }
+	    print "Server issued move for other player: $1, $2\n";
+	    $mymove = move($side_str,$side,$board,$resign);
+	} elsif (/^O/) {
+	    print "Server says GAME OVER MAN!\n";
+	    $over = 1;
+	}
+	if (defined $mymove) {
+	    if ($mymove == -1) {
+		print "$side_str RESIGNING the game\n";
+		print $sock "0\n";
+		$over = 1;
+		$resigned = 1;
+	    } else {
+		my $boardnum = Board::boardof($mymove)+1;
+		my $boardind = Board::boardind($mymove)+1;
+		print "SENDING MOVE: $boardnum$boardind\n";
+		print $sock "$boardnum$boardind\n";
+	    }
+	}
+    }
+    print $board->stringify();
+    my $win = ($resigned ? $other_side : $board->winner());
+    print "I played $side_str\n";
+    if ($server_winner) {
+	print "Winner: $server_winner\n";
+    } else {
+	print "Winner: ", ((!$win || $win == Board::mark_empty) ? "none" :
+	    $win == Board::mark_x ? "X" : "O"), "\n";
+    }
+}
+
+sub solo_move {
+    my($board,$mark,$resign,$dump_game) = @_;
+    my $player = Board::player_name($mark);
+    my $move = move($player, $mark, $board, $resign);
+    my $win = $board->winner();
+    print "$player resigned\n" if $move == -1;
+    print "$player wins\n" if $win;
+    print $board->stringify() if $dump_game && $verbose;
+    print($board->dump_string(), "\n"),exit(0) if $dump_game;
+    return undef if $win || $move == -1;
+    return \$move;
+}
+
+sub move {
+    my($name,$mark,$board,$resign) = @_;
+    my $player = Board::player_name($mark);
+    my $start = time();
+    my $move = best_move($mark,$board,$resign);
+    if ($resign && $move == -1) {
+	return $move;
+    }
+    $board->cell($move,$mark);
+    my $end = time();
+    my $delta = sprintf "%.3f", $end-$start;
+    print "$player: Move calculated in $delta seconds\n";
+    #print $board->stringify(), "----\n";; sleep 1;
+    return $move;
+}
+
+sub best_move {
+    my($mark,$board,$resign,$speculative) = @_;
+    my $other = Board::other_player->[$mark];
+    my @moves = shuffle($board->legal_moves($mark));
+    my $force = $board->force();
+    my $player = Board::player_name($mark);
+    if (defined($force) && @moves == 0) {
+	print "$player has no valid moves on board $force, playing anywhere\n"
+	    unless $speculative;
+	$board->force(undef);
+	return best_move($mark,$board,$resign,$speculative);
+    } elsif (@moves == 0) {
+	print "$player declares a draw with no valid moves\n"
+	    unless $speculative;
+	return undef;
+    }
+    my $pos;
+    if (defined($force)) {
+	if ($board->threat_by_board($force,$mark)) {
+	    # We have a winning move to make
+	    if (($pos=winning_move($board,$force,$mark))) {
+		return $pos;
+	    }
+	}
+    }
+    print " current forcing: ", (defined($force)?$force:"none"), "\n"
+	unless $speculative;
+    my @goodmoves = grep {
+	my $b = Board::boardof($_);
+	my $i = Board::boardind($_);
+	$b==$i || !$board->threat_by_board($i,$other);
+    } @moves;
+    # Sort possible moves by the speculation of who might win, in
+    # descending chance that it will be $mark
+    if(@goodmoves > 1 && !$speculative && @moves != 81) {
+	my @scores = map {speculate_winner($mark,$board,$_)} @goodmoves;
+	if (!grep {$_>-10} @scores) {
+	    print "Speculation looks bad. Re-trying...\n";
+	    if (@goodmoves > 2) {
+		@goodmoves = map {$goodmoves[$_]}
+		    sort {$scores[$b] <=> $scores[$a]} 0 .. $#goodmoves;
+		@scores = sort {$b<=>$a} @scores;
+		# Drop the worst move and re-try
+		pop @goodmoves; pop @scores;
+		if (@goodmoves > 4) {
+		    # If there are enough, skip one more.
+		    pop @goodmoves; pop @scores;
+		}
+	    }
+	    if (@goodmoves) {
+		my @scores = map {
+		    speculate_winner($mark,$board,$goodmoves[$_],1)+$scores[$_];
+		} 0 .. $#goodmoves;
+		my $factor = ($resign && $resign == 1 ? -15 : -$resign);
+		if ($resign && !grep {$_ > $factor} @scores) {
+		    print "Speculation indicates $player has already lost\n";
+		    print $board->stringify();
+		    return -1;
+		}
+	    }
+	}
+	@goodmoves = map {$goodmoves[$_]}
+	    sort {$scores[$b] <=> $scores[$a]} 0 .. $#goodmoves;
+    }
+    my $nmoves = @goodmoves;
+    print "$player: Found $nmoves valid, useful moves available\n" unless $speculative;
+    for my $pos (@goodmoves) {
+	my $boardnum = Board::boardof($pos);
+	my $boardindex = Board::boardind($pos);
+	# Get threats by opponent for next move
+	my $threat = $board->threat_by_board($boardindex, $other);
+	unless($threat) {
+	    print "$player: ", Board::coords_of($pos), "\n"
+		unless $speculative;
+	    return $pos;
+	} elsif ($boardnum == $boardindex) {
+	    my $next = $board->clone();
+	    $next->cell($pos, $mark);
+	    my $next_threat = $board->threat_by_board($boardindex, $other);
+	    if (!$next_threat) {
+		print "$player: eliminating threat on board $boardindex: ",
+		    Board::coords_of($pos), "\n" unless $speculative;
+		return $pos;
+	    }
+	} else {
+	    my $othername = Board::player_name($other);
+	    print "$player: skipping ", Board::coords_of($pos),
+		" due to threat from $othername\n" unless $speculative;
+	}
+    }
+    print "No useful moves available for $player\n" unless $speculative;
+    print $board->stringify() unless $speculative;
+    return -1 if $resign;
+    print "Moving to ", Board::coords_of($moves[0]), "\n" unless $speculative;
+    return $moves[0]; # return a random losing move if forced to
+}
+
+# Speculate winner tries to speculate how likely it is that $mark
+# will win on $board given a move of $move. Returns a number which is
+# larger when we expect to win and smaller when we expect to lose.
+sub speculate_winner {
+    my($mark,$board,$pos,$retry) = @_;
+    my $other = Board::other_player->[$mark];
+    # Right now, the logic is simple: play a random game with the given
+    # move going first. Report the result as 1 ($mark wins), 0 (draw),
+    # or -1 ($mark loses).
+    #print "  Speculating on winner of move, ",Board::coords_of($pos),"\n";
+    my $b = Board::boardof($pos);
+    my $threat = $board->threat_by_board($b,$mark);
+    my $specboard = $board->clone();
+    $specboard->cell($pos,$mark);
+    my @moves = $specboard->legal_moves($other);
+    my $outcome=0;
+    my $trials = SPECULATION_TRIALS;
+    $trials+=1 if @moves < 8;
+    $trials+=2 if @moves < 6;
+    $trials+=2 if @moves <= 4;
+    $trials*=2 if $retry;
+    $trials-- if @moves > 9;
+    $outcome += $trials/3 if $threat < $specboard->threat_by_board($b,$mark);
+    MOVE: foreach my $omove (@moves) {
+	$b = Board::boardof($omove);
+	$threat = $specboard->threat_by_board($b,$other);
+	my $shallow;
+	my $deep;
+	for(my $i=0;$i < $trials; $i++) {
+	    my $ospecboard = $specboard;
+	    $specboard = $specboard->clone();
+	    $specboard->cell($omove,$other);
+	    if ($threat < $specboard->threat_by_board($b,$other)) {
+		$outcome-=0.5;
+	    }
+	    if ($specboard->winner()) {
+		# If $other can win in one move, then none of
+		# the other moves have any weight.
+		$outcome = -scalar(@moves)*$trials;
+		last MOVE;
+	    }
+	    my $depth;
+	    for($depth=0;;$depth++) {
+		my $move = best_move($mark,$specboard,1,1);
+		if (!defined $move) {
+		    last;
+		} elsif ($move == -1) {
+		    $outcome-=2;
+		    last;
+		} elsif ($specboard->winner()) {
+		    if ($depth < 10) {
+			$outcome+=0.75;
+		    } else {
+			$outcome++;
+		    }
+		    last;
+		}
+		$specboard->cell($move,$mark);
+		$move = best_move($other,$specboard,1,1);
+		if (!defined $move) {
+		    last;
+		} elsif ($move == -1) {
+		    if ($depth < 10) {
+			$outcome+=0.75;
+		    } else {
+			$outcome++;
+		    }
+		    last;
+		} elsif ($specboard->winner()) {
+		    $outcome-=2;
+		    last;
+		}
+		$specboard->cell($move,$other);
+	    }
+	    $specboard = $ospecboard;
+	    $shallow = $depth if !defined($shallow) || $depth < $shallow;
+	    $deep = $depth if !defined($deep) || $depth > $deep;
+	}
+	$outcome += $trials/3 if $shallow > 5;
+    }
+    print "  Speculating on winner of move, ",Board::coords_of($pos),
+	": $outcome\n";
+    return $outcome;
+}
+
+sub winning_move {
+    my($board,$bnum,$mark) = @_;
+    for my $win (@{ Board::wins_one; }) {
+	my $owned = 0;
+	my $empty = undef;
+	for my $pos (@$win) {
+	    my $cell = $board->cell_byboard($bnum,$pos);
+	    if ($cell == $mark) {
+		$owned++;
+	    } elsif ($cell == Board::other_player->[$mark]) {
+		$owned--;
+	    } else {
+		$empty = $pos;
+	    }
+	}
+	if ($owned == 2) {
+	    #print Board::player_name($mark), ": Winning move found at $bnum,$empty\n";
+	    return $empty+$bnum*9;
+	}
+    }
+    return undef;
+}

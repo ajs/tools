@@ -1,0 +1,54 @@
+# Special dedicated powers for intelligent items, each of which can
+# affect the price of the item.
+---
+- 6
+- name: Item can use ice storm
+  price: 50000
+- 12
+- name: Item can use confusion
+  price: 50000
+- 17
+- name: Item can use phantasmal killer
+  price: 50000
+- 24
+- name: Item can use crushing despair
+  price: 50000
+- 31
+- name: Item can use dimension door on itself and wielder
+  price: 50000
+- 36
+- name: Item can use contagion (heightened to 4th level) as touch attack
+  price: 56000
+- 43
+- name: Item can use poison (heightened to 4th level) as touch attack
+  price: 56000
+- 50
+- name: Item can use rusting grasp as touch attack
+  price: 56000
+- 56
+- name: Item can cast 10d6 lightning bolt
+  price: 60000
+- 62
+- name: Item can cast 10d6 fireball
+  price: 60000
+- 68
+- name: 'Wielder gets +2 luck bonus on attacks, saves, and checks'
+  price: 80000
+- 74
+- name: Item can use mass inflict light wounds
+  price: 81000
+- 81
+- name: Item can use song of discord
+  price: 81000
+- 87
+- name: Item can use prying eyes
+  price: 81000
+- 92
+- name: Item can cast 15d6 greater shout 3/day
+  price: 130000
+- 98
+- name: Item can use waves of exhaustion
+  price: 164000
+- 100
+- name: 'Item can use true resurrection on wielder, once per month'
+  price: 200000

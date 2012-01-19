@@ -1,0 +1,42 @@
+---
+- 12
+- name: chain shirt
+  price: 100
+- 18
+- name: masterwork studded leather
+  price: 175
+- 26
+- name: breastplate
+  price: 200
+- 34
+- name: banded mail
+  price: 250
+- 54
+- name: half-plate
+  price: 600
+- 80
+- name: full plate
+  price: 1500
+- 85
+- name: darkwood buckler
+  price: 205
+- 90
+- name: darkwood shield
+  price: 257
+- 100
+-
+  - 17
+  - name: masterwork buckler
+    price: 165
+  - 40
+  - name: masterwork light wooden shield
+    price: 153
+  - 60
+  - name: masterwork light steel shield
+    price: 159
+  - 83
+  - name: masterwork heavy wooden shield
+    price: 157
+  - 100
+  - name: masterwork heavy steel shield
+    price: 170

@@ -1,0 +1,23 @@
+#!/usr/bin/perl
+
+use POSIX;
+
+$/='';
+$_ = <>;
+$me = 'ajsherman@rcn.com';
+
+if (/^Subject:\s*dome/m) {
+	$h=$_;
+	$_ = <>;
+	if (/^(\d+):(.*)/ && $1 == strftime("%d%H",localtime())*2) {
+		$cmd = $2;
+		if ($h =~ /^From:\s*(.*)/m) {
+			$to = $1;
+			if ($to !~ /\bajsherman\@rcn\.com\b/) {
+				$to = "$to, ajsherman\@rcn.com";
+			}
+			system("$cmd 2>&1 | mail -s pagecmd $to");
+		}
+	}
+}
+			

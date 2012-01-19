@@ -1,0 +1,24 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US" xml:lang="en-US">
+<head>
+<title>World of Warcraft Item Database Search</title>
+<link rel="stylesheet" type="text/css" href="main.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+
+<table class="bodystructure"><tr>
+<td class="sidebar">
+<div class="logo">
+<img border=0 src="/images/wowstreetlogo.png" alt="Wowstreet at AJS.COM"/>
+</div>
+
+<br/>
+
+</td><td class="bodycell">
+
+<h1>Wowstreet is currently down. Please try again later.</h1>
+[% downtime_message %]
+[% INCLUDE wowstreet_footer.tt2 %]

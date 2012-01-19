@@ -1,0 +1,522 @@
+# All of the various weapons that can be made into random treasure, and
+# their base stats. This includes:
+# frequency - commor or uncommon
+# name - string name
+# price - gp cost for masterwork version of the weapon
+# type - melee, ranged, or ammo
+# weight - weight in lbs
+# wood, metal, leather - set to 1 if it can be made out of special materials
+#	based on that type of base material.
+# count - for ammo, determines how many are in a standard lot
+---
+- 70
+-
+  - 4
+  - frequency: common
+    name: dagger
+    price: 302
+    type: melee
+    weight: 1
+  - 14
+  - frequency: common
+    name: greataxe
+    price: 320
+    type: melee
+    weight: 12
+  - 24
+  - frequency: common
+    name: greatsword
+    price: 350
+    type: melee
+    weight: 8
+  - 28
+  - frequency: common
+    name: kama
+    price: 302
+    type: melee
+    weight: 2
+  - 41
+  - frequency: common
+    name: longsword
+    price: 315
+    type: melee
+    weight: 4
+  - 45
+  - frequency: common
+    name: 'mace, light'
+    price: 305
+    type: melee
+    weight: 4
+  - 50
+  - frequency: common
+    name: 'mace, heavy'
+    price: 312
+    type: melee
+    weight: 8
+  - 54
+  - frequency: common
+    name: nunchaku
+    price: 302
+    type: melee
+    weight: 2
+    wood: 1
+  - 57
+  - frequency: common
+    heads: 2
+    name: quarterstaff
+    price: 600
+    type: melee
+    weight: 4
+    wood: 1
+  - 61
+  - frequency: common
+    name: rapier
+    price: 320
+    type: melee
+    weight: 2
+  - 66
+  - frequency: common
+    name: scimitar
+    price: 315
+    type: melee
+    weight: 4
+  - 70
+  - frequency: common
+    metal: 1
+    name: shortspear
+    price: 302
+    type: melee
+    weight: 3
+    wood: 1
+  - 74
+  - frequency: common
+    name: siangham
+    price: 303
+    type: melee
+    weight: 1
+  - 84
+  - frequency: common
+    name: 'sword, bastard'
+    price: 335
+    type: melee
+    weight: 6
+  - 89
+  - frequency: common
+    name: 'sword, short'
+    price: 310
+    type: melee
+    weight: 2
+  - 100
+  - frequency: common
+    name: 'waraxe, dwarven'
+    price: 330
+    type: melee
+    weight: 8
+- 80
+-
+  - 3
+  - frequency: uncommon
+    heads: 2
+    name: 'axe, orc double'
+    price: 660
+    type: melee
+    weight: 15
+  - 7
+  - frequency: uncommon
+    name: battleaxe
+    price: 310
+    type: melee
+    weight: 6
+  - 10
+  - frequency: uncommon
+    name: 'chain, spiked'
+    price: 325
+    type: melee
+    weight: 10
+  - 12
+  - frequency: uncommon
+    name: club
+    price: 300
+    type: melee
+    weight: 3
+    wood: 1
+  - 16
+  - frequency: uncommon
+    name: 'crossbow, hand'
+    price: 400
+    type: ranged
+    weight: 2
+    wood: 1
+  - 19
+  - frequency: uncommon
+    name: 'crossbow, repeating heavy'
+    price: 550
+    type: ranged
+    weight: 12
+    wood: 1
+  - 20
+  - frequency: uncommon
+    name: 'crossbow, repeating light'
+    price: 550
+    type: ranged
+    weight: 6
+    wood: 1
+  - 21
+  - frequency: uncommon
+    name: 'dagger, punching'
+    price: 302
+    type: melee
+    weight: 1
+  - 23
+  - frequency: uncommon
+    name: falchion
+    price: 375
+    type: melee
+    weight: 8
+  - 26
+  - frequency: uncommon
+    heads: 2
+    name: 'flail, dire'
+    price: 690
+    type: melee
+    weight: 10
+  - 31
+  - frequency: uncommon
+    name: 'flail, heavy'
+    price: 315
+    type: melee
+    weight: 10
+  - 35
+  - frequency: uncommon
+    name: flail
+    price: 308
+    type: melee
+    weight: 5
+  - 37
+  - frequency: uncommon
+    name: gauntlet
+    price: 302
+    type: melee
+    weight: 1
+  - 39
+  - frequency: uncommon
+    name: 'gauntlet, spiked'
+    price: 305
+    type: melee
+    weight: 1
+  - 41
+  - frequency: uncommon
+    name: glaive
+    price: 308
+    type: melee
+    weight: 10
+  - 43
+  - frequency: uncommon
+    name: greatclub
+    price: 305
+    type: melee
+    weight: 8
+    wood: 1
+  - 45
+  - frequency: uncommon
+    name: guisarme
+    price: 309
+    type: melee
+    weight: 12
+  - 48
+  - frequency: uncommon
+    name: halberd
+    price: 310
+    type: melee
+    weight: 12
+  - 51
+  - frequency: uncommon
+    metal: 1
+    name: spear
+    price: 301
+    type: melee
+    weight: 6
+    wood: 1
+  - 54
+  - frequency: uncommon
+    heads: 2
+    name: 'hammer, gnome hooked'
+    price: 620
+    type: melee
+    weight: 6
+  - 56
+  - frequency: uncommon
+    name: 'hammer, light'
+    price: 301
+    type: melee
+    weight: 2
+  - 58
+  - frequency: uncommon
+    name: handaxe
+    price: 306
+    type: melee
+    weight: 3
+  - 61
+  - frequency: uncommon
+    name: kukri
+    price: 308
+    type: melee
+    weight: 2
+  - 64
+  - frequency: uncommon
+    name: lance
+    price: 310
+    type: melee
+    weight: 10
+  - 67
+  - frequency: uncommon
+    name: longspear
+    price: 305
+    type: melee
+    weight: 9
+  - 70
+  - frequency: uncommon
+    name: morningstar
+    price: 308
+    type: melee
+    weight: 6
+  - 72
+  - frequency: uncommon
+    metal: 0
+    name: net
+    price: 320
+    type: melee
+    weight: 6
+  - 74
+  - frequency: uncommon
+    name: 'pick, heavy'
+    price: 308
+    type: melee
+    weight: 6
+  - 76
+  - frequency: uncommon
+    name: 'pick, light'
+    price: 304
+    type: melee
+    weight: 3
+  - 78
+  - frequency: uncommon
+    name: ranseur
+    price: 310
+    type: melee
+    weight: 12
+  - 80
+  - frequency: uncommon
+    metal: 0
+    name: sap
+    price: 301
+    type: melee
+    weight: 2
+  - 82
+  - frequency: uncommon
+    name: scythe
+    price: 318
+    type: melee
+    weight: 10
+  - 84
+  - frequency: uncommon
+    name: shuriken
+    price: 301
+    type: ranged
+    weight: 0.5
+  - 86
+  - frequency: uncommon
+    name: sickle
+    price: 306
+    type: melee
+    weight: 2
+  - 89
+  - frequency: uncommon
+    heads: 2
+    name: 'sword, two-bladed'
+    price: 700
+    type: melee
+    weight: 10
+  - 91
+  - frequency: uncommon
+    name: trident
+    price: 315
+    type: melee
+    weight: 4
+  - 94
+  - frequency: uncommon
+    heads: 2
+    name: 'urgrosh, dwarven'
+    price: 650
+    type: melee
+    weight: 12
+  - 97
+  - frequency: uncommon
+    name: warhammer
+    price: 312
+    type: melee
+    weight: 5
+  - 100
+  - frequency: uncommon
+    metal: 0
+    name: whip
+    price: 301
+    type: melee
+    weight: 2
+- 100
+-
+  - 10
+  -
+    - 25
+    - count: 50
+      name: 'arrows, longbow'
+      price: 350
+      type: ammo
+      weight: 7.5
+      wood: 1
+    - 50
+    - count: 50
+      name: 'arrows, shortbow'
+      price: 350
+      type: ammo
+      weight: 7.5
+      wood: 1
+    - 80
+    -
+      - 20
+      - count: 50
+        name: 'bolts, crossbow heavy'
+        price: 350
+        type: ammo
+        weight: 5
+        wood: 1
+      - 40
+      - count: 50
+        name: 'bolts, crossbow light'
+        price: 350
+        type: ammo
+        weight: 5
+        wood: 1
+      - 60
+      - count: 50
+        name: 'bolts, crossbow repeating heavy'
+        price: 350
+        type: ammo
+        weight: 10
+        wood: 1
+      - 80
+      - count: 50
+        name: 'bolts, crossbow repeating light'
+        price: 350
+        type: ammo
+        weight: 10
+        wood: 1
+      - 100
+      - count: 50
+        name: 'bolts, crossbow hand'
+        price: 350
+        type: ammo
+        weight: 5
+        wood: 1
+    - 100
+    - count: 50
+      metal: 0
+      name: 'bullets, sling'
+      price: 350
+      type: ammo
+      weight: 25
+  - 15
+  - name: 'axe, throwing'
+    price: 308
+    type: ranged
+    weight: 2
+  - 25
+  - name: 'crossbow, heavy'
+    price: 350
+    type: ranged
+    weight: 8
+    wood: 1
+  - 35
+  - name: 'crossbow, light'
+    price: 335
+    type: ranged
+    weight: 4
+    wood: 1
+  - 39
+  - name: dart
+    price: 301
+    type: ranged
+    weight: 0.5
+    wood: 1
+  - 41
+  - name: javelin
+    price: 301
+    type: ranged
+    weight: 2
+    wood: 1
+  - 46
+  - name: shortbow
+    price: 330
+    type: ranged
+    weight: 2
+    wood: 1
+  - 51
+  - name: 'shortbow, composite (+0 str bonus)'
+    price: 375
+    type: ranged
+    weight: 2
+    wood: 1
+  - 56
+  - name: 'shortbow, composite (+1 str bonus)'
+    price: 450
+    type: ranged
+    weight: 2
+    wood: 1
+  - 61
+  - name: 'shortbow, composite (+2 str bonus)'
+    price: 525
+    type: ranged
+    weight: 2
+    wood: 1
+  - 65
+  - metal: 0
+    name: sling
+    price: 300
+    type: ranged
+    weight: 0
+  - 75
+  - name: longbow
+    price: 375
+    type: ranged
+    weight: 3
+    wood: 1
+  - 80
+  - name: 'longbow, composite'
+    price: 400
+    type: ranged
+    weight: 3
+    wood: 1
+  - 85
+  - name: 'longbow, composite (+1 str bonus)'
+    price: 500
+    type: ranged
+    weight: 3
+    wood: 1
+  - 90
+  - name: 'longbow, composite (+2 str bonus)'
+    price: 600
+    type: ranged
+    weight: 3
+    wood: 1
+  - 95
+  - name: 'longbow, composite (+3 str bonus)'
+    price: 700
+    type: ranged
+    weight: 3
+    wood: 1
+  - 100
+  - name: 'longbow, composite (+4 str bonus)'
+    price: 800
+    type: ranged
+    weight: 3
+    wood: 1

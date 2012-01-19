@@ -1,0 +1,680 @@
+#!/usr/bin/perl
+#
+# A system intrusion detection device
+#
+# Written in 2000 by Aaron Sherman <ajs@ajs.com>
+#
+# OLD CVS Id: idd,v 1.5 2001/06/21 21:55:41 ajs Exp
+
+# TODO:
+#	Future tests:
+#		* Check /etc/hosts for odd entries
+
+#globals
+$0 =~ s/^.*\///;
+@deffuncs = qw(dotdotdot plaindev cgi_exploits timeanom proclist bad_strings
+	rpm passwd bad_files bad_inetd bad_ports bad_procs bad_index
+	recentmod);
+if ( -f "/etc/xinetd.d/cups-lpd" ) {
+	$ps_all = 'axm'; # RH 8.0 "see all threads" arg
+} else {
+	$ps_all = 'ax';
+}
+$usage = "Usage: $0 [-v] [<function>]...\n";
+$usage .= "  Available functions: " . join(', ',@deffuncs) . "\n";
+$verbose = 0;
+@sysdirs = qw(
+	/
+	/etc /var /dev /sbin /bin /usr
+	/usr/lib /usr/bin /usr/sbin /usr/share /usr/local
+);
+push @sysdirs, subdirs(2,'/etc','/var','/dev','/sbin','/bin','/usr/lib',
+	'/usr/bin','/usr/sbin','/usr/share');
+%funcvec = map {($_ => $_)} @deffuncs;
+@funcs = ();
+@stack = ();
+$HOW_RECENT_IS_TOO_RECENT = 15; # Binaries should be more than 15 days old
+
+# Figure out what EPERM is even if Errno is unavailable
+if (eval "use Errno") {
+  $EPERM=Errno::EPERM;
+} else {
+  $EPERM=1;
+}
+
+# Parse commmand-line
+while(defined($arg = shift @stack) || defined($arg = shift @ARGV)) {
+	if ($arg =~ s/^-//) {
+		if ($arg !~ /^-/ && length($arg) > 1) {
+			unshift @stack, split //, $arg;
+			next;
+		}
+		if ($arg eq 'v' || $arg eq '-verbose') {
+			$verbose = 1;
+		} elsif ($arg eq 'h' || $arg eq '?' || $arg eq '-help') {
+			print $usage;
+			exit 0;
+		} elsif ($arg eq '-') {
+			last;
+		} else {
+			die "$0: Bad argument: \"-$arg\"\n$usage";
+		}
+	} else {
+		unshift @ARGV, $arg;
+		last;
+	}
+}
+
+if (@ARGV) {
+	@funcs = @ARGV;
+} else {
+	@funcs = @deffuncs;
+}
+
+verbose("Executing functions: ".join(', ',@funcs));
+
+# Take each function to be executed and call it's entry in funcvec
+foreach $func (@funcs) {
+	($func,$args) = split /=/, $func,2;
+	@args = length($args)?split /,/, $args : ();
+	if (exists($funcvec{$func})) {
+		verbose("Executing $func");
+		&{$funcvec{$func}}(@args);
+	} else {
+		warn "$0: Unknown function: $func\n";
+	}
+}
+
+verbose("Done.");
+
+######################### Tests
+
+# Check @sysdirs for '...'
+sub dotdotdot {
+	foundin('...',@sysdirs);
+}
+
+# Check to see if ps and netstat have the same modification times
+sub timeanom {
+	sametimes("ps","netstat");
+}
+
+# Check for certain classes of CGI exploits
+sub cgi_exploits {
+	if (-e '/home/httpd/cgi-bin/phf') {
+		advise("cgi-bin/phf installed");
+	}
+}
+
+# XXX If we had access to Proc::ProcessTable, we could do a better job....
+sub bad_procs {
+	my $ps = whereis("ps");
+	return unless defined $ps;
+	my $badprocs = '\.(?:bugtraq|cinik|unlock)';
+	my @procs = map {(/$badprocs/o&&/^\s*(\d+)/ && $1) || ()} `$ps $ps_all`;
+	advise("Suspect process name for pid $_") foreach @procs;
+}
+
+sub recentmod {
+    my @should_be_old =
+      ( grep {$_} map {whereis($_,'ignore')}
+	qw(sshd smrsh sendmail httpd suexec named
+	   atd atrun up2date ntpd xinetd useradd
+	   vipw in.rshd in.rlogind chroot lsof
+	   mtr traceroute crond gcc as ld passwd gpg time
+	   netstat ps init rm mv cp login ssh scp rcp rlogin));
+    foreach my $file (@should_be_old) {
+	if (-M($file) < $HOW_RECENT_IS_TOO_RECENT) {
+	    advise("Recently modified binary: $file");
+	}
+    }
+}
+
+# Check for certain known strings in key binaries
+sub bad_strings {
+	my @strings = (
+		'RCB Phraser', 'WOOT=', 'lrkr0x', '/tmp/smtpd',
+		'Zap2!', 'Usage: wted', 'Usage: lled', 'utmp Manager',
+		'offset of esp', '/tmp/temp.dip', 'Bogusity checker',
+		'Shit happens', '/tmp/newsh', 'Result: First:',
+		'PHAZESOFT', 'Zap!', 'exploit this bug',
+		'./issue.our', "w\000h\0000\000",
+		': 1337','xploit','r00t','August Anton',
+		'xpl0it','educational purpose only',
+		'oopz', 'knark', 'hax0r', 'rewt', 'elite', 'vejeta',
+		'.ark', 'poop', 'begin 655 .', 'bugtraq.c',
+		'.c -lcrypto;/tmp/', 'mars.raketti.net', 'not port 1963',
+		'genx','/dev/saux');
+	my %prog_specific = (
+		telnetd      => 'cterm100|vt350|VT100|ansi-term|/dev/hda[0-7]',
+		fingerd      => 'cterm100',
+		su 	     => 'satori|vejeta',
+		sshd 	     => 'check_global_passwd|panasonic|satori|vejeta|'.
+			     	'\.ark',
+		tcpd 	     => 'p1r0c4|hack|/dev/xmx|/dev/hdn0|/dev/xdta',
+		crond 	     => '/dev/hda|/dev/hda[0-7]|/dev/hdc0',
+		slogin 	     => 'homo',
+		amd 	     => 'blah',
+		lsof 	     => '/prof',
+		rlogind      => 'p1r0c4|r00t',
+		find 	     => '/dev/ttyof|/dev/pty[pqrs]|/prof',
+		grep 	     => 'givemer',
+		egrep 	     => 'blah',
+		mail 	     => 'sh -i',
+		killall      => '/dev/ttyop|/dev/pty[pqrs]|/dev/hda[0-7]|'.
+			     	'/dev/hdp|/dev/ptyxx',
+		pidof 	     => '/dev/pty[pqrs]',
+		top 	     => '/dev/xmx|/dev/ttyop|/dev/pty[pqrsx]|'.
+			     	'/dev/hdp|/dev/dsx|/prof',
+		pstree 	     => '/dev/ttyof|/dev/hda01|/dev/cui220|'.
+			     	'/dev/ptyxx|/prof',
+		ps 	     => '/dev/xmx|\.1proc|/dev/ttyop|/dev/pty[pqrsx]|'.
+				'/dev/cui|/dev/hda[0-7]|/dev/hdp|/dev/cui220|'.
+				'/dev/dsx|w0rm|/dev/hdaa|duarawkz',
+		netstat      => '/dev/hdl0/dev/xdta|/dev/ttyoa|'.
+				'/dev/pty[pqrsx]|/dev/cui|/dev/hdn0|'.
+				'/dev/cui221|/dev/dszy|/dev/ddth3|/dev/caca|'.
+				'/prof',
+		du 	     => '/dev/ttyof|/dev/pty[pqrsx]|w0rm/prof',
+		ls 	     => '/dev/ttyof|/dev/pty[pqrs]|/dev/hdl0|'.
+				'\.tmp/lsfile|/dev/hdcc|/dev/ptyxx|'.
+				'duarawkz|/prof',
+		sendmail     => 'fuck',
+		mingetty     => 'Dimensioni|pacchetto',
+		gpm 	     => 'mingetty',
+		hdparm       => '/dev/ida'
+	);
+	my $long = (sort {$b<=>$a} map {length $_} @strings)[0];
+	my @binaries = qw(ps netstat login z2 zap wted lled /dev/kmem
+		/proc/ksyms amd basename biff chfn chsh cron date du dirname
+		echo env find fingerd gpm grep hdparm su ifconfig
+		inetd inetdconf identd killall ldsopreload ls lsof
+		mail mingetty named passwd pidof pop2 pop3 pstree
+		rpcinfo rlogind rshd slogin sendmail sshd syslogd tar tcpd top
+		telnetd timed traceroute write);
+	local *F;
+	local $_;
+	foreach my $cmd (@binaries) {
+		my $binstr = $prog_specific{$cmd};
+		my $binary = whereis($cmd,'ignore');
+		if (defined($binary) && open(F,"<$binary")) {
+			my $prev='';
+			my $begin = 1;
+			READLOOP:
+			while(read(F,$_,4096)) {
+				if ($begin && ($binary !~ /init\.d/) && /^\#!/) {
+					advise("$binary is a script");
+				}
+				$begin = 0;
+				$prev .= $_;
+				# Someone want to tell me why this is faster
+				# than makeing and pre-compiling one big
+				# regular expression?
+				foreach my $string (@strings) {
+					if (index($prev,$string) >= 0) {
+						advise("$binary contains questionable string \"$string\"");
+						last READLOOP;
+					}
+				}
+				if (defined($binstr) && $prev =~ /$binstr/) {
+					advise("$binary contains questionable string \"$&\"");
+					last READLOOP;
+				}
+				$prev = substr($prev,-($long-1));
+			}
+			close F;
+		}
+	}
+	my $ks = '/proc/ksyms';
+	if (open(F,"<$ks")) {
+		my $prev = '';
+		while(read(F,$_,4096)) {
+			my $this = $prev . $_;
+			$prev = $_;
+			if (index($this,'adore') >= 0) {
+				advise("Possible Adore LKM");
+			}
+		}
+		close F;
+	}
+}
+
+# This was based on the Ramen Worm, and its well-known defacement strategy.
+sub bad_index {
+	foreach my $docroot (qw(/home/httpd/html /var/www/html
+			        /home/httpd/htdocs)) {
+		my $index = "$docroot/index.html";
+		if (open(F,"<$index")) {
+			while(<F>) {
+				if (/love.*noodles/i) {
+					advise("Ramen detected in $index");
+					last;
+				}
+			}
+			close F;
+		}
+	}
+}
+
+# If we're using RPM, use it to verify key packages
+# Some of the selection is based on this comment on important binaries that
+# are often attacked http://staff.washington.edu/dittrich/misc/faqs/rootkits.faq
+# util-linux-2.7-18	/usr/bin/chfn
+# 			/usr/bin/chsh
+# 			/bin/login
+# fileutils-3.16-9	/bin/ls
+# passwd-0.50-11	/usr/bin/passwd
+# procps-1.2.7-5	/bin/ps
+# 			/usr/bin/top
+# rsh-0.10-4		/usr/sbin/in.rshd
+# net-tools-1.33-6	/bin/netstat
+# 			/sbin/ifconfig
+# sysklogd-1.3-22	/usr/sbin/syslogd
+# netkit-base-0.10-10	/usr/sbin/inetd
+# tcp_wrappers-7.6-4	/usr/sbin/tcpd
+# psmisc-17-3		/usr/bin/killall
+# SysVinit-2.74-4	/sbin/pidof
+# findutils-4.1-23	/usr/bin/find
+sub rpm {
+	my $rpm = whereis("rpm", 'ignore');
+	return unless defined $rpm;
+	foreach my $pkg (sort qw(procps net-tools util-linux SysVinit bind fileutils
+	    findutils glibc iptables ipchains iputils passwd rsh sysklogd netkit-base
+	    tcp_wrappers psmisc)) {
+		verify_rpm($pkg);
+	}
+}
+
+# Check for plain files and directories in /dev that don't belong
+sub plaindev {
+	local *D;
+	my @devs;
+	if (opendir(D,'/dev')) {
+		foreach my $bad (grep {
+		    (/^([pt]ty|shadow|[a-z]aux)/i ||
+		     /^([hsc][du]|portd|\.(\..|[^.]))/) &&
+		       (-f "/dev/$_" || -d "/dev/$_") && !-l "/dev/$_"} readdir D) {
+		    advise("File/dir masquerading as device: /dev/$bad");
+		}
+		closedir D;
+	}
+}
+
+# Check for hacked copy of ``ps'' or hidden directory entries in /proc
+sub proclist {
+	my @p1 = get_hidden_procs();
+	my @p2 = get_hidden_procs();
+	foreach my $proc (@p1) {
+		my($pid,$from,$found) = @$proc;
+		if (grep {$_->[0] == $pid && $_->[1] eq $from} @p2) {
+			local *F;
+			my $cmd = 'unknown command';
+			if (open(F,"</proc/$pid/cmdline")) {
+				$cmd = <F>;
+				close F;
+			}
+			advise("Process $pid ($cmd) is hidden from $from, but seen by $found");
+			print STDERR "\tTrying ps --pid\n\t";
+			$|=1;
+			system("/bin/ps --pid $pid uww");
+		}
+	}
+}
+
+# Check /etc/passwd for scary entries
+sub passwd {
+	local *F;
+	local $_;
+	if (open(F,"</etc/passwd")) {
+		while(<F>) {
+			if(/^(w0rm):/) {
+				advise("Suspect username: $1");
+			} elsif (/^([^:]+)::/) {
+				advise("Null password for $1");
+			}
+		}
+		close F;
+	} else {
+		advise("Cannot open /etc/passwd: $!");
+	}
+}
+
+# Check for known droppings
+sub bad_files {
+	my @bad = qw(/tmp/w0rm /tmp/rootsh /usr/bin/.lsd /proc/knark
+		     /tmp/.*buqtraq* /tmp/.*cinik* /tmp/.uupud /tmp/.unlock);
+	foreach my $file (@bad) {
+		if (-e($file) || ($file=~/\*/ && (($file)=glob($file)))) {
+			advise("Suspect file: $file");
+		}
+	}
+	# Files where they should not be
+	my $exts = '\.(?:tgz|gz|tar|Z|zip|shar)$';
+	foreach my $dir (qw(/ /bin /etc /sbin /lib /dev /usr/bin /usr/sbin
+	    /usr/man /usr/share/man /usr/doc)) {
+		local *D;
+		if (opendir(D,$dir)) {
+			foreach my $file (readdir D) {
+				if ($file =~ /$exts/oi) {
+					advise("Suspect file: $dir/$file");
+				}
+			}
+			closedir D;
+		}
+	}
+	# One root-kit replaced the symlink version of /sbin/telinit with
+	# their compromised version. Very sneaky.
+	if ( -x '/sbin/telinit' && ! -l '/sbin/telinit' ) {
+		advise("/sbin/telinit is not a symlink");
+	}
+}
+
+# Check inetd entries...
+sub bad_inetd {
+	local *F;
+	if (-d "/etc/xinetd.d") {
+		return; # XXX - no xinetd support yet
+	} elsif (open(F, "</etc/inetd.conf")) {
+		local $_;
+		local $.;
+		my $telnet_line;
+		while(<F>) {
+			next if /^\s*($|\#)/;
+			if (/^asp/) {
+				advise("Suspect Lion signature in inetd.conf");
+				next;
+			}
+			($port,$fam,$prot,$wait,$who,$prog,$rest) =
+			    split /\s+/, $_, 7;
+			if ($prog =~ /sh$/ || $prog !~ /\/s?bin\// ||
+			    !-e $prog) {
+				advise("Suspect program in inetd.conf: $prog");
+			} elsif ($port =~ /^\d+$/ && $port >= 9000 &&
+				 $port eq 'tcp') {
+				advise("TCP services on port $port: $prog");
+			} elsif ($port eq 'telnet' || $port == 23 ||
+				 $port eq 'shell' || $port eq 'login' ||
+				 $port == 153 || $port == 154) {
+				$telnet_line = $.;
+				$tl_text = $_;
+			}
+		}
+		if (defined $telnet_line) {
+			if ($. - $telnet_line < 5) {
+				advise("Insecure service(s) near end of inetd.conf ($. - $telnet_line)");
+			}
+		}
+		close F;
+	}
+}
+
+# Check for odd open ports...
+sub bad_ports {
+	my $ns = whereis('netstat','ignore');
+	# Took out 45454 because it's used by something legit
+	my @ports = qw(114 145 511 600 1008 1524 1999 2881 3133 3879
+		       4369 5665 10008 12321 23132 27374 29364 31336 31337
+		       47017 47889 60001);
+	foreach my $arg (@_) {
+		if ($arg =~ s/^-//) {
+			if ($arg eq '') {
+				@ports = ();
+			} else {
+				@ports = grep {$_ != $arg} @ports;
+			}
+		} elsif ($arg =~ /^(\d+)$/) {
+			push @ports, $1;
+		} else {
+			warn "Non-numeric port passed to bad_ports: $arg\n";
+		}
+	}
+	my $udpports = join '|', @ports, 2002, 1978, 4156;
+	my $tcpports = join '|', @ports;
+	my $ip = '[\d.]+';
+	return unless $ns;
+	local *P;
+	local $_;
+	open(P,"$ns -an |") or die "$0: Cannot fork: $!\n";
+	while(<P>) {
+		if (/^tcp\s+\d+\s+\d+\s+$ip:($tcpports)\s+$ip:\*\s+LISTEN/) {
+			advise("Suspect tcp listener port: $1");
+			print;
+		} elsif (/^udp\s+\d+\s+\d+$ip:($udpports)/) {
+			advise("Suspect udp listener port: $1");
+			print;
+		}
+	}
+	close P;
+}
+
+############################# Support utilities
+
+sub foundin {
+	my $name = shift;
+	foreach my $dir (@_) {
+		if (-e "$dir/$name") {
+			advise("Found $name in $dir");
+		}
+	}
+}
+
+sub whereis {
+	my $prog = shift;
+	return $prog if $prog =~ m%^/% && -f $prog && ! -d $prog;
+	foreach my $path (split(':',$ENV{PATH}), @sysdirs) {
+		my $tmp = "$path/$prog";
+		return $tmp if -x $tmp;
+	}
+	advise("Cannot find $prog") unless $_[0] eq 'ignore';
+	return undef;
+}
+
+sub subdirs {
+	my $level = shift;
+	return unless $level--;
+	my @result;
+	foreach my $dir (@_) {
+		verbose("subdirs: in $dir");
+		local *D;
+		if (opendir(D,$dir)) {
+			my @subdirs = grep {-d $_ && !-l $_} map {"$dir/$_"} 
+				grep {!/^\.\.?$/} readdir D;
+			closedir D;
+			next unless @subdirs;
+			push @result, @subdirs, subdirs($level,@subdirs);
+		}
+	}
+	return @result;
+}
+
+sub advise {
+	my $msg = shift;
+	print STDERR "ADVISORY: $msg\n";
+}
+
+sub sametimes {
+	my $last = undef;
+	foreach my $file (@_) {
+		my $realfile = $file;
+		if ($file !~ /^\//) {
+			next unless $realfile = whereis($file);
+		}
+		return 0 if defined($last) && ($last = -M($realfile));
+	}
+	return 1;
+}
+
+sub verbose {
+	my $msg = shift;
+	print STDERR $msg, "\n" if $verbose;
+}
+
+sub verify_rpm {
+	my $package = shift;
+	my $rpm = whereis('rpm','ignore');
+	return 1 unless $rpm;
+	system("$rpm -V $package");
+	advise("$package has been modified since the package was installed") if $?;
+}
+
+# A multi-pass hidden process detector. Start by running ps, then do
+# a readdir on /proc, then try to kill(0,pid) all possible process
+# IDs. At each step compare to the last and save process IDs that only
+# appear in one list. Return a list of [pid, what, found] where pid is the
+# numeric process ID and "what" is a string which identifies what test
+# the process was hidden from, and "found" is a string that
+# identifies what the process was found by.
+sub get_hidden_procs {
+	my $ps = whereis("ps");
+	return unless defined $ps;
+	my @procs = map {(/^\s*(\d+)/ && $1) || ()} `$ps $ps_all`;
+	my %procs;
+	@procs{@procs} = ();
+	my @bad = ();
+	local *D;
+	if (opendir(D,'/proc')) {
+		my @fs_procs = map {(/^(\d+)$/ && $1) || ()} readdir D;
+		closedir D;
+		foreach my $pid (sort {$a <=> $b} @fs_procs) {
+		    push @bad, [$pid, 'ps','readdir'] unless exists $procs{$pid};
+		}
+		%procs=();
+		@procs{@fs_procs}=();
+		for($i=1;$i<65_536;$i++) {
+		  unless(exists $procs{$i}) {
+		    if (kill(0,$i) || $! == $EPERM) {
+		      push @bad, [$i, 'readdir','kill'];
+		    } elsif (chdir("/proc/$i") && chdir("/proc/$i")) {
+		      push @bad, [$i, 'kill','chdir'];
+		    }
+		  }
+		}
+	}
+	return @bad;
+}
+
+__END__
+
+=head1 NAME
+
+idd - Intrusion Detection Device, a self-contained Perl security tool
+
+=head1 SYNOPSIS
+
+  idd [<module> ...]
+
+=head1 DESCRIPTION
+
+C<idd> is a tool for determining if a system has been compromised. It relies
+on several common attributes of intrusion tools (often called "root kits")
+to detect system anomolies.
+
+=head1 COMMAND-LINE
+
+The command line is simple. Either idd is run with no arguments, or with
+one or more space-separated module names. The modules are individual tests.
+The following modules are available:
+
+=over 5
+
+=item C<dotdotdot>
+
+Look for directories called "C<...>" in common system areas.
+
+=item C<plaindev>
+
+Look for plain files in C</dev>
+
+=item C<cgi_exploits>
+
+Some root kits drop CGI programs that are intended for remote access.
+This module detects them.
+
+=item C<timeanom>
+
+Look for timestamp related anomolies on some programs.
+
+=item C<proclist>
+
+Apply several techniques to spotting "hidden" processes.
+
+One of the techniques is thanks to C<chkrootkit> (the C<chdir(2)>
+method).
+
+=item C<bad_strings>
+
+Look for signatures of various rootkits in system programs.
+
+=item C<rpm>
+
+If the RedHat Package Manager is available, use it to verify that
+key packages have not been modified.
+
+NOTE: This test tends to produce a few false positives, but is also
+very useful for spotting root kits that are not sophisticated enough
+to modify the RedHat package database.
+
+=item C<passwd>
+
+Comb the C</etc/passwd> file for anomolies.
+
+=item C<bad_files>
+
+Look for "droppings" (such as sniffer programs, log files, hidden directories,
+etc).
+
+=item C<bad_index>
+
+Look for suspect strings in index.html files
+
+=item C<bad_inetd>
+
+Look for obvious modifications of inetd.conf.
+
+NOTE: Not all systems use an inetd.conf anymore.
+
+=item C<bad_ports>
+
+Look for open server-ports which are used by intruders for remote access.
+
+=item C<bad_procs>
+
+Look for process names that are suspect. This function trusts the C<ps>
+binary, so use C<rpm>, C<bad_strings> and C<proclist> tests to confirm
+that C<ps> is unmodified.
+
+=item C<recentmod>
+
+Look at system binaries that should not be modified, and complain if
+their modification times are recent. This is a rather iffy test,
+but it's nice to know when things change.
+
+=back
+
+=head1 BUGS
+
+=over 5
+
+=item *
+
+Some false positives, especially from C<rpm> and C<bad_inetd>
+
+=item *
+
+Many tests will fail on non-Linux systems
+
+=item *
+
+Some tests (e.g. C<rpm>) are even RedHat specific.
+
+=item *
+
+More tests are always needed....
+
+=back
+
+=head1 AUTHOR
+
+Written in 2000 by Aaron Sherman E<lt>ajs@ajs.comE<gt>
+
+=cut

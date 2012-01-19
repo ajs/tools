@@ -1,0 +1,74 @@
+#!/usr/bin/perl
+
+my $verbose = $ENV{RTERM_VERBOSE} || 0;
+my $host = shift @ARGV;
+my $user = shift @ARGV;
+my $rest;
+if (@ARGV) {
+	$rest = join(' ', @ARGV);
+}
+if (!defined $user) {
+	if ($host =~ s/^([^\@]+)\@//) {
+		$user = $1;
+	} else {
+		$user = (getpwuid($>))[0] || getlogin() || 'root';
+	}
+}
+my $class = $host;
+$class =~ s/\..*//;
+$class =~ tr/a-z/A-Z/;
+%replace = (
+	h => $host,
+	u => $user,
+	r => $rest,
+	'%' => '%');
+
+my $ssh = $ENV{RTERM_SSH_CMD} || "ssh -tCAXY -c blowfish %u\@%h %r";
+$ssh =~ s/\%(.)/$replace{$1}/g;
+my $termprog = 'gnome-terminal';
+my $termenv = $ENV{RTERM_TERM_CMD};
+$termprog = $termenv if defined($termenv) && $termenv;
+my $pro = undef;
+if (defined $ENV{RTERM_PROFILE}) {
+	$pro = $ENV{RTERM_PROFILE};
+} else {
+	my $last_pro = undef;
+	foreach my $profile (glob "$ENV{HOME}/.gconf/apps/gnome-terminal/profiles/R*"){
+		$profile =~ s/^.*\///;
+		$last_pro = $profile;
+		$pro = $profile if $profile eq 'RDC';
+	}
+	$pro = $last_pro unless defined $pro;
+}
+$pro = 'Default' unless defined $pro;
+my @term = ($termprog,
+	    "--window-with-profile=$pro", '--title',"$user\@$host","--command=$ssh");
+if ($termprog =~ /gnome-terminal/ && $verbose) {
+	unshift @term, '--disable-factory';
+}
+
+if ($verbose) {
+	$tv = join ', ', map {qq{q{$_}}} @term;
+	warn "exec $tv\n" if $verbose;
+} else {
+	# Go into the background
+	eval "use Proc::Daemon";
+	if ($@) {
+		my $pid = fork();
+		exit 0 if $pid && $pid > 0;
+		close STDERR;
+		close STDOUT;
+		close STDIN;
+		chdir '/';
+	} else {
+		Proc::Daemon::Init();
+	}
+	open STDERR, ">>$ENV{HOME}/.rterm-err";
+}
+
+if (`ssh-add -l 2>/dev/null` !~ m|/home/$user|) {
+	system("ssh-add 2>/dev/null");
+}
+exec @term;
+exec "xterm -e $ssh";
+die "$0: Cannot exec $termprog or fallback xterm: $!\n";

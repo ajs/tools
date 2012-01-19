@@ -1,0 +1,183 @@
+# Weapon special abilities. Specials include bane (select a creature type),
+# two_abilities (re-roll twice on this table)
+---
+-
+  -
+    - 10
+    - 6
+    - 3
+  - name: bane
+    special: bane
+    plus: 1
+  -
+    - 17
+    - 12
+    - -1
+  - name: defending
+    plus: 1
+    type: melee
+  -
+    - 27
+    - 19
+    - 6
+  - name: flaming
+    plus: 1
+  -
+    - 37
+    - 26
+    - 9
+  - name: frost
+    plus: 1
+  -
+    - 47
+    - 33
+    - 12
+  - name: shock
+    plus: 1
+  -
+    - 56
+    - 38
+    - 15
+  - name: ghost touch
+    plus: 1
+  -
+    - 67
+    - 44
+    - -1
+  - name: keen
+    plus: 1
+  -
+    - 71
+    - 48
+    - 19
+  - align: lawful
+    name: ki focus
+    plus: 1
+    type: melee
+  -
+    - 75
+    - 50
+    - -1
+  - name: merciful
+    plus: 1
+  -
+    - 82
+    - 54
+    - 21
+  - name: mighty cleaving
+    plus: 1
+  -
+    - 87
+    - 59
+    - 24
+  - name: spell storing
+    plus: 1
+  -
+    - 91
+    - 63
+    - 28
+  - name: throwing
+    plus: 1
+  -
+    - 95
+    - 65
+    - 32
+  - name: thundering
+    plus: 1
+  -
+    - 99
+    - 69
+    - 36
+  - name: vicious
+    plus: 1
+  -
+    - -1
+    - 72
+    - 41
+  - align: chaotic
+    name: anarchic
+    plus: 2
+  -
+    - -1
+    - 75
+    - 46
+  - align: lawful
+    name: axiomatic
+    plus: 2
+  -
+    - -1
+    - 78
+    - 49
+  - name: disruption
+    plus: 2
+  -
+    - -1
+    - 81
+    - 54
+  - name: flaming burst
+    plus: 2
+    upgrade: flaming
+  -
+    - -1
+    - 84
+    - 59
+  - name: icy burst
+    plus: 2
+    upgrade: frost
+  -
+    - -1
+    - 87
+    - 64
+  - align: good
+    name: holy
+    plus: 2
+  -
+    - -1
+    - 90
+    - 69
+  - name: shocking burst
+    plus: 2
+    upgrade: shock
+  -
+    - -1
+    - 93
+    - 74
+  - align: evil
+    name: unholy
+    plus: 2
+  -
+    - -1
+    - 95
+    - 78
+  - name: wounding
+    plus: 2
+  -
+    - -1
+    - -1
+    - 83
+  - name: speed
+    plus: 3
+  -
+    - -1
+    - -1
+    - 86
+  - name: brilliant energy
+    plus: 4
+  -
+    - -1
+    - -1
+    - 88
+  - name: dancing
+    plus: 4
+    type: melee
+  -
+    - -1
+    - -1
+    - 90
+  - name: vorpal
+    plus: 5
+  -
+    - 100
+    - 100
+    - 100
+  - special: two_abilities

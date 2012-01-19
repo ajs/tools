@@ -1,0 +1,660 @@
+#!/usr/bin/perl -CSD
+#
+# http://www.itasoftware.com/careers/SolveThisWorkHerePuzzles.html?catid=114
+#
+# Write a program to find the largest possible rectangle of letters such
+# that every row forms a word (reading left to right) and every column forms
+# a word (reading top to bottom). Words should appear in this dictionary:
+# WORD.LST (1.66MB). Heuristic solutions that may not always produce a
+# provably optimal rectangle will be accepted: seek a reasonable tradeoff
+# of efficiency and optimality.
+#
+# Beyond what is detailed above, this program provides a number of ways
+# to explore the creation of rectangles of letters from a word list.
+# The input word list must be in UTF-8 format, but may contain words
+# in any combination of Unicode characters as long as they are
+# valid alphabetics (see the --case-sensitive option for control over
+# case). This program is distributed with both the ITA WORD.LST file
+# and the ispell german dictionary (DE.LST).
+#
+# Dependencies:
+#   Time::HiRes - run "cpan Time::HiRes" as root if running under Unix/Linux
+#
+# Suggested command-lines:
+#
+# Help:
+# wordrect --help
+# Assume ITA's WORD.LST file, optimizing the search for known solutions:
+# wordrect --verbose --ita
+# Solve only symetric cases, working up from smallest to largest exhaustively:
+# wordrect --verbose --constrain --timeout 0 --symetric
+# Use the local word list on modern Linux systems:
+# wordrect --word-list /usr/share/dict/words --verbose
+
+use Data::Dumper;
+use Time::HiRes qw(time);
+use Getopt::Long;
+use Pod::Usage;
+use List::Util qw(shuffle);
+use strict;
+
+$|=1;
+
+# Defaults for command-line args:
+our $verbose = 0;
+our $debug = 0;
+our $max_width = 30;
+our $max_height = 30;
+our $word_list = 'WORD.LST';
+our $case_sensitive = 0;
+our $just_one = 0;
+our $square = 0;
+our $symetric = 0;
+our $incremental_progress = 0;
+our $timeout = 0.125;
+our $constrained_search;
+our $max_breadth;
+our $max_area;
+our $try_first = '';
+our $compact = 0;
+
+# Process command-line
+GetOptions(
+    'm|man' => sub {pod2usage(-verbose => 2)},
+    'v|verbose' => \$verbose,
+    'd|debug' => sub {$verbose=1; $debug=1},
+    'w|max-width=i' => \$max_width,
+    'h|max-height=i' => \$max_height,
+    'a|max-area=i' => \$max_area,
+    'l|word-list=s' => \$word_list,
+    'c|case-sensitive' => \$case_sensitive,
+    '1|just-one' => \$just_one,
+    's|symetric-only' => sub {$symetric=1;$square=1},
+    'square' => \$square,
+    'i|incremental-progress' => \$incremental_progress,
+    'C|constrained-search' => \$constrained_search,
+    't|timeout=f' => \$timeout,
+    'b|max-breadth=i' => \$max_breadth,
+    'f|try-first=s' => \$try_first,
+    'ita' => sub { $try_first = 'nreid' },
+    'compact' => \$compact
+) or pod2usage("Argument processing error");
+
+$try_first =~ s/u\+([a-f0-9]+)/chr(hex("0x".$1))/ieg if $try_first;
+
+our $start_time = time();
+my %done;
+our @parts;
+my @lens;
+my %all_letters;
+
+# Read input list
+print "Reading word list\n" if $verbose;
+my $wl;
+open($wl,"<", $word_list) or die "Cannot open $word_list: $!";
+while(<$wl>) {
+    chomp;
+    $_ = lc $_ unless $case_sensitive;
+    next unless /^\w{2,}$/ && !/[_\d]/; # alpha only
+    next if $done{$_}++; # Probably pointless paranoia
+    my $len = length($_);
+    next if $len > $max_width && $len > $max_height;
+    next if $max_area && $len > $max_area/2;
+    $lens[$len]++;
+    # Grab all prefixes that make up this word e.g.:
+    #	apple becomes: a => p, ap => p, app => l, appl => e
+    for(my $wi=0;$wi<$len;$wi++) {
+	$all_letters{my $l = substr($_,$wi,1)}++;
+	$parts[$len]{substr($_,0,$wi)}.=$l;
+    }
+}
+
+undef $wl;
+undef %done;
+
+# when $try_first is set, we use it as a pre-sorted list of letters to try,
+# which does not eliminate search time, but vastly reduces it when chosen
+# properly.
+my @letter_map = uniq(split(//,$try_first), sort {$b cmp $a} keys %all_letters);
+# Sort and uniquify the letters available for each word prefix
+for(my $i=2;$i<@parts;$i++) {
+    next unless $parts[$i];
+    foreach my $part (keys %{$parts[$i]}) {
+	my %letters;
+	$letters{$_}++ foreach split //, $parts[$i]{$part};
+	if ($try_first) {
+	    $parts[$i]{$part} = [ grep {$letters{$_}} @letter_map];
+	} else {
+	    $parts[$i]{$part} = [ sort {$letters{$b} <=> $letters{$a}} keys %letters ];
+	}
+    }
+}
+
+# Generate the list of all possible rectangle sizes (assume that
+# the list might be sparse, so only search rectangle sizes that
+# are made up of observed word lengths).
+my @all_lens = grep {$lens[$_]} 2 .. $#lens;
+my @all_dims = sort {order($b) <=> order($a) ||
+		     abs($a->[0]-$a->[1]) <=> abs($b->[0]-$b->[1])}
+	       grep {
+		    $_->[0] >= $_->[1] &&
+		    (!$max_width || $_->[0] <= $max_width) &&
+		    (!$max_height || $_->[1] <= $max_height)
+	       }
+	       map {my $n=$_; map {[$n,$_]} @all_lens} @all_lens;
+
+print "Ready to begin searching.\n" if $verbose;
+
+# Now begin walking through the list, largest rectangles first,
+# doubling the timeout each time we complete all rectangles.
+#
+# Function call overhead is high in Perl, so there's a lot of
+# manual inlining, here, calling out to external functions only
+# in rarely executed cases (such as printing a solution). This
+# makes the code uglier, but gives us the performance we need.
+my $have_answer = 0;
+my @saved_stack;
+my @completed;
+
+$SIG{INT} = sub {
+    my $runtime = time()-$start_time;
+    printf "Total runtime: %.3fsec\n",$runtime;
+    my $largest = (sort {$b<=>$a}
+		   map {$_->[0] * $_->[1]}
+		   grep {!$completed[$_->[0]][$_->[1]]} @all_dims)[0];
+    my $smallest = $have_answer;
+    print "Solution is known to be between $smallest and $largest.\n"
+	if $largest;
+    exit 0;
+};
+
+# Outer loop is for the per-rectangle timeout (if any)
+for(;;$timeout*=2) {
+    my $incremental_period = ($timeout?$timeout/3:5);
+    print "Timeout: $timeout","sec\n" if $verbose && $timeout;
+    my $record_depth = 0;
+    my $work_done = 0;
+    # Then loop over the rectangle shapes
+    DIM: foreach my $pair (@all_dims) {
+	my($hlen,$vlen) = @$pair;
+	my $dim = $hlen*$vlen;
+	next if $dim <= $have_answer;
+	next if $completed[$hlen][$vlen];
+	next if $max_area && $dim > $max_area;
+	if ($dim > ($have_answer ? sqrt($have_answer)+1 : 3)**2  &&
+	    $constrained_search) {
+	    next;
+	}
+	next if $square && $hlen != $vlen;
+	print "Considering $hlen x $vlen ($dim)\n" if $debug || $timeout==0 || $incremental_progress;
+	$work_done = 1;
+	# starting stack directs us to progress to 0,0
+	my @stack = ([-1,0,("*"x$dim)x2,1]);
+	if ($saved_stack[$hlen][$vlen]) {
+	    @stack = @{$saved_stack[$hlen][$vlen]};
+	    $saved_stack[$hlen][$vlen] = undef;
+	}
+	my $max_inc = 0;
+	my $inc_then = my $then = time();
+	my $vparts = $parts[$vlen];
+	my $hparts = $parts[$hlen];
+	my @next;
+	# Now build a stack and start processing it
+	while((my $work = pop @stack)) {
+	    my($x,$y,$board1,$board2,$sym,$cur) = @$work;
+	    substr($board1,$x+$y*$hlen,1) = $cur;
+	    substr($board2,$y+$x*$vlen,1) = $cur;
+	    # Increment through the rectangle in a right-left/top-bottom path
+	    if ($x < $hlen-1) { $x++; } else { $x = 0; $y++; }
+	    my $hpart = substr($board1,$y*$hlen,$x);
+	    my $vpart = substr($board2,$x*$vlen,$y);
+	    if ($symetric && $hlen == $vlen && $y > $x) {
+		push @stack, [$x,$y,$board1,$board2,1,
+			      substr($board1,$y+$x*$hlen,1)];
+		next;
+	    }
+	    if ($y && $x == 0) {
+		@next = @{$vparts->{$vpart}};
+	    } elsif ($x && $y == 0) {
+		@next = @{$hparts->{$hpart}};
+	    } else {
+		# Find the intersection of two lists of letters
+		my $vp = '['.join("",@{$vparts->{$vpart}}).']';
+		@next = grep {/$vp/} @{$hparts->{$hpart}};
+	    }
+
+	    # Squares don't need to search both sides of
+	    # symetries.
+	    my @sym;
+	    if ($sym && $hlen == $vlen && $y > $x) {
+		my $v2part = substr($board2,$y*$vlen,$x+1);
+		@next = grep { $v2part le $hpart.$_ } @next;
+		@sym = map { $v2part eq $hpart.$_ } @next;
+	    }
+	    # Check for solution
+	    if (@next && $x == $hlen-1 && $y == $vlen-1) {
+		solved_board($hlen,$vlen,$board1,@next);
+		$have_answer = $dim;
+		next DIM;
+	    }
+	    # Print incremental progress if requested
+	    if($incremental_progress &&
+	       (!$timeout || $timeout >= 1) &&
+	       $x+$y*$hlen > $record_depth &&
+	       time()-$inc_then >= $incremental_period) {
+		solved_board($hlen,$vlen,$board1);
+		print "Stack depth: ",scalar(@stack),"\n" if $verbose;
+		$record_depth = $x+$y*$hlen;
+		$inc_then = time();
+	    }
+	    # Push the possible next moves on the stack
+	    for(my $i=$#next;$i>=0;$i--) {
+		next if $x != $hlen-1 && !$hparts->{$hpart.$next[$i]};
+		next if $y != $vlen-1 && !$vparts->{$vpart.$next[$i]};
+		push @stack, [ $x,$y,$board1,$board2,$sym[$i],$next[$i] ];
+	    }
+	    if ($timeout && time()-$then > $timeout) {
+		$saved_stack[$hlen][$vlen]=\@stack;
+		next DIM;
+	    }
+	}
+	print "Completely traversed $hlen x $vlen\n" if $verbose;
+	$completed[$hlen][$vlen]=1;
+    }
+    last unless $work_done;
+}
+
+# Print the solution
+sub solved_board {
+    my($hlen,$vlen,$board,@next) = @_;
+    my $dim = $hlen*$vlen;
+    print "--" x $hlen, "\n" if $verbose;
+    printf "%d x %d (%d) solution found in %.3fsec\n",
+	$hlen, $vlen, $dim, time()-$start_time if @next;
+    for(my $y=0;$y<$vlen;$y++) {
+	my $x;
+	for($x=0;$x<$hlen;$x++) {
+	    if ($x == $hlen - 1 && $y == $vlen - 1) {
+		print $next[0] if @next;
+		print "\n",scalar(@next)," possible last letters"
+		    if @next > 1;
+	    } else {
+		my $l = substr($board,$x+$y*$hlen,1);
+		print $l;
+		print " " unless $compact || $x==$hlen-1;
+	    }
+	}
+	print "*" if @next == 0 && $y+1 == $vlen && $x == $hlen;
+	print "\n";
+    }
+    exit 0 if $just_one && @next;
+}
+
+# Ordering of the rectangles to search (by size)
+sub order {
+    my($pair) = @_;
+    return $pair->[0]*$pair->[1];
+}
+
+# Uniquify a list, preserving order
+sub uniq {
+    my %seen;
+    return grep {!$seen{$_}++} @_;
+}
+
+__END__
+
+=head1 NAME
+
+wordrect - Find the largest rectangle of words from a given list
+
+=head1 SYNOPSIS
+
+ wordrect [options]
+
+ options:
+ 
+  -h | --help		    This synopsis
+  -m | --man		    Produce full manual
+  -v | --verbose	    Output verbose status
+  -1 | --just-one	    Exit after finding a single solution
+  -C | --constrained-search Search only smaller rectangles
+  -c | --case-sensitive	    Keep input words' case
+  --compact		    Compact output (no spaces)
+  -f | --try-first STRING   Try each letter in string in order, first
+  -h | --max-height N	    Consider words <= N in length down
+  -i | --incremental-progress
+			    Print progress (rectangle being searched)
+  --ita			    Use a --try-first string based on ITA's WORD.LST
+  -l | --word-list FILE	    Use FILE as the input word list
+  --square		    Only search squares
+  -t | --timeout N	    First pass times out each rectangle in N sec
+  -w | --max-width N	    Consider words <= N in length across
+
+  Typical usage:
+
+  wordrect --verbose --constrain --square
+
+  To just search for a 7x7 square:
+
+  wordrect --max-width 7 --square --timeout 0
+
+=head1 DESCRIPTION
+
+From the ITA puzzle:
+
+C<http://www.itasoftware.com/careers/SolveThisWorkHerePuzzles.html?catid=114>
+
+=over 5
+
+Write a program to find the largest possible rectangle of letters such
+that every row forms a word (reading left to right) and every column forms
+a word (reading top to bottom). Words should appear in this dictionary:
+WORD.LST (1.66MB). Heuristic solutions that may not always produce a
+provably optimal rectangle will be accepted: seek a reasonable tradeoff
+of efficiency and optimality.
+
+=back
+
+=head2 Approach
+
+This implementation reads the wordlist and breaks each word down into
+prefixes mapped to the possible next letters. So if a dictionary contains:
+
+ apple
+ aptly
+
+Then our datastructre would look like:
+
+ a=>[p]
+ ap=>[pt]
+ app=>[l]
+ appl=>[e]
+ apt=>[l]
+ aptl=>[y]
+
+And when building a rectangle with either height or width of 5, those
+prefixes would be consulted and masked against the possible next letters
+determined by the opposing prefix. For example:
+
+ stats
+ ap***
+ *****
+ *****
+ *****
+
+Here, we have to place a next letter after the p. Consulting our table in
+one direction gives "p" and "t" as possible next characters because of the
+leading "ap", but in the other direction the leading "a" allows only for
+a next character of "p". The intersection of these is "p", and so we place
+that in the next slot.
+
+The key question is how you sort the choices at each stage. Right now,
+I punt and just sort them in reverse alphabetical order. I tried many
+orderings including by the frequency of occurance, and the most efficient
+appeared to be reverse alphabetical. This seems non-intutive to me,
+so I'm guessing that either it's a lucky hit or there's some underlying
+mechanism that I'm missing.
+
+=head2 Previous Approach
+
+This implementation pre-processes the input wordlist into a datastructure
+that collects word parts by total word length and part length for rapid
+access. Then, it picks the largest rectangle and begins to search the
+space of possible words. If it does not finish before a given timeout,
+it saves its place and proceeds to the next rectangle. In this way,
+it searches more breadth of the space at the cost of not finding the best
+solution first.
+
+Once the first pass is done, the timeout is doubled and the search begins
+again. This is repeated until the search is complete.
+
+The boundary for the search is set at the largest found rectangle and
+any rectangle whose search is exhausted is removed from the list.
+
+This approach was developed through trial and error. Early attempts yielded
+little fruit because of the rapid discovery of very deep corners of the
+search space. However, some rectangles were search exhaustively nearly
+instantly. It seemed to make more sense to find all of the nearly empty
+search spaces quickly and remove them from consideration. By using a timeout,
+not only is this achived, but the definition of "shallow search space"
+can change as we get deeper and deeper into the search, allowing us
+to set any arbitrary upper bound on the search time and still likely have
+covered all of the possible rectangle shapes and produced at least one
+answer of moderate length.
+
+=head2 RESULTS
+
+Here's the complete solution for symetric squares (for historical reasons,
+this is an old, and less efficient solution, but it provides context for
+the later comments; the new 8x8 symetric solution is found in 34sec):
+
+ $ ./wordrect --verbose --const -t 0 --square --inc --sym
+ Reading word list
+ Ready to begin searching.
+ Considering 3 x 3 (9)
+ ------
+ 3 x 3 (9) solution found in 10.460sec
+ z o o 
+ o x o 
+ o o t 
+ 2 possible last letters
+ Considering 4 x 4 (16)
+ --------
+ 4 x 4 (16) solution found in 10.462sec
+ z y m e 
+ y w i s 
+ m i t e 
+ e s e s 
+ Considering 5 x 5 (25)
+ ----------
+ 5 x 5 (25) solution found in 10.464sec
+ z y m e s 
+ y o u t h 
+ m u s h y 
+ e t h y l 
+ s h y l y 
+ Considering 6 x 6 (36)
+ ------------
+ 6 x 6 (36) solution found in 10.477sec
+ z y m a s e 
+ y o u p o n 
+ m u s i c s 
+ a p i e c e 
+ s o c c e r 
+ e n s e r f 
+ Considering 7 x 7 (49)
+ --------------
+ 7 x 7 (49) solution found in 11.011sec
+ z o s t e r s 
+ o v e r l e t 
+ s e r i e m a 
+ t r i m m e r 
+ e l e m e n t 
+ r e m e n d s 
+ s t a r t s y 
+ Considering 8 x 8 (64)
+ ----------------
+ 8 x 8 (64) solution found in 2634.924sec
+ n e r e i d e s 
+ e t e r n i s e 
+ r e n o v a t e 
+ e r o t i z e d 
+ i n v i t e r s 
+ d i a z e p a m 
+ e s t e r a s e 
+ s e e d s m e n 
+
+The interesting thing about the above is that the search space is small
+enough that we can demonstrate that there's no 9x9 solution in a reasonable
+period of time after finding the 8x8.
+
+And here's a relatively fast solution for the general case that assumes
+ITA's words list. Using the above solution as a starting point, the first
+few letters are used as a guide to sorting the search space. This drastically
+improves performance, though I still have not found an ideal sort that
+will make all cases trivial. This sort, for example, performs quite poorly
+for 6x6 and 7x7 squares compared to many others.
+
+ $ ./wordrect --verbose --ita
+ Reading word list
+ Ready to begin searching.
+ Timeout: 0.125sec
+ ----------------
+ 8 x 8 (64) solution found in 32.003sec
+ n e r e i d e s
+ e n e r g i s e
+ r e s o n a t e
+ e r o t i z e d
+ i g n i t e r s
+ d i a z e p a m
+ e s t e r a s e
+ s e e d s m e n 
+
+Left entirely to its own devices, this program finds a reasonably sized answer
+in just over 3 minutes:
+
+ 20 x 3 (60) solution found in 190.185sec
+ p h o t o i n t e r p r e t a t i o n s
+ h y p e r c o a g u l a b i l i t i e y
+ t r a n s f o r m a t i o n a l i s t s
+
+=head1 OPTIONS
+
+=over 5
+
+=item C<-m>
+
+=item C<--man>
+
+Produce this manaual.
+
+=item C<-v>
+
+=item C<--verbose>
+
+Output verbose status.
+
+=item C<-1>
+
+=item C<--just-one>
+
+Exit after finding the first solution. This is most useful when combined with
+C<--initial-timeout> of 0, which implies that the first solution found
+is also the best.
+
+=item <-C>
+
+=item <--constrained-search>
+
+Start searching the smallest rectangles, and constrain the search to
+just those. When a solution is found, the search is increased to
+include rectangles which are one wider and higher than the previous
+solution.
+
+Do not combine this option with C<--only-one> or C<--initial-timeout 0>
+as that would result in producing only small results.
+
+=item C<-c>
+
+=item C<--case-sensitive>
+
+By default all input words are lowercased. This option turns off that feature
+and compares words in case-sensitive fashion.
+
+=item C<--compact>
+
+Print the results in a compact form (no spaces between letters). By default
+spaces are used to improve formatting.
+
+=item C<-f>
+
+=item C<--try-first>
+
+Takes a string which is used as a list of letters that will be searched
+first. For example, given:
+
+ --try-first abc
+
+The letters "a", "b" and "c" will be used respectively to sort the search
+space.
+
+To insert Unicode characters into the list which might not be available for
+use from the command-line, you can enter their Unicode index like so:
+
+ --try-first u+0041u+00e4
+
+=item C<-h>
+
+=item C<--max-height>
+
+Given a numeric argument, only consider word rectangles whose height is
+less than or equal to that number. Default is 30.
+
+=item C<-i>
+
+=item C<--incremental-progress>
+
+Print progress in terms of the largest rectangles considered and what
+rectangles are currently being considered.
+
+=item C<--ita>
+
+This argument is the exact same as:
+
+ --try-first nreid
+
+It simply sorts the search space based on a known solution for the ITA WORD.LST
+input file. On other input files this may not be ideal.
+
+=item C<-l>
+
+=item C<--word-list>
+
+Given a filename as an argument, this parameter sets the input file for
+the word list to work from. Default is "WORD.LST" which is the filename
+used in the puzzle and provided for download.
+
+=item C<-t>
+
+=item C<--initial-timeout>
+
+The search is performed in passes, with each pass timing out each
+rectangle size after the number of seconds given as an argument to this
+parameter (default 0.25). After all rectangles are done or time out,
+the search time is doubled and the search begins again.
+
+If set to 0, there is no timeout, and each rectangle will be searched
+exhaustively.
+
+=item C<--square>
+
+Like C<--symetric-only>, this forces the consideration of only squares,
+but no other symetry is required.
+
+=item C<-w>
+
+=item C<--max-width>
+
+Given a numeric argument, only consider word rectangles whose width is
+less than or equal to that number. Default is 30.
+
+=back
+
+=head1 AUTHOR
+
+Written in 2008 by Aaron Sherman <ajs@ajs.com>
+
+Copyright 2008, Aaron Sherman. Distributed under the same terms
+as Perl itself:
+
+C<http://dev.perl.org/licenses/>
+
+The ITA WORD.LST file is owned by ITA Software, Inc.
+
+The DE.LST file is part of the igerman98-20000710, and is distributed under
+the GPL
+
+C<http://www.j3e.de/ispell/igerman98/dict/>
+
+=cut

@@ -1,0 +1,105 @@
+
+# Identifiers
+
+π = 3.14159;
+_ = 1;
+_8 = 2;
+apple = 3;
+
+# As a matter of convention, which may be enforced by compiler stricture
+# options, left-to-right and right-to-left symbols should not appear
+# within the same program's executable text (comments and documentation
+# may allow for this), nor should any combining diacritical marks
+# appear within an identifier.
+
+$a; # a is a variable
+my a $b; # b is of type a
+:a # The adverb a
+:a(b) # The adverb a parameterized by variable b
+:$a # the variable a as an adverb
+$a:b; # create a value which is constructed from variable a and adverb b
+$a:$b; # create a value which is constructed from variables a and b
+a($b); # a is a function, called with one arg: $b
+$a.b; # b is a method of object a
+a{b}; # a is a special grammar which will parse b and return an AST
+
+# Square brackets delimit lists
+[1, 2, 3];
+# Lists with only pairs are called "alists". Unlike hashes, they are ordered.
+[ a => 1, b => 2 ]; # note auto-quoting of identifiers on LHS of =>
+# Storing a list into a typed container:
+my hash $h = [ a => 1, b => 2 ]; # Convert the alist to a hash (ordering lost)
+my array $a = [1, 2, 3]; # Convert the list into an array (ordering preserved)
+
+# Braces delimit code (closures):
+{ for 1 .. 100 -> ($i) { print $i } }
+
+# Functions are declared with sub:
+sub hello($who) { print "Hello, $who"; }
+
+# Function parameter list signatures can be complex:
+sub somefunc(type $param1, $param2 = 1, :$param3) { ...  }
+
+# A lone parameter, with or without type, may be passed as positional
+# or named. A parameter marked as an adverb (leading ":") is passed
+# named-only (never positionally)
+somefunc(1,2); # param1=1, param2=2, param3=undef
+somefunc(1); # param1=1, param2=undef, param3=undef
+somefunc(:param1(1), :param2(2), :param3(3)); # param1=1, param2=2, param3=3
+somefunc(:param3(1), 2); # param1=2, param2=undef, param3=1
+
+# Variable length parameter lists (variadics) are specified with *
+# and/or *: like so:
+
+sub somefunc(*$pos_args, *:$name_args) { ... }
+
+# The * parameter will pick up all positional parameters as a list.
+# The *: parameter will pick up all named parameters as a list of
+# ordered pairs.
+
+# The Perl 5 like default behavior looks like this:
+sub perl5func(*$_) {
+	(my $a, my $b) = *$_;
+	...
+}
+
+# Methods are declared with the method keyword:
+method somemethod(...) {...}
+
+# A program is wrapped in a namespace ("main") and a subroutine ("_main")
+# and executed as if it had been called with the parameters:
+	_main(*$argv, *:$argh);
+# Where $argv is the array of command-line parameters and $argh is 
+# the environment variable table, plus any parameters which are
+# to be communicated from the interpreter to the program.
+
+# Strings may use either or both of {} or $ to interpolate code or variables
+# respectively:
+print "Now is the $time { for =$men -> ($all, $good) { ... }";
+
+# As in Perl, qq{...} is the same as "..." and q{...} is the same as '...'
+# More generally, however, when the compiler sees:
+
+	a{
+
+# It immediately engages the grammar named "a" to parse the brace-delimited
+# program text. The returned AST is then inserted into the program.
+# This is how regexes work:
+
+	re{ a .* b }
+	rule somename re{ a <somename>* }
+
+# Documentation is added in the same way as Perl 5, though this is open
+# to future modification. This means that:
+
+__END__
+
+ends file parsing
+
+=head1 NAME
+
+is a good way to start off your docs
+
+However, it's still true that a line starting with = will trigger pod mode,
+and will continue in pod mode until a =cut line.
+

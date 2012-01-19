@@ -1,0 +1,39 @@
+---
+- 10
+- metal: 1
+  name: buckler
+  price: 165
+  type: shield
+  weight: 5
+  wood: 1
+- 15
+- name: 'shield, light, wooden'
+  price: 153
+  type: shield
+  weight: 5
+  wood: 1
+- 20
+- metal: 1
+  name: 'shield, light, steel'
+  price: 159
+  type: shield
+  weight: 6
+- 30
+- name: 'shield, heavy, wooden'
+  price: 157
+  type: shield
+  weight: 10
+  wood: 1
+- 95
+- metal: 1
+  name: 'shield, heavy, steel'
+  price: 170
+  type: shield
+  weight: 15
+- 100
+- metal: 1
+  name: 'shield, tower'
+  price: 180
+  type: shield
+  weight: 45
+  wood: 1

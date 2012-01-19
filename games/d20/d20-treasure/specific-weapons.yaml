@@ -1,0 +1,242 @@
+---
+-
+  -
+    - 15
+    - -1
+    - -1
+  - name: sleep arrow
+    plus: 1
+    price: 132
+  -
+    - 25
+    - -1
+    - -1
+  - name: screaming bolt
+    plus: 2
+    price: 267
+  -
+    - 45
+    - -1
+    - -1
+  - name: 'silver dagger, masterwork'
+    plus: 0
+    price: 322
+  -
+    - 65
+    - -1
+    - -1
+  - name: 'cold iron longsword, masterwork'
+    plus: 0
+    price: 330
+  -
+    - 75
+    - 9
+    - -1
+  - name: javelin of lightning
+    plus: 2
+    price: 1500
+  -
+    - 80
+    - 15
+    - -1
+  - name: slaying arrow
+    special: bane
+    plus: 2
+    price: 2282
+  -
+    - 90
+    - 24
+    - -1
+  - name: adamantine dagger
+    plus: 0
+    price: 3002
+  -
+    - 100
+    - 33
+    - -1
+  - name: adamantine battleaxe
+    plus: 0
+    price: 3010
+  -
+    - -1
+    - 37
+    - -1
+  - name: slaying arrow (greater)
+    special: bane
+    plus: 3
+    price: 4057
+  -
+    - -1
+    - 40
+    - -1
+  - name: shatterspike
+    plus: 3
+    price: 4315
+  -
+    - -1
+    - 46
+    - -1
+  - name: dagger of venom
+    plus: 3
+    price: 8302
+  -
+    - -1
+    - 51
+    - -1
+  - name: trident of warning
+    plus: 3
+    price: 10115
+  -
+    - -1
+    - 57
+    - 4
+  - name: assassin's dagger
+    plus: 3
+    price: 10302
+  -
+    - -1
+    - 62
+    - 7
+  - name: shifter's sorrow
+    plus: 3
+    price: 12780
+  -
+    - -1
+    - 66
+    - 9
+  - name: trident of fish command
+    plus: 3
+    price: 18650
+  -
+    - -1
+    - 74
+    - 13
+  - name: flame tongue
+    plus: 3
+    price: 20715
+  -
+    - -1
+    - 79
+    - 17
+  - name: luck blade (0 wishes)
+    plus: 3
+    price: 22060
+  -
+    - -1
+    - 86
+    - 24
+  - name: sword of subtlety
+    plus: 4
+    price: 22310
+  -
+    - -1
+    - 91
+    - 31
+  - name: sword of the planes
+    plus: 4
+    price: 22315
+  -
+    - -1
+    - 95
+    - 37
+  - name: nine lives stealer
+    plus: 4
+    price: 23057
+  -
+    - -1
+    - 98
+    - 42
+  - name: sword of life stealing
+    plus: 4
+    price: 25715
+  -
+    - -1
+    - 100
+    - 46
+  - name: oathbow
+    plus: 4
+    price: 25600
+  -
+    - -1
+    - -1
+    - 51
+  - name: mace of terror
+    plus: 5
+    price: 38552
+  -
+    - -1
+    - -1
+    - 57
+  - name: life-drinker
+    plus: 5
+    price: 40320
+  -
+    - -1
+    - -1
+    - 62
+  - name: sylvan scimitar
+    plus: 5
+    price: 47315
+  -
+    - -1
+    - -1
+    - 67
+  - name: rapier of puncturing
+    plus: 5
+    price: 50320
+  -
+    - -1
+    - -1
+    - 73
+  - name: sun blade
+    plus: 5
+    price: 50335
+  -
+    - -1
+    - -1
+    - 79
+  - name: frost brand
+    plus: 5
+    price: 54475
+  -
+    - -1
+    - -1
+    - 84
+  - name: dwarven thrower
+    plus: 6
+    price: 60312
+  -
+    - -1
+    - -1
+    - 91
+  - name: luck blade (1 wish)
+    plus: 6
+    price: 62360
+  -
+    - -1
+    - -1
+    - 95
+  - name: mace of smiting
+    plus: 7
+    price: 75312
+  -
+    - -1
+    - -1
+    - 97
+  - name: luck blade (2 wishes)
+    plus: 10
+    price: 102660
+  -
+    - -1
+    - -1
+    - 99
+  - name: holy avenger
+    plus: 10
+    price: 120630
+  -
+    - -1
+    - -1
+    - 100
+  - name: luck blade (3 wishes)
+    plus: 10
+    price: 142960

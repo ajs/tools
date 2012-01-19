@@ -1,0 +1,80 @@
+# Cursed items listed in Dragon Magazine. THERE ARE NO PERCENTILE NUMBERS
+# because dragon doesn't list them that way. See dragon-items table for
+# more info.
+---
+- issue: 331
+  name: arrow of bursting
+  price: 100
+  subtype: ammo
+  type: weapon
+- issue: 331
+  name: ghost mantle
+  price: 100000
+  type: wondrous item
+- issue: 331
+  name: mask of the sun's radiance
+  price: 10000
+  type: wondrous item
+- issue: 331
+  name: ring of breathing water
+  price: 6000
+  type: ring
+- issue: 331
+  name: rod of animated dead
+  price: 24000
+  type: rod
+- issue: 331
+  name: rod of delusions
+  price: 20000
+  type: rod
+- issue: 331
+  name: singing ioun stone
+  price: 12000
+  type: wondrous item
+- issue: 331
+  name: spellbook of dissolution
+  price: 6250
+  type: wondrous item
+  special: book
+- charges: 50
+  issue: 331
+  name: walking staff
+  price: 39500
+  type: staff
+- issue: 336
+  name: blasphemous figurines of the void
+  price: 14000
+  type: wondrous item
+- issue: 336
+  name: brush of the fallen master
+  price: 20000
+  type: wondrous item
+- issue: 336
+  name: carnivorous tome
+  price: 150000
+  type: wondrous item
+  special: book
+- charges: -1
+  issue: 336
+  name: fiendish elixir
+  price: 5000
+  type: wondrous item
+- issue: 336
+  name: mask of endless laughter
+  price: 24500
+  type: wondrous item
+- issue: 336
+  name: parasitic twin
+  price: 91000
+  type: wondrous item
+- frequency: common
+  issue: 336
+  name: sacrificial knife
+  price: 14302
+  subtype: melee
+  type: weapon
+- charges: 50
+  issue: 336
+  name: staff of nightmares
+  price: 51000
+  type: staff
