@@ -5,9 +5,11 @@
 import random
 
 class D20Treasure(object):
-    def __init__(self, value, sale_value):
+    def __init__(self, value, sale_value, name, description):
         self.value = value
         self.sale_value = sale_value
+        self.name = name
+        self.description = description
 
 class Roller(object):
     @staticmethod
