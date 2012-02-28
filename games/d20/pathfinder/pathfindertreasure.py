@@ -108,9 +108,11 @@ class D20Weapon(D20Treasure):
     def __init__(self, name, weapon_type, weapon_data):
         self.combat = weapon_data['combat']
         cost = D20Coin.gp(float(weapon_data['cost']))
-        self.material = weapon_data['material']
+        self.material = weapon_data.get('material', 'metal')
         self.count = weapon_data.get('count', 1)
         self.heads = weapon_data.get('heads', 1)
+        self.weight = float(weapon_data.get('weight', 0))
+        self.heft = weapon_data.get('heft', None)
         super(D20Weapon, self).__init__(
             value=cost,
             sale_value=cost/2,
@@ -146,12 +148,58 @@ class D20Weapon(D20Treasure):
         weapons = D20Weapon.get_weapons(max_value=max_value)
         weapon_data = Roller.pick_one(weapons[weapon_type])
         weapon = D20Weapon(weapon_data['name'], weapon_type, weapon_data)
+
+        special_material = Roller.d100()
+        sm_desc = None
+        sm_cost = 0
+        sm_masterwork = masterwork
+        if special_material >= 95:
+            if masterwork is not False:
+                if weapon.material == 'wood':
+                    sm_desc = 'darkwood'
+                    sm_cost = D20Coin.gp(10*weapon.weight)
+                    sm_masterwork = True
+                elif weapon.material == 'metal':
+                    metals = ('adamantine', 'cold iron', 'mithral',
+                              'alchemical silver')
+                    metal = Roller.pick_one(metals)
+                    sm_desc = metal
+                    if metal == 'adamantine':
+                        if weapon.count > 1:
+                            sm_cost = D20Coin.gp(60 * weapon.count)
+                        else:
+                            sm_cost = D20Coin.gp(3000)
+                        sm_masterwork = True
+                    elif metal == 'cold iron':
+                        # The rules say you can have one head be cold
+                        # cold iron and another head be something else.
+                        # I say that's silly.
+                        sm_cost = weapon.value * weapon.heads
+                    elif metal == 'mithral':
+                        sm_cost = D20Coin.gp(500 * weapon.weight)
+                        sm_masterwork = 1
+                    elif metal == 'alchemical silver' and weapon.heft:
+                        if weapon.count > 1:
+                            sm_cost = D20Coin.gp(2)
+                        elif weapon.heft == 'light':
+                            sm_cost = D20Coin.gp(20)
+                        elif weapon.heft == '1-handed':
+                            sm_cost = D20Coin.gp(90)
+                        else:
+                            sm_cost = D20Coin.gp(180)
+
+        if sm_desc is not None:
+            if max_value is None or weapon.value + sm_cost <= max_value:
+                weapon.name = sm_desc + ' ' + weapon.name
+                weapon.value += sm_cost
+                weapon.sale_value += sm_cost/2
+                masterwork = sm_masterwork
+
         if masterwork is False:
             return weapon
         elif masterwork == 'random':
-            mwkroll = Roller.roll1(sides=20)
-            #logging.debug("Masterwork roll: %d" % mwkroll)
-            if mwkroll < 18:
+            mwkroll = Roller.d100()
+            if mwkroll < 90:
                 return weapon
 
         if weapon.count > 1:
@@ -220,6 +268,18 @@ class Roller(object):
             if int(row[0]) >= pick:
                 return row[1:]
         return None
+
+    @staticmethod
+    def d6():
+        return Roller.roll1(sides=6)
+
+    @staticmethod
+    def d20():
+        return Roller.roll1(sides=20)
+
+    @staticmethod
+    def d100():
+        return Roller.roll1(sides=100)
 
     @staticmethod
     def pick_one(table):

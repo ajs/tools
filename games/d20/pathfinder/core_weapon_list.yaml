@@ -5,42 +5,50 @@
       material: 'metal'
       combat: 'melee'
       weight: 1
+      heft: 'light'
     - name: 'light mace'
       cost: 2
       material: 'metal'
       combat: 'melee'
       weight: 4
+      heft: 'light'
     - name: 'heavy mace'
       cost: 12
       material: 'metal'
       combat: 'melee'
       weight: 8
+      heft: '1-handed'
     - name: 'morningstar'
       cost: 8
       material: 'metal'
       combat: 'melee'
       weight: 6
+      heft: '1-handed'
     - name: 'shortspear'
       cost: 1
       material: 'wood'
       combat: 'ranged'
       weight: 3
+      heft: '1-handed'
     - name: 'longspear'
       cost: 5
       material: 'wood'
       combat: 'ranged'
       weight: 3
+      heft: '2-handed'
     - name: 'quarterstaff'
       cost: 5
       heads: 2
       material: 'wood'
       combat: 'melee'
       weight: 4
+      heft: '2-handed'
     - name: 'spear'
       cost: 2
       material: 'wood'
       combat: 'ranged'
       weight: 6
+      heft: '2-handed'
     - name: 'light crossbow'
       cost: 35
       material: 'wood'
@@ -49,7 +57,7 @@
     - name: 'crossbow bolt'
       count: 10
       cost: 1
-      material: 'wood'
+      material: 'metal'
       combat: 'ranged'
       weight: 1
     - name: 'short sword'
@@ -57,16 +65,19 @@
       material: 'metal'
       combat: 'melee'
       weight: 2
+      heft: 'light'
     - name: 'longsword'
       cost: 15
       material: 'metal'
       combat: 'melee'
       weight: 4
+      heft: '1-handed'
     - name: 'greatsword'
       cost: 50
       material: 'metal'
       combat: 'melee'
       weight: 8
+      heft: '2-handed'
     - name: 'longbow'
       cost: 75
       material: 'wood'
@@ -75,7 +86,7 @@
     - name: 'arrow'
       cost: 1
       count: 20
-      material: 'wood'
+      material: 'metal'
       combat: 'ranged'
       weight: 3
     - name: 'shortbow'
@@ -89,21 +100,25 @@
       material: 'metal'
       combat: 'melee'
       weight: 1
+      heft: 'light'
     - name: 'spiked gauntlet'
       cost: 5
       material: 'metal'
       combat: 'melee'
       weight: 1
+      heft: 'light'
     - name: 'sickle'
       cost: 6
       material: 'metal'
       combat: 'melee'
       weight: 2
+      heft: 'light'
     - name: 'club'
       cost: 0
       material: 'wood'
       combat: 'melee'
       weight: 3
+      heft: '1-handed'
     - name: 'blowgun'
       cost: 2
       material: 'wood'
@@ -142,121 +157,145 @@
       material: 'metal'
       combat: 'ranged'
       weight: 2
+      heft: 'light'
     - name: 'light hammer'
       cost: 1
       material: 'metal'
       combat: 'melee'
       weight: 2
+      heft: 'light'
     - name: 'handaxe'
       cost: 6
       material: 'metal'
       combat: 'melee'
       weight: 3
+      heft: 'light'
     - name: 'kukri'
       cost: 8
       material: 'metal'
       combat: 'melee'
       weight: 2
+      heft: 'light'
     - name: 'light pick'
       cost: 4
       material: 'metal'
       combat: 'melee'
       weight: 3
+      heft: 'light'
     - name: 'sap'
       cost: 1
       material: 'leather'
       combat: 'melee'
       weight: 2
+      heft: 'light'
     - name: 'starknife'
       cost: 24
       material: 'metal'
       combat: 'ranged'
       weight: 3
+      heft: 'light'
     - name: 'battleaxe'
       cost: 10
       material: 'metal'
       combat: 'melee'
       weight: 6
+      heft: '1-handed'
     - name: 'flail'
       cost: 8
       material: 'metal'
       combat: 'melee'
       weight: 5
+      heft: '1-handed'
     - name: 'heavy pick'
       cost: 8
       material: 'metal'
       combat: 'melee'
       weight: 6
+      heft: '1-handed'
     - name: 'rapier'
       cost: 20
       material: 'metal'
       combat: 'melee'
       weight: 6
+      heft: '1-handed'
     - name: 'scimitar'
       cost: 15
       material: 'metal'
       combat: 'melee'
       weight: 4
+      heft: '1-handed'
     - name: 'trident'
       cost: 15
       material: 'metal'
       combat: 'melee'
       weight: 4
+      heft: '1-handed'
     - name: 'warhammer'
       cost: 12
       material: 'metal'
       combat: 'melee'
       weight: 5
+      heft: '1-handed'
     - name: 'falchion'
       cost: 75
       material: 'metal'
       combat: 'melee'
       weight: 8
+      heft: '2-handed'
     - name: 'glaive'
       cost: 8
       material: 'metal'
       combat: 'melee'
       weight: 10
+      heft: '2-handed'
     - name: 'greataxe'
       cost: 20
       material: 'metal'
       combat: 'melee'
       weight: 12
+      heft: '2-handed'
     - name: 'greatclub'
       cost: 5
       material: 'wood'
       combat: 'melee'
       weight: 8
+      heft: '2-handed'
     - name: 'heavy flail'
       cost: 15
       material: 'metal'
       combat: 'melee'
       weight: 10
+      heft: '2-handed'
     - name: 'guisarme'
       cost: 9
       material: 'metal'
       combat: 'melee'
       weight: 12
+      heft: '2-handed'
     - name: 'halberd'
       cost: 10
       material: 'metal'
       combat: 'melee'
       weight: 12
+      heft: '2-handed'
     - name: 'lance'
       cost: 10
       material: 'metal'
       combat: 'melee'
       weight: 10
+      heft: '2-handed'
     - name: 'ranseur'
       cost: 10
       material: 'metal'
       combat: 'melee'
       weight: 12
+      heft: '2-handed'
     - name: 'scythe'
       cost: 18
       material: 'metal'
       combat: 'melee'
       weight: 10
+      heft: '2-handed'
     - name: 'composite longbow'
       cost: 100
       material: 'wood'
@@ -279,71 +318,85 @@
       material: 'metal'
       combat: 'melee'
       weight: 2
+      heft: 'light'
     - name: 'nunchaku'
       cost: 2
       material: 'wood'
       combat: 'melee'
       weight: 2
+      heft: 'light'
     - name: 'sai'
       cost: 1
       material: 'metal'
       combat: 'melee'
       weight: 1
+      heft: 'light'
     - name: 'siangham'
       cost: 3
       material: 'metal'
       combat: 'melee'
       weight: 1
+      heft: 'light'
     - name: 'bastard sword'
       cost: 35
       material: 'metal'
       combat: 'melee'
       weight: 6
+      heft: '1-handed'
     - name: 'dwarven waraxe'
       cost: 30
       material: 'metal'
       combat: 'melee'
       weight: 8
+      heft: '1-handed'
     - name: 'whip'
       cost: 1
       material: 'leather'
       combat: 'melee'
       weight: 2
+      heft: '1-handed'
     - name: 'orc double axe'
       cost: 60
       material: 'metal'
       combat: 'melee'
       weight: 15
+      heft: '2-handed'
     - name: 'spiked chain'
       cost: 25
       material: 'metal'
       combat: 'melee'
       weight: 10
+      heft: '2-handed'
     - name: 'elven curve blade'
       cost: 80
       material: 'metal'
       combat: 'melee'
       weight: 7
+      heft: '2-handed'
     - name: 'dire flail'
       cost: 90
       material: 'metal'
       combat: 'melee'
       weight: 10
+      heft: '2-handed'
     - name: 'gnome hooked hammer'
       cost: 20
       material: 'metal'
       combat: 'melee'
       weight: 6
+      heft: '2-handed'
     - name: 'two-bladed sword'
       cost: 100
       material: 'metal'
       combat: 'melee'
       weight: 10
+      heft: '2-handed'
     - name: 'dwarven urgrosh'
       cost: 50
       material: 'metal'
       combat: 'melee'
       weight: 12
+      heft: '2-handed'
     - name: 'bolas'
       cost: 5
       material: 'leather'
