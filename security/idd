@@ -259,25 +259,38 @@ sub bad_index {
 # If we're using RPM, use it to verify key packages
 # Some of the selection is based on this comment on important binaries that
 # are often attacked http://staff.washington.edu/dittrich/misc/faqs/rootkits.faq
-# util-linux-2.7-18	/usr/bin/chfn
+# Update: third column is Ubuntu debconf target for the same files
+# util-linux-2.7-18	/usr/bin/chfn		passwd
 # 			/usr/bin/chsh
 # 			/bin/login
-# fileutils-3.16-9	/bin/ls
-# passwd-0.50-11	/usr/bin/passwd
-# procps-1.2.7-5	/bin/ps
+# fileutils-3.16-9	/bin/ls			coreutils
+# passwd-0.50-11	/usr/bin/passwd		passwd
+# procps-1.2.7-5	/bin/ps			procps
 # 			/usr/bin/top
 # rsh-0.10-4		/usr/sbin/in.rshd
-# net-tools-1.33-6	/bin/netstat
+# net-tools-1.33-6	/bin/netstat		net-tools
 # 			/sbin/ifconfig
 # sysklogd-1.3-22	/usr/sbin/syslogd
-# netkit-base-0.10-10	/usr/sbin/inetd
-# tcp_wrappers-7.6-4	/usr/sbin/tcpd
-# psmisc-17-3		/usr/bin/killall
-# SysVinit-2.74-4	/sbin/pidof
-# findutils-4.1-23	/usr/bin/find
+# 			/usr/sbin/rsyslogd	rsyslog
+# netkit-base-0.10-10	/usr/sbin/inetd		
+# tcp_wrappers-7.6-4	/usr/sbin/tcpd		tcpd
+# psmisc-17-3		/usr/bin/killall	psmisc
+# SysVinit-2.74-4	/sbin/pidof		
+# 			/bin/pidof		sysvinit-utils
+# findutils-4.1-23	/usr/bin/find		findutils
+#			/sbin/telinit		upstart
 sub rpm {
+	my $dpkg = whereis("dpkg", "ignore");
 	my $rpm = whereis("rpm", 'ignore');
-	return unless defined $rpm;
+	if (defined($dpkg) && $dpkg ne 'ignore') {
+		foreach my $pkg (sort qw(passwd coreutils procps net-tools
+				 rsyslog tcpd psmisc sysvinit-utils findutils
+				 upstart)) {
+			verify_dpkg($pgk);
+		}
+		return;
+	}
+	return unless defined($rpm) && $rpm ne 'ignore';
 	foreach my $pkg (sort qw(procps net-tools util-linux SysVinit bind fileutils
 	    findutils glibc iptables ipchains iputils passwd rsh sysklogd netkit-base
 	    tcp_wrappers psmisc)) {
@@ -362,11 +375,11 @@ sub bad_files {
 			closedir D;
 		}
 	}
-	# One root-kit replaced the symlink version of /sbin/telinit with
-	# their compromised version. Very sneaky.
-	if ( -x '/sbin/telinit' && ! -l '/sbin/telinit' ) {
-		advise("/sbin/telinit is not a symlink");
-	}
+	# # One root-kit replaced the symlink version of /sbin/telinit with
+	# # their compromised version. Very sneaky.
+	# if ( -x('/sbin/telinit') && ! -l('/sbin/telinit') ) {
+	# 	advise("/sbin/telinit is not a symlink");
+	# }
 }
 
 # Check inetd entries...
@@ -463,7 +476,7 @@ sub whereis {
 	return $prog if $prog =~ m%^/% && -f $prog && ! -d $prog;
 	foreach my $path (split(':',$ENV{PATH}), @sysdirs) {
 		my $tmp = "$path/$prog";
-		return $tmp if -x $tmp;
+		return $tmp if -f($tmp) && -x($tmp);
 	}
 	advise("Cannot find $prog") unless $_[0] eq 'ignore';
 	return undef;
@@ -509,6 +522,15 @@ sub verbose {
 	print STDERR $msg, "\n" if $verbose;
 }
 
+sub verify_dpkg {
+	my $package = shift;
+	return unless $package;
+	my $prog = whereis('debsums','ignore');
+	return 1 unless $prog;
+	system("$prog $package >/dev/null");
+	advise("$package has been modified since the package was installed") if $?;
+}
+
 sub verify_rpm {
 	my $package = shift;
 	my $rpm = whereis('rpm','ignore');
@@ -539,7 +561,8 @@ sub get_hidden_procs {
 		    push @bad, [$pid, 'ps','readdir'] unless exists $procs{$pid};
 		}
 		%procs=();
-		@procs{@fs_procs}=();
+		%threads = map {(map {($_=>1)} grep {$_ ne '.' && $_ ne '..'} (opendir(D,"/proc/$_/task")&&readdir(D)))} @fs_procs;
+		@procs{keys %threads}=();
 		for($i=1;$i<65_536;$i++) {
 		  unless(exists $procs{$i}) {
 		    if (kill(0,$i) || $! == $EPERM) {
