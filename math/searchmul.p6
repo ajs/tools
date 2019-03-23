@@ -117,7 +117,3 @@ sub MAIN(
         last if $stop and @steps >= $stop;
     }
 }
-
-# Select a number between 0 and $max-1, weighted toward the
-# lower end of that range.
-sub weighted-randint(Int $max) { (^($max*$max)).roll.sqrt.Int }
