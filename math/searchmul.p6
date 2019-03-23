@@ -142,11 +142,16 @@ sub MAIN(
         }
     }
 
+    # If you aren't familiar with Perl6 bags, they're wonderful toys!
+    # Just throw values in them and they act like a hash of value=>count
+    # pairs, but with many added features of set-like behavior and
+    # the ability to perform weighted random selections.
     my Bag $freqs .= new: $digits.comb;
 
-    OUTER:
+    # Here begins the main search loop:
     loop {
-        my $number;
+        my $number; # our current "number" (actually a string of digits)
+
         print "-" if $debug and (state $debug-step)++ %% 100;
         if $build and @prefixes {
             my $all = [~] @prefixes;
@@ -160,6 +165,7 @@ sub MAIN(
         my @steps;
         my $orig = $number;
         put "Trying $number" if $debug and $debug-step %% 1000;
+        # Count up the steps to 1-digit
         loop {
             if $number.chars == 1 {
                 if @steps >= $max {
