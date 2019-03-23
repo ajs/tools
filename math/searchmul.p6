@@ -36,6 +36,10 @@ Search for the longest possib chain in a 15-digit number:
 
     ./searchmul.p6 --length=15
 
+Search for a chain 11-steps long in a 15-digit number:
+
+    ./searchmul.p6 --length=15 --stop=11
+
 Same as the first example, but in base 16:
 
     ./searchmul.p6 --length=3 --increment --base=16
@@ -44,6 +48,58 @@ Try to apply some filtering to the search based on
 how often digits occur in results:
 
     ./searchmul.p6 --length=3 --increment --frequency
+
+=head1 SAMPLE OUTPUT
+
+    ./searchmul.p6 --length=15 --stop=11
+    2 steps:
+    429472673763664
+    9217732608
+    0
+
+    4 steps:
+    922932833286829
+    1934917632
+    244944
+    4608
+    0
+
+    7 steps:
+    269772376888389
+    147483721728
+    4214784
+    7168
+    336
+    54
+    20
+    0
+
+    10 steps:
+    993247378243222
+    438939648
+    4478976
+    338688
+    27648
+    2688
+    768
+    336
+    54
+    20
+    0
+
+    11 steps:
+    848787974797878
+    4996238671872
+    438939648
+    4478976
+    338688
+    27648
+    2688
+    768
+    336
+    54
+    20
+    0
 
 =end pod
 
