@@ -23,6 +23,12 @@ that gives 5 steps:
  20
  0
 
+=head1 CREDIT
+
+Inspired by the video:
+
+L<https://www.youtube.com/watch?v=Wim9WJeDTHQ>
+
 =head1 EXAMPLES
 
 Here are some example command-lines:
