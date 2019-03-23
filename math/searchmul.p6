@@ -3,18 +3,52 @@
 
 use v6;
 
-# This program randomly generates numbers of a given'
-# length and determines how many steps it takes to reach
-# a one-digit nunber by multiplying the digits that make
-# up the number at each stage. For example, here is a number
-# that gives 5 steps:
-#
-#  18843
-#  768
-#  336
-#  54
-#  20
-#  0
+# Right now this doesn't get included in the --man output,
+# but it seems a rational expectation for the future...
+
+=begin pod
+
+=head1 DESCRIPTION
+
+This program randomly generates numbers of a given
+length and determines how many steps it takes to reach
+a one-digit nunber by multiplying the digits that make
+up the number at each stage. For example, here is a number
+that gives 5 steps:
+
+ 18843
+ 768
+ 336
+ 54
+ 20
+ 0
+
+=head1 EXAMPLES
+
+Here are some example command-lines:
+
+Start at length=3 and proceed to find longer
+and longer chains in increasinlgy longer numbers.
+
+    ./searchmul.p6 --length=3 --increment
+
+Search for the longest possib chain in a 15-digit number:
+
+    ./searchmul.p6 --length=15
+
+Same as the first example, but in base 16:
+
+    ./searchmul.p6 --length=3 --increment --base=16
+
+Try to apply some filtering to the search based on
+how often digits occur in results:
+
+    ./searchmul.p6 --length=3 --increment --frequency
+
+=end pod
+
+# The "is copy" arguments are modifed inside MAIN
+
 sub MAIN(
         Int  :$length is copy = 400, #= Length of results
         Str  :$digits is copy = "2346789", #= Available digits
