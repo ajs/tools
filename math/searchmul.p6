@@ -139,20 +139,16 @@ class MultiplicativePersistence {
 
     #| Return a string containing the next number to check
     method next-number() {
-        my $number;
-
         if $!build and @!prefixes {
             my $all = [~] @!prefixes;
-            $number = @!prefixes.pick; # Pick a prefix
+            my $number = @!prefixes.pick; # Pick a prefix
             # Shuffle if required
             $number = [~] $number.comb.pick(*) if $!shuffle;
-            $number ~= $all.comb.pick; # Add a digit used in any prefix
+            return $number ~ $all.comb.pick; # Add a digit used in any prefix
         } else {
             my $choices := ($!frequency ?? $!freqs !! $!digits.comb.eager);
-            $number = [~] $choices.roll($!length);
+            return [~] $choices.roll($!length);
         }
-
-        return $number;
     }
 
     #| Return the number of multiplicative steps to a 1-digit number
