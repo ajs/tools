@@ -112,28 +112,99 @@ how often digits occur in results:
 # Kept as global so we can detect user-provided changes
 our $default-digits = '2346789';
 
+class MultiplicativePersistence {
+    has $.length is rw = 3; # Current number length
+    has $.base = 10; # Calculate numbers in this base
+    has $.digits = '2346789'; # Use these digits to find results
+    has $.frequency = False; # Build on frequency of results' digits
+
+    has BagHash $!freqs; # Frequencies of digits in results
+
+    # Experimental build mode tries building new numbers via
+    # concatenation.
+    has $.build = False;
+    has $.shuffle = False;
+    has $.build-len = 100;
+    has @!prefixes;
+    has @!next-prefixes;
+
+    submethod TWEAK() {
+        # Seed frequncies with initial digits
+        $!freqs = BagHash.new: $!digits.comb if $!frequency;
+    }
+
+    #| Return a string containing the next number to check
+    method next-number() {
+        my $number;
+
+        if self.build and @!prefixes {
+            my $all = [~] @!prefixes;
+            $number = @!prefixes.pick; # Pick a prefix
+            # Shuffle if required
+            $number = [~] $number.comb.pick(*) if $!shuffle;
+            $number ~= $all.comb.pick; # Add a digit used in any prefix
+        } else {
+            my $choices := ($!frequency ?? $!freqs !! $!digits.comb.eager);
+            $number = [~] $choices.roll($!length);
+        }
+
+        return $number;
+    }
+
+    #| Return the number of multiplicative steps to a 1-digit number
+    method score($number) { return self.steps($number).elems - 1 }
+
+    #| Return the actual steps as an iterator of products
+    method steps($number is copy) {
+        gather while $number.chars > 1 {
+            take $number;
+            # These are the same, but base-10 is simplified for performance
+            if $!base == 10 {
+                $number = [*] $number.comb;
+            } else {
+                $number = (
+                    [*] $number.comb.map({.parse-base($!base)})
+                ).base($!base);
+            }
+        }
+    }
+
+    method add-prefix($number) {
+        @!next-prefixes.push: $number;
+        if @!next-prefixes == $!build-len {
+            @!prefixes = @!next-prefixes;
+            @!next-prefixes = ();
+        }
+    }
+
+    method update-frequency($number) {
+        $!freqs{$_}++ for $number.comb;
+    }
+}
+
 # The "is copy" arguments are modifed inside MAIN
 
+#| Search for multiplicative persistence
 sub MAIN(
         Int  :$length is copy = 400, #= Length of results
         Str  :$digits is copy = $default-digits, #= Available digits
         Int  :$base=10,              #= Base to work in (ignores --digits)
         Bool :$increment=False,      #= Increment length after each find
+        Bool :$increment-slow=False, #= --increment, but only when score increases
         Bool :$build=False,          #= Build on previous finds
         Int  :$stop=0,               #= Where to stop (0=none)
         Bool :$shuffle=False,        #= When --build-ing, shuffle prefix numbers
         Int  :$build-len=100,        #= When --build-ing, size of prefix cache
         Bool :$verbose is copy =False, #= Verbose output
         Bool :$debug=False,          #= Debugging output
+        Bool :$quiet=False,          #= Terse output
         Bool :$frequency=False,      #= Weight digit choices by frequency in results
         Bool :$prime=False,          #= Seed --digits with prime factors
     ) {
 
-    use Test;
     my $max = 0;
     my @prefixes;
     my @next-prefixes;
-    my $ratchet = 0;
     my $debug-step = 0;
     my $verbose-step = 0;
 
@@ -162,81 +233,57 @@ sub MAIN(
         put $digits if $verbose;
     }
 
-    # If you aren't familiar with Perl6 bags, they're wonderful toys!
-    # Just throw values in them and they act like a hash of value=>count
-    # pairs, but with many added features of set-like behavior and
-    # the ability to perform weighted random selections.
-    my Bag $freqs .= new: $digits.comb;
+    my MultiplicativePersistence $engine .= new(
+        :$length,
+        :$base,
+        :$digits,
+        # All build mode params:
+        :$build, :$frequency, :$build-len);
 
     # Here begins the main search loop:
     loop {
-        my $number; # our current "number" (actually a string of digits)
+        # our current "number" (actually a string of digits)
+        my $number = $engine.next-number;
+        my $score = $engine.score($number);
 
-        if $build and @prefixes {
-            my $all = [~] @prefixes;
-            $number = @prefixes.pick; # Pick a prefix
-            $number = [~] $number.comb.pick(*) if $shuffle; # Shuffle if required
-            $number ~= $all.comb.pick; # Add a digit used in any prefix
-        } else {
-            my $choices := ($frequency ?? $freqs !! $digits.comb.eager);
-            $number = [~] $choices.roll($length);
+        if $debug {
+            put "Trying $number" if $debug-step %% 1_000;
+        } elsif $verbose {
+            print "." if $verbose-step++ %% 1_000;
         }
-        my @steps;
-        my $orig = $number;
-        put "Trying $number" if $debug and $debug-step++ %% 1_000;
-        loop {
-            if $number.chars == 1 {
-                print "." if $verbose and $verbose-step++ %% 1_000;
-                if @steps >= $max {
-                    if $increment {
-                        $length++;
-                        put "(New length $length at $orig)" if $verbose;
-                    } elsif $build {
-                        if $debug {
-                            put "Add $orig to prefixes";
-                        }
-                        @next-prefixes.push: $orig;
-                        if @next-prefixes == $build-len {
-                            put "Swapping in new prefixes: {@next-prefixes}" if $debug;
-                            @prefixes = @next-prefixes;
-                            @next-prefixes = ();
-                        }
-                    }
-                }
-                if @steps > $max {
-                    $max = +@steps;
-                    put "Length: {$orig.chars}" if $increment or $build;
-                    put "{+@steps} steps:\n$orig";
-                    put $_ for @steps;
-                    put ""
-                }
-                last;
-            }
-            # These are the same, but base-10 is simplified for performance
-            if $base == 10 {
-                $number = [*] $number.comb;
-            } else {
-                $number = ([*] $number.comb.map(
-                    {.parse-base($base)})).base($base);
-            }
-            put "  $number" if $debug and $debug-step %% 1000;
-            push @steps, $number;
-        }
-        if @steps > $ratchet {
-            $ratchet = +@steps;
-            put "$orig\({+@steps})" if $debug;
-        }
-        if @steps == $max {
-            $ratchet = 0;
-            if $frequency and @steps > 2 {
-                $freqs (+)= $orig.comb;
+
+        if $score >= $max {
+            if $increment or ($increment-slow and $score > $max) {
+                $engine.length++;
+                put "(New length {$engine.length} at $number)" if $verbose;
+            } elsif $build {
                 if $debug {
-                    put $freqs;
-                } elsif $verbose {
-                    print "*";
+                    put "Add $number to prefixes";
                 }
+                $engine.add-prefix($number)
+            }
+
+            if $frequency and $score > 2 {
+                $engine.update-frequency($number);
+                print "*" if $verbose;
             }
         }
-        last if $stop and @steps >= $stop;
+
+        if $score > $max {
+            $max = $score;
+            if $quiet {
+                put "$number: $score"
+            } else {
+                put "Length: {$number.chars}" if $increment or $build;
+                put "$score steps:\n$number";
+                put $_ for $engine.steps($number);
+                put "";
+            }
+
+        }
+
+        put $engine.steps($number) if $debug and $debug-step++ %% 1_000;
+
+        last if $stop and $score >= $stop;
     }
 }
