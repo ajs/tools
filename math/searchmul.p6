@@ -204,6 +204,7 @@ sub MAIN(
         Bool :$quiet=False,          #= Terse output
         Bool :$frequency=False,      #= Weight digit choices by frequency in results
         Bool :$prime=False,          #= Seed --digits with prime factors
+        Bool :$print-max=False,      #= Show any find at least as long as current max
     ) {
 
     my $max = 0;
@@ -272,18 +273,19 @@ sub MAIN(
                 $engine.update-frequency($number);
                 print "*" if $verbose;
             }
-        }
 
-        if $score > $max {
-            $max = $score;
-            if $quiet {
-                put "$number: $score"
-            } else {
-                put "Length: {$number.chars}" if $increment or $build;
-                put "$score steps:";
-                put $_ for $engine.steps($number);
-                put "";
+            if $score > $max or $print-max {
+                if $quiet {
+                    put "$number: $score"
+                } else {
+                    put "Length: {$number.chars}" if $increment or $build;
+                    put "$score steps:";
+                    put $_ for $engine.steps($number);
+                    put "";
+                }
             }
+
+            $max = $score if $score > $max;
 
         }
 
