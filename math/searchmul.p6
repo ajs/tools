@@ -179,7 +179,7 @@ sub MAIN(
             $number ~= $all.comb.pick; # Add a digit used in any prefix
         } else {
             my $choices := ($frequency ?? $freqs !! $digits.comb.eager);
-            $number = [~] (^$length).map: { $choices.roll };
+            $number = [~] $choices.roll($length);
         }
         my @steps;
         my $orig = $number;
