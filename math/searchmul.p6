@@ -131,6 +131,8 @@ sub MAIN(
     my @prefixes;
     my @next-prefixes;
     my $ratchet = 0;
+    my $debug-step = 0;
+    my $verbose-step = 0;
 
     if $build {
         if $increment {
@@ -163,7 +165,6 @@ sub MAIN(
     loop {
         my $number; # our current "number" (actually a string of digits)
 
-        print "-" if $debug and (state $debug-step)++ %% 100;
         if $build and @prefixes {
             my $all = [~] @prefixes;
             $number = @prefixes.pick; # Pick a prefix
@@ -175,10 +176,10 @@ sub MAIN(
         }
         my @steps;
         my $orig = $number;
-        put "Trying $number" if $debug and $debug-step %% 1000;
-        # Count up the steps to 1-digit
+        put "Trying $number" if $debug and $debug-step++ %% 1_000;
         loop {
             if $number.chars == 1 {
+                print "." if $verbose and $verbose-step++ %% 1_000;
                 if @steps >= $max {
                     if $increment {
                         $length++;
@@ -186,8 +187,6 @@ sub MAIN(
                     } elsif $build {
                         if $debug {
                             put "Add $orig to prefixes";
-                        } elsif $verbose and (state $verbose-step)++ %% 100 {
-                            print ".";
                         }
                         @next-prefixes.push: $orig;
                         if @next-prefixes == $build-len {
@@ -222,9 +221,13 @@ sub MAIN(
         }
         if @steps == $max {
             $ratchet = 0;
-            if $frequency {
+            if $frequency and @steps > 2 {
                 $freqs (+)= $orig.comb;
-                put $freqs if $debug;
+                if $debug {
+                    put $freqs;
+                } elsif $verbose {
+                    print "*";
+                }
             }
         }
         last if $stop and @steps >= $stop;
