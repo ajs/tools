@@ -154,10 +154,11 @@ class MultiplicativePersistence {
     #| Return the number of multiplicative steps to a 1-digit number
     method score($number) { return self.steps($number).elems - 1 }
 
-    #| Return the actual steps as an iterator of products
+    #| Return the actual steps, including the starting number
     method steps($number is copy) {
-        gather loop {
-            take $number;
+        my @steps;
+        loop {
+            @steps.push: $number;
             last if $number.chars == 1;
             # These are the same, but base-10 is simplified for performance
             if $!base == 10 {
@@ -168,6 +169,7 @@ class MultiplicativePersistence {
                 ).base($!base);
             }
         }
+        return @steps;
     }
 
     method add-prefix($number) {
