@@ -156,8 +156,9 @@ class MultiplicativePersistence {
 
     #| Return the actual steps as an iterator of products
     method steps($number is copy) {
-        gather while $number.chars > 1 {
+        gather loop {
             take $number;
+            last if $number.chars == 1;
             # These are the same, but base-10 is simplified for performance
             if $!base == 10 {
                 $number = [*] $number.comb;
