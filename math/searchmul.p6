@@ -29,6 +29,10 @@ Inspired by the video:
 
 L<https://www.youtube.com/watch?v=Wim9WJeDTHQ>
 
+See also the smallest numbers for each score at:
+
+L<https://oeis.org/A003001>
+
 =head1 EXAMPLES
 
 Here are some example command-lines:
