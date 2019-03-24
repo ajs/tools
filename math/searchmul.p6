@@ -123,6 +123,7 @@ sub MAIN(
         Bool :$verbose is copy =False, #= Verbose output
         Bool :$debug=False,          #= Debugging output
         Bool :$frequency=False,      #= Weight digit choices by frequency in results
+        Bool :$prime=False,          #= Seed --digits with prime factors
     ) {
 
     use Test;
@@ -146,6 +147,10 @@ sub MAIN(
         default {
             $digits = [~] (2..^$base).map({.base: $base}).eager;
         }
+    }
+
+    if $prime {
+        $digits = [~] $digits.comb.grep: {.parse-base($base).is-prime};
     }
 
     # If you aren't familiar with Perl6 bags, they're wonderful toys!
@@ -201,7 +206,13 @@ sub MAIN(
                 }
                 last;
             }
-            $number = ([*] $number.comb.map({.parse-base($base)})).base($base);
+            # These are the same, but base-10 is simplified for performance
+            if $base == 10 {
+                $number = [*] $number.comb;
+            } else {
+                $number = ([*] $number.comb.map(
+                    {.parse-base($base)})).base($base);
+            }
             put "  $number" if $debug and $debug-step %% 1000;
             push @steps, $number;
         }
