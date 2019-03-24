@@ -29,6 +29,10 @@ Inspired by the video:
 
 L<https://www.youtube.com/watch?v=Wim9WJeDTHQ>
 
+See also the smallest numbers for each score at:
+
+L<https://oeis.org/A003001>
+
 =head1 EXAMPLES
 
 Here are some example command-lines:
@@ -135,20 +139,16 @@ class MultiplicativePersistence {
 
     #| Return a string containing the next number to check
     method next-number() {
-        my $number;
-
         if $!build and @!prefixes {
             my $all = [~] @!prefixes;
-            $number = @!prefixes.pick; # Pick a prefix
+            my $number = @!prefixes.pick; # Pick a prefix
             # Shuffle if required
             $number = [~] $number.comb.pick(*) if $!shuffle;
-            $number ~= $all.comb.pick; # Add a digit used in any prefix
+            return $number ~ $all.comb.pick; # Add a digit used in any prefix
         } else {
             my $choices := ($!frequency ?? $!freqs !! $!digits.comb.eager);
-            $number = [~] $choices.roll($!length);
+            return [~] $choices.roll($!length);
         }
-
-        return $number;
     }
 
     #| Return the number of multiplicative steps to a 1-digit number
@@ -192,6 +192,7 @@ sub MAIN(
         Int  :$length is copy = 400, #= Length of results
         Str  :$digits is copy = $default-digits, #= Available digits
         Int  :$base=10,              #= Base to work in (ignores --digits)
+        Int  :$count-from? is copy,  #= Instead of generating random numbers
         Bool :$increment=False,      #= Increment length after each find
         Bool :$increment-slow=False, #= --increment, but only when score increases
         Bool :$build=False,          #= Build on previous finds
@@ -247,7 +248,7 @@ sub MAIN(
     # Here begins the main search loop:
     loop {
         # our current "number" (actually a string of digits)
-        my $number = $engine.next-number;
+        my $number = $count-from ?? $count-from++ !! $engine.next-number;
         my $score = $engine.score($number);
 
         if $debug {
