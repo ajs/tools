@@ -3,3 +3,67 @@
 *.bak
 *#
 .#*
+
+# Gitignore for Perl 6 (http://www.perl6.org)
+# As part of https://github.com/github/gitignore
+
+# precompiled files
+.precomp
+lib/.precomp
+
+# Perl 5 gitignore from https://github.com/github/gitignore/blob/master/Perl.gitignore
+!Build/
+.last_cover_stats
+/META.yml
+/META.json
+/MYMETA.*
+*.o
+*.pm.tdy
+*.bs
+
+# Devel::Cover
+cover_db/
+
+# Devel::NYTProf
+nytprof.out
+
+# Dizt::Zilla
+/.build/
+
+# Module::Build
+_build/
+Build
+Build.bat
+
+# Module::Install
+inc/
+
+# ExtUtils::MakeMaker
+/blib/
+/_eumm/
+/*.gz
+/Makefile
+/Makefile.old
+/MANIFEST.bak
+/pm_to_blib
+/*.zip
+
+# vim gitignore from https://github.com/github/gitignore/blob/master/Global/Vim.gitignore
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
+# Persistent undo
+[._]*.un~
+
