@@ -109,11 +109,14 @@ how often digits occur in results:
 
 =end pod
 
+# Kept as global so we can detect user-provided changes
+our $default-digits = '2346789';
+
 # The "is copy" arguments are modifed inside MAIN
 
 sub MAIN(
         Int  :$length is copy = 400, #= Length of results
-        Str  :$digits is copy = "2346789", #= Available digits
+        Str  :$digits is copy = $default-digits, #= Available digits
         Int  :$base=10,              #= Base to work in (ignores --digits)
         Bool :$increment=False,      #= Increment length after each find
         Bool :$build=False,          #= Build on previous finds
@@ -144,15 +147,19 @@ sub MAIN(
 
     given $base {
         when 10 { }
-        when $_ < 3 { die "--base must be >=3" }
+        when $_ < 3 { die "--base must be >= 3" }
         when $_ > 36 { die "--base must be <= 36" }
         default {
-            $digits = [~] (2..^$base).map({.base: $base}).eager;
+            if $digits eq $default-digits {
+                $digits = [~] (2..^$base).map({.base: $base});
+            }
         }
     }
 
     if $prime {
+        print "Stripping composites from digits: $digits -> " if $verbose;
         $digits = [~] $digits.comb.grep: {.parse-base($base).is-prime};
+        put $digits if $verbose;
     }
 
     # If you aren't familiar with Perl6 bags, they're wonderful toys!
