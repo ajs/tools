@@ -118,7 +118,7 @@ class MultiplicativePersistence {
     has $.digits = '2346789'; # Use these digits to find results
     has $.frequency = False; # Build on frequency of results' digits
 
-    has BagHash $!freqs; # Frequencies of digits in results
+    has Bag $!freqs; # Frequencies of digits in results
 
     # Experimental build mode tries building new numbers via
     # concatenation.
@@ -130,7 +130,7 @@ class MultiplicativePersistence {
 
     submethod TWEAK() {
         # Seed frequncies with initial digits
-        $!freqs = BagHash.new: $!digits.comb if $!frequency;
+        $!freqs (+)= $!digits.comb if $!frequency;
     }
 
     #| Return a string containing the next number to check
@@ -181,7 +181,7 @@ class MultiplicativePersistence {
     }
 
     method update-frequency($number) {
-        $!freqs{$_}++ for $number.comb;
+        $!freqs (+)= $number.comb;
     }
 }
 
