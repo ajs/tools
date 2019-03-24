@@ -137,7 +137,7 @@ class MultiplicativePersistence {
     method next-number() {
         my $number;
 
-        if self.build and @!prefixes {
+        if $!build and @!prefixes {
             my $all = [~] @!prefixes;
             $number = @!prefixes.pick; # Pick a prefix
             # Shuffle if required
