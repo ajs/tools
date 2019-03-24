@@ -237,8 +237,9 @@ sub MAIN(
         :$length,
         :$base,
         :$digits,
+        :$frequency,
         # All build mode params:
-        :$build, :$frequency, :$build-len);
+        :$build, :$build-len);
 
     # Here begins the main search loop:
     loop {
@@ -275,7 +276,7 @@ sub MAIN(
                 put "$number: $score"
             } else {
                 put "Length: {$number.chars}" if $increment or $build;
-                put "$score steps:\n$number";
+                put "$score steps:";
                 put $_ for $engine.steps($number);
                 put "";
             }
