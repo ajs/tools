@@ -192,6 +192,7 @@ sub MAIN(
         Int  :$length is copy = 400, #= Length of results
         Str  :$digits is copy = $default-digits, #= Available digits
         Int  :$base=10,              #= Base to work in (ignores --digits)
+        Int  :$count-from? is copy,  #= Instead of generating random numbers
         Bool :$increment=False,      #= Increment length after each find
         Bool :$increment-slow=False, #= --increment, but only when score increases
         Bool :$build=False,          #= Build on previous finds
@@ -247,7 +248,7 @@ sub MAIN(
     # Here begins the main search loop:
     loop {
         # our current "number" (actually a string of digits)
-        my $number = $engine.next-number;
+        my $number = $count-from ?? $count-from++ !! $engine.next-number;
         my $score = $engine.score($number);
 
         if $debug {
