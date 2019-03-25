@@ -201,10 +201,12 @@ sub MAIN(
         Int  :$build-len=100,        #= When --build-ing, size of prefix cache
         Bool :$verbose is copy =False, #= Verbose output
         Bool :$debug=False,          #= Debugging output
-        Bool :$quiet=False,          #= Terse output
+        Bool :$quiet is copy =False, #= Terse output
+        Bool :$very-quiet=False,     #= Like --quiet, but only show the final entry
         Bool :$frequency=False,      #= Weight digit choices by frequency in results
         Bool :$prime=False,          #= Seed --digits with prime factors
         Bool :$print-max=False,      #= Show any find at least as long as current max
+        Bool :$sort,                 #= Sort the digits of results.
     ) {
 
     my $max = 0;
@@ -220,6 +222,11 @@ sub MAIN(
         warn "--build is experimental at this time.";
     }
     $verbose = True if $debug;
+
+    if $very-quiet {
+        die "--quiet requires --stop" unless $stop;
+        $quiet = True;
+    }
 
     given $base {
         when 10 { }
@@ -245,6 +252,25 @@ sub MAIN(
         :$frequency,
         # All build mode params:
         :$build, :$build-len);
+
+    my sub report($n, $score, :$force=False) {
+        my $outnum = $sort ?? [~] $n.comb.sort !! $n;
+        if $quiet {
+            put "$outnum: $score" if $force or !$very-quiet or $score >= $stop;
+        } else {
+            put "Length: {$outnum.chars}" if $increment or $build;
+            put "$score steps:";
+            put $_ for $engine.steps($outnum);
+            put "";
+        }
+    }
+
+    our $winner; # The highest scoring result so far, used only for
+                 # premature exit via signal.
+    signal(SIGUSR1).tap: {
+        report($winner, $engine.score($winner), :force) if $winner;
+        exit 0;
+    }
 
     # Here begins the main search loop:
     loop {
@@ -275,18 +301,12 @@ sub MAIN(
             }
 
             if $score > $max or $print-max {
-                if $quiet {
-                    put "$number: $score"
-                } else {
-                    put "Length: {$number.chars}" if $increment or $build;
-                    put "$score steps:";
-                    put $_ for $engine.steps($number);
-                    put "";
-                }
+                report($number, $score);
             }
 
+            # The winner thus far...
+            $winner = $number if not $winner or $score > $max;
             $max = $score if $score > $max;
-
         }
 
         put $engine.steps($number) if $debug and $debug-step++ %% 1_000;
