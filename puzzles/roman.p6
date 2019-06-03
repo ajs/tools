@@ -8,12 +8,19 @@
 
 use v6.c;
 
+# Some globas relevant to both encoding and decoding
 our $rom = 'MDCLXVI';
 our @rom = $rom.comb;
 our @val = <1000 500 100 50 10 5 1>;
 
+# Declare that MAIN has multiple signatures. In Perl 6,
+# MAIN is not only the default execution function, but
+# is introspected in order to generate command-line
+# parameter parsing. The comments that start with pound-
+# equals are also pulled into the docs.
 proto MAIN(|) {*}
 
+# The test runner. Use --test to run this.
 multi MAIN(
         Bool :$test #= Run tests
 ) {
@@ -30,13 +37,15 @@ multi MAIN(
 }
     
 multi MAIN(
-        Str $number #= Roman or base 10 number
+        Int $number #= base 10 number
 ) {
-    if $number ~~ /\d/ {
-        say as_roman($number);
-    } else {
-        say from_roman($number);
-    }
+    say as_roman($number);
+}
+
+multi MAIN(
+        Str $number #= Roman encoded number
+) {
+    say from_roman($number);
 }
 
 sub as_roman($n is copy) {
