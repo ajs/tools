@@ -124,14 +124,6 @@ class MultiplicativePersistence {
 
     has Bag $!freqs; # Frequencies of digits in results
 
-    # Experimental build mode tries building new numbers via
-    # concatenation.
-    has $.build = False;
-    has $.shuffle = False;
-    has $.build-len = 100;
-    has @!prefixes;
-    has @!next-prefixes;
-
     submethod TWEAK() {
         # Seed frequncies with initial digits
         $!freqs (+)= $!digits.comb if $!frequency;
@@ -139,16 +131,8 @@ class MultiplicativePersistence {
 
     #| Return a string containing the next number to check
     method next-number() {
-        if $!build and @!prefixes {
-            my $all = [~] @!prefixes;
-            my $number = @!prefixes.pick; # Pick a prefix
-            # Shuffle if required
-            $number = [~] $number.comb.pick(*) if $!shuffle;
-            return $number ~ $all.comb.pick; # Add a digit used in any prefix
-        } else {
-            my $choices := ($!frequency ?? $!freqs !! $!digits.comb.eager);
-            return [~] $choices.roll($!length);
-        }
+        my $choices := ($!frequency ?? $!freqs !! $!digits.comb.eager);
+        return [~] $choices.roll($!length);
     }
 
     #| Return the number of multiplicative steps to a 1-digit number
@@ -172,14 +156,6 @@ class MultiplicativePersistence {
         return @steps;
     }
 
-    method add-prefix($number) {
-        @!next-prefixes.push: $number;
-        if @!next-prefixes == $!build-len {
-            @!prefixes = @!next-prefixes;
-            @!next-prefixes = ();
-        }
-    }
-
     method update-frequency($number) {
         $!freqs (+)= $number.comb;
     }
@@ -195,10 +171,7 @@ sub MAIN(
         Int  :$count-from? is copy,  #= Instead of generating random numbers
         Bool :$increment=False,      #= Increment length after each find
         Bool :$increment-slow=False, #= --increment, but only when score increases
-        Bool :$build=False,          #= Build on previous finds
         Int  :$stop=0,               #= Where to stop (0=none)
-        Bool :$shuffle=False,        #= When --build-ing, shuffle prefix numbers
-        Int  :$build-len=100,        #= When --build-ing, size of prefix cache
         Bool :$verbose is copy =False, #= Verbose output
         Bool :$debug=False,          #= Debugging output
         Bool :$quiet is copy =False, #= Terse output
@@ -210,17 +183,9 @@ sub MAIN(
     ) {
 
     my $max = 0;
-    my @prefixes;
-    my @next-prefixes;
     my $debug-step = 0;
     my $verbose-step = 0;
 
-    if $build {
-        if $increment {
-            die "--build and --increment are not compatible";
-        }
-        warn "--build is experimental at this time.";
-    }
     $verbose = True if $debug;
 
     if $very-quiet {
@@ -249,16 +214,14 @@ sub MAIN(
         :$length,
         :$base,
         :$digits,
-        :$frequency,
-        # All build mode params:
-        :$build, :$build-len);
+        :$frequency);
 
     my sub report($n, $score, :$force=False) {
         my $outnum = $sort ?? [~] $n.comb.sort !! $n;
         if $quiet {
             put "$outnum: $score" if $force or !$very-quiet or $score >= $stop;
         } else {
-            put "Length: {$outnum.chars}" if $increment or $build;
+            put "Length: {$outnum.chars}" if $increment;
             put "$score steps:";
             put $_ for $engine.steps($outnum);
             put "";
@@ -288,11 +251,6 @@ sub MAIN(
             if $increment or ($increment-slow and $score > $max) {
                 $engine.length++;
                 put "(New length {$engine.length} at $number)" if $verbose;
-            } elsif $build {
-                if $debug {
-                    put "Add $number to prefixes";
-                }
-                $engine.add-prefix($number)
             }
 
             if $frequency and $score > 2 {
