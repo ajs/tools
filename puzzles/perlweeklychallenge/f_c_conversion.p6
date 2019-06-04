@@ -14,8 +14,8 @@
 use v6.c;
 
 # Note that this is the only place we keep the
-# units, so everything else has to derive even the
-# abbreviations from this lookup.
+# units, so everything else except comments has
+# to derive even the abbreviations from this lookup.
 our %knowns = (
     unit => <F C>,
     freezing => [32, 0],
@@ -48,7 +48,7 @@ multi MAIN(
 #= by default show crossover for units
 multi MAIN() {
     my $units = %knowns<unit>.join('/');
-    say "$units crossover at {crossover}";
+    say "$units cross over at {crossover}";
 }
 
 sub other-unit($unit) { return %knowns<unit>.grep({$_ ne $unit}).first }
