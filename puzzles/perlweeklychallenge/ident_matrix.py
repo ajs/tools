@@ -7,22 +7,21 @@
 # example, if the size is 4, then create Identity Matrix 4x4. For more
 # information about Indentity Matrix, please read the wiki page.
 
+# This is a straight translation of the Perl 6 solution.
+
 
 import sys
 import argparse
 
 
 def main():
-	parser = argparse.ArgumentParser(
-		description='Generate the Identity Matrix of the given size (nxn)')
-	parser.add_argument('size', type=int, nargs='?', default=4)
-	size = parser.parse_args().size
+    parser = argparse.ArgumentParser(
+            description='Generate the Identity Matrix of the given size (nxn)')
+    parser.add_argument('size', type=int, nargs='?', default=4)
+    size = parser.parse_args().size
 
-    import pdb
-    pdb.set_trace()
-
-	for row in range(size):
-		print(' '.join(int(col == row) for col in range(size)))
+    for row in range(size):
+        print(' '.join(str(int(col == row)) for col in range(size)))
 
 if __name__ == '__main__':
     main()
