@@ -5,7 +5,7 @@ published: true
 ---
 
 In this week's
-[Perl Weekly Challeng](https://perlweeklychallenge.org/blog/perl-weekly-challenge-012/)
+[Perl Weekly Challenge](https://perlweeklychallenge.org/blog/perl-weekly-challenge-012/)
 I submitted solutions for:
 
 * [The Euclid Numbers non-prime challenge](https://github.com/ajs/tools/blob/master/puzzles/perlweeklychallenge/euclid-challenge.p6)
