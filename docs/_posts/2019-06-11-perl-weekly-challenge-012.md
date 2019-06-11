@@ -1,6 +1,7 @@
 ---
 layout: single
-title:  "Welcome to Jekyll!"
+title:  "The Perl Weekly Challenge 012 Entries"
+published: true
 ---
 
 # The Perl Weekly Challenge 012 Entries
