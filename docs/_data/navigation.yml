@@ -1,4 +1,6 @@
 main:
+  - title: "Blog Index"
+    url: http://ajs.github.io/tools/
   - title: "Tools Repository"
     url: https://github.com/ajs/tools
   - title: "Other repos"
