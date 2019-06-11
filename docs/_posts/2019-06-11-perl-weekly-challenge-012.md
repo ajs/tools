@@ -4,8 +4,6 @@ title:  "The Perl Weekly Challenge 012 Entries"
 published: true
 ---
 
-# The Perl Weekly Challenge 012 Entries
-
 In this week's
 [Perl Weekly Challeng](https://perlweeklychallenge.org/blog/perl-weekly-challenge-012/)
 I submitted solutions for:
