@@ -22,6 +22,7 @@ baseurl: "/tools" # the subpath of your site, e.g. /blog
 url: "http://ajs.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: aaronsherman
 github_username:  ajs
+repository: "ajs/tools"
 
 # Build settings
 markdown: kramdown
@@ -41,3 +42,17 @@ plugins:
 #   - vendor/cache/
 #   - vendor/gems/
 #   - vendor/ruby/
+
+# From https://mmistakes.github.io/minimal-mistakes/docs/posts/
+defaults:
+  # _posts
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: single
+      author_profile: true
+      read_time: true
+      comments: true
+      share: true
+      related: true
