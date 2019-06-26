@@ -83,11 +83,11 @@ have all finished.
 ## Optimizing and lies
 
 That's it! Simplest sort ever, but here's a quick bit
-of opritmization:
+of optimization:
 
     await gather for @*ARGS -> $n {
         take start {
-            sleep +$n div 10;
+            sleep +$n / 10;
             say $n;
         }
     }
@@ -102,7 +102,7 @@ example, this fails spectacularly because of batching:
 
     await gather for (^100).roll(100) -> $n {
         take start {
-            sleep +$n div 10;
+            sleep +$n / 10;
             say $n;
         }
     }
