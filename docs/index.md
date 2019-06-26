@@ -1,11 +1,11 @@
 ---
 layout: home
 author_profile: true
+paginate: 5 # amount of posts to show
+paginate_path: /page:num/
 ---
 
-<ul>
-    {% for post in site.posts %}
-    <li> <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a> </li>
-    {% endfor %}
-</ul>
+## Welcome to Aaron's Tools Blog!
+
+This blog is all about programming, puzzles, languages and tools!
 
