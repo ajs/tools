@@ -30,6 +30,7 @@ remote_theme: "mmistakes/minimal-mistakes@4.16.4"
 plugins:
   - jekyll-feed
   - jekyll-include-cache
+  - jekyll-redirect-from
 # Outputting
 permalink: /:categories/:title/
 paginate: 5 # amount of posts to show

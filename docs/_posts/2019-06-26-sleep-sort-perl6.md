@@ -2,6 +2,8 @@
 layout: single
 title:  "Sleep Sort in Perl6"
 published: true
+redirect_from:
+  - /2019/06/26/sleep-sort-perl6.html
 ---
 
 I've been following the series of sort articles by Andrew Shitov on
