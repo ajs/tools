@@ -2,6 +2,8 @@
 layout: single
 title:  "Perl6 Integer Sequences Needs You!"
 published: true
+redirect_from:
+  - /2019/06/12/perl6-integer-sequences.html
 ---
 
 The Perl6 library [Math::Sequences](https://github.com/ajs/perl6-Math-Sequences)
