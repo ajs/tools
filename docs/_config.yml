@@ -27,6 +27,7 @@ repository: "ajs/tools"
 # Build settings
 markdown: kramdown
 remote_theme: "mmistakes/minimal-mistakes@4.16.4"
+encoding: utf-8
 plugins:
   - jekyll-feed
   - jekyll-include-cache
