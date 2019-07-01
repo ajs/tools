@@ -25,9 +25,9 @@ _Weak Prime number `p(n) when p(n) < [ p(n-1) + p(n+1) ] / 2`_
 Interestingly, we have our solution partially written for us, above. All we need to do
 is put that pseudocode into Perl 6 like so:
 
-```Perl6
+```
 my @primes = (2,3,*+2 ... *).grep: {.is-prime};
-my @primes = (2,3,*+2 ... *).grep: {.is-prime};
+
 my @strong-primes = lazy @primes.pairs.grep(-> (:$key, :$value) {
 	$key != 0 and $value > (@primes[$key-1] + @primes[$key+1])/2.0}
 ).map: {.value};
@@ -38,7 +38,7 @@ my @weak-primes = lazy @primes.pairs.grep(-> (:$key, :$value) {
 
 and as a bonus, the balanced primes:
 
-```Perl6
+```
 my @balanced-primes = lazy @primes.pairs.grep(-> (:$key, :$value) {
 	$key != 0 and $value == (@primes[$key-1] + @primes[$key+1])/2.0}
 ).map: {.value};
@@ -50,7 +50,7 @@ Perl 6 lets us pass a block to a subroutine with placeholder variables,
 so we can define the generator for each of these sequences as a
 function taking one `Code` parameter:
 
-```Perl6
+```
 sub powerful-primes(&cmp) {
 	lazy @primes.pairs.grep(-> (:$key, :$value) {
 		$key != 0 and cmp($value, (@primes[$key-1] + @primes[$key+1])/2.0)}
@@ -60,7 +60,7 @@ sub powerful-primes(&cmp) {
 
 And then we can call this like so:
 
-```Perl6
+```
 my @strong-primes = powerful-primes({$^a > $^b});
 my @weak-primes = powerful-primes({$^a < $^b});
 my @balanced-primes = powerful-primes({$^a == $^b});
@@ -68,7 +68,7 @@ my @balanced-primes = powerful-primes({$^a == $^b});
 
 Here's the whole program with tests.
 
-```Perl6
+```
 use Test;
 
 my @primes = (2,3,*+2 ... *).grep: {.is-prime};
