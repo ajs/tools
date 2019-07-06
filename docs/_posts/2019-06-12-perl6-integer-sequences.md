@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: post
 title:  "Perl6 Integer Sequences Needs You!"
 published: true
 redirect_from:

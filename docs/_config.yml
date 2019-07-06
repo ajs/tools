@@ -27,6 +27,7 @@ repository: "ajs/tools"
 # Build settings
 markdown: kramdown
 highlighter: pygments
+syntax_highlighter: pygments
 #remote_theme: "mmistakes/minimal-mistakes@4.16.4"
 theme: minima
 encoding: utf-8

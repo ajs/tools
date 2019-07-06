@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: post
 title:  "Perl 6 needs a list concatenation op"
 published: true
 ---

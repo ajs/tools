@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: post
 title:  "Sleep Sort in Perl6"
 published: true
 redirect_from:

@@ -1,5 +1,5 @@
 ---
-layout: single
+layout: post
 title:  "Perl Weekly Challenge 014.1"
 published: true
 ---
