@@ -58,7 +58,7 @@ git log --graph --oneline
 ```
 
 ```
-* c848265 (HEAD -> master, origin/abandoned-work-branch, origin/master, abandoned-work-branch) Thanks, I hate it
+* c848265 (HEAD -> master, origin/master) Thanks, I hate it
 * 3bba862 Broke more stuff
 * 7e0fee1 Broke stuff
 * 6f10c38 Minor fix
@@ -86,7 +86,7 @@ git log --graph --oneline
 Now I had something like this:
 
 ```
-* c848265 (origin/abandoned-work-branch, origin/master, abandoned-work-branch) Thanks, I hate it
+* c848265 (origin/master, abandoned-work-branch) Thanks, I hate it
 * 3bba862 Broke more stuff
 * 7e0fee1 Broke stuff
 * 6f10c38 (HEAD -> master) Minor fix
