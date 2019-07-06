@@ -28,6 +28,7 @@ repository: "ajs/tools"
 markdown: kramdown
 highlighter: pygments
 #remote_theme: "mmistakes/minimal-mistakes@4.16.4"
+theme: minima
 encoding: utf-8
 plugins:
   - jekyll-feed
