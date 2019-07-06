@@ -80,7 +80,7 @@ git status
 git reset --hard
 # That wipes out the modified files left by the
 # first reset
-git log --graph --oneline
+git log --all --graph --oneline
 ```
 
 Now I had something like this:
