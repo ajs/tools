@@ -20,7 +20,7 @@ You can see all of the entries here: [Perl Weekly Challenge Club](https://github
 The Euclid challenge is interessting to me mostly because of my work on the [Math::Sequences](https://github.com/ajs/perl6-Math-Sequences) module for Perl 6. This module takes the core 
 [On-Line Encyclopedia of Integer Sequences® (OEIS®)](https://oeis.org/) enttries and makes them available as Perl6 arrays, so that you can do things like:
 
-```Perl6
+```perl6
     use Math::Sequences::Integer;
     
     for @A010051 -> $prime {
