@@ -73,8 +73,41 @@ sub iterativeA(UInt $m, UInt $n --> UInt) {
 	return $p;
 }
 
-sub doA(UInt $m, UInt $n, :$count, :$A=&givenA) {
-	say $A($m, $n) for ^$count;
+grammar Ackermann {
+	rule TOP {^ <ackermann> $}
+	rule ackermann { <number> | <function> }
+	token number { "-"? \d+ }
+	rule function {
+		'A' '(' $<m> = <ackermann> ',' $<n> = <ackermann> ')'
+	}
+	rule resolvable {
+		'A' '(' $<m> = <number> ',' $<n> = <number> ')'
+	}
+}
+
+sub regexA(UInt $m, UInt $n, :$verbose=False --> UInt) {
+	my $ack = "A($m, $n)";
+	say $ack if $verbose;
+	while $ack !~~ /^ <Ackermann::number> $/ {
+		my $pre = $ack;
+		$ack .= subst(
+			/$<A> = <Ackermann::resolvable>/, 
+			-> $/ {
+				{
+					when $<A><m> eq "0" { $<A><n> + 1 }
+					when $<A><n> eq "0" { "A({$<A><m> - 1}, 1)" }
+					default { "A({$<A><m> - 1}, A($<A><m>, {$<A><n> - 1}))" }
+				}
+			},
+			:global);
+		die "Failed to parse $pre" if $pre eq $ack;
+		say "\t = $ack" if $verbose;
+	}
+	+$ack;
+}
+
+sub doA(UInt $m, UInt $n, :$count, :$A=&givenA, *%flags) {
+	say $A($m, $n, |%flags) for ^$count;
 }
 
 proto MAIN(UInt $m, UInt $n, UInt :$count, *%options) {*}
@@ -92,4 +125,9 @@ multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$multi!) {
 multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$iterative!) {
 	#= Ackermann via iterative tree
 	doA($m, $n, :$count, :A(&iterativeA));
+}
+
+multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$regex!, Bool :$verbose) {
+	#= Ackermann via regex replacement
+	doA($m, $n, :$count, :A(&regexA), :$verbose);
 }
