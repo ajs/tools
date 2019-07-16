@@ -89,21 +89,28 @@ sub regexA(UInt $m, UInt $n, :$verbose=False --> UInt) {
 	my $ack = "A($m, $n)";
 	say $ack if $verbose;
 	while $ack !~~ /^ <Ackermann::number> $/ {
-		my $pre = $ack;
 		$ack .= subst(
 			/$<A> = <Ackermann::resolvable>/, 
-			-> $/ {
-				{
-					when $<A><m> eq "0" { $<A><n> + 1 }
-					when $<A><n> eq "0" { "A({$<A><m> - 1}, 1)" }
-					default { "A({$<A><m> - 1}, A($<A><m>, {$<A><n> - 1}))" }
-				}
+			{
+				when $<A><m> eq "0" { $<A><n> + 1 }
+				when $<A><n> eq "0" { "A({$<A><m> - 1}, 1)" }
+				default { "A({$<A><m> - 1}, A($<A><m>, {$<A><n> - 1}))" }
 			},
 			:global);
-		die "Failed to parse $pre" if $pre eq $ack;
 		say "\t = $ack" if $verbose;
 	}
 	+$ack;
+}
+
+sub arrayA(UInt $m, UInt $n --> UInt) {
+	my @ack = $m, $n;
+	while @ack.elems > 1 {
+		(my $m, my $n) = @ack.splice(@ack.elems-2);
+		if $m == 0 { @ack.push($n + 1) }
+		elsif $n == 0 { @ack.push($m - 1, 1) }
+		else { @ack.push($m - 1, $m, $n -1) }
+	}
+	@ack.pop;
 }
 
 sub doA(UInt $m, UInt $n, :$count, :$A=&givenA, *%flags) {
@@ -130,4 +137,9 @@ multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$iterative!) {
 multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$regex!, Bool :$verbose) {
 	#= Ackermann via regex replacement
 	doA($m, $n, :$count, :A(&regexA), :$verbose);
+}
+
+multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$array!) {
+	#= Ackermann via array management
+	doA($m, $n, :$count, :A(&arrayA));
 }
