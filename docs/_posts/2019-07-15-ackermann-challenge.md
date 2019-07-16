@@ -4,13 +4,15 @@ title:  "Ackermann Challenge"
 published: true
 ---
 
-This week's Perl Weekly Challenge is to produce reductions of Ackermann
+This week's first Perl Weekly Challenge is to produce reductions of Ackermann
 functions. If you've never run into the Ackermann function, it's a
 mathematical construct (actually a family of them, but we'll focus on the
 one in the challenge) that is described as a function that takes two
 integers. Its result is either an integer or some combinations of
 Ackermann functions. Here is the statement of the puzzle that explains a
 bit:
+
+## Perl Weekly Challenge 017.1
 
 > Create a script to demonstrate Ackermann function. The Ackermann function is defined as below, m and n are positive number:
 
@@ -31,6 +33,8 @@ bit:
          = 4
 ```
 
+## Grammar
+
 Okay, so our goal is to take in something that looks like `A(m, n)` and step
 through the reduction rules until we reach an integer result. My first
 thought, here, was that this sounds like a parsing problem, and indeed,
@@ -50,13 +54,15 @@ grammar Ackermann {
 }
 ```
 
-This can be used directly to match any valid Ackermann funcion:
+This can be used directly to match any valid Ackermann function:
 
 ```
 if Ackermann.parse("A(1, A(2, 3))") {
 	say "We have Ackermann!"
 }
 ```
+
+## Resolution
 
 But that is just the first step. To reduce an Ackermann function, we need
 to know what parts of it are currently reducible. So we can add a rule to the grammar that
@@ -69,7 +75,7 @@ matches when a function just has two integer parameters:
 	}
 ```
 
-Notice the extra variables, there? Those are storeing the numbers for easy
+Notice the extra variables, there? Those are storing the numbers for easy
 access.
 
 Now, all we need to do is write the function that executes the match and
@@ -94,7 +100,7 @@ sub regexA(UInt $m, UInt $n, :$verbose=False --> UInt) {
 }
 ```
 
-A few points here are worth analyzing:
+## Analysis
 
 When our replacement block (the second parameter to `.subst`) is called,
 we get the special variable ($/) populated for us. I'm taking it as a
@@ -110,7 +116,7 @@ the first and second `<number>` matched (stored, respectively into
 `$<m>` and `$<n>`).
 
 Next up, notice that our strings contain code. Any string or regex in Perl 6
-can contain a block of code, deliniated by `{...}` and it will cause
+can contain a block of code, delineated by `{...}` and it will cause
 the block of code to be executed and its value interpolated (in a string) or
 ignored (in a regex, in which it's used solely for side effects like failing
 the match). So, all we have to do to format an Ackermann function is to put
@@ -121,7 +127,7 @@ it in a string:
 ```
 
 That's it. Our `$m` gets decremented and the stringification of that number
-is interpolated into the resuling string, giving something like
+is interpolated into the resulting string, giving something like
 `"A(0, 1)"`.
 
 Finally, note that when `$verbose` is set, this function will print its
