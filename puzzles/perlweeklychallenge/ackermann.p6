@@ -24,18 +24,24 @@ use v6;
 #         = A(0, 3)
 #         = 4
 
-subset PInt of UInt where *;
+proto multiA(Int $m, Int $n --> Int) {*}
+multi multiA(     0, Int $n --> Int) {        $n + 1                      }
+multi multiA(Int $m,      0 --> Int) { multiA($m - 1, 1)                  }
+multi multiA(Int $m, Int $n --> Int) { multiA($m - 1, multiA($m, $n - 1)) }
 
-proto multiA(UInt $m, UInt $n --> UInt) {*}
-multi multiA(0, PInt $n --> UInt)       {        $n + 1                      }
-multi multiA(PInt $m, 0 --> UInt)       { multiA($m - 1, 1)                  }
-multi multiA(PInt $m, PInt $n --> UInt) { multiA($m - 1, multiA($m, $n - 1)) }
+sub whenA(Int $m, Int $n) {
+	when $m == 0 {        $n + 1                      }
+	when $n == 0 { whenA($m - 1, 1)                  }
+	default      { whenA($m - 1, whenA($m, $n - 1)) }
+}
 
-sub givenA(UInt $m, UInt $n --> UInt) {
-	given $m {
-		when 0       {        $n + 1                      }
-		when $n == 0 { givenA($m - 1, 1)                  }
-		default      { givenA($m - 1, givenA($m, $n - 1)) }
+sub recurseA(Int $m, Int $n) {
+	if $m == 0 {
+		$n + 1;
+	} elsif $n == 0 {
+		recurseA($m - 1, 1);
+	} else {
+		recurseA($m - 1, recurseA($m, $n - 1));
 	}
 }
 
@@ -52,7 +58,7 @@ class MIPair does Associative {
 	}
 }
 
-sub iterativeA(UInt $m, UInt $n --> UInt) {
+sub iterativeA(Int $m, Int $n --> Int) {
 	my $p = MIPair.new($m, $n);
 	# Pair($m, $n) is A($m, $n) while a non-pair is a resolved value
 	my $pp := $p;
@@ -85,7 +91,7 @@ grammar Ackermann {
 	}
 }
 
-sub regexA(UInt $m, UInt $n, :$verbose=False --> UInt) {
+sub regexA(Int $m, Int $n, :$verbose=False --> Int) {
 	my $ack = "A($m, $n)";
 	say $ack if $verbose;
 	while $ack !~~ /^ <Ackermann::number> $/ {
@@ -102,10 +108,10 @@ sub regexA(UInt $m, UInt $n, :$verbose=False --> UInt) {
 	+$ack;
 }
 
-sub arrayA(UInt $m, UInt $n --> UInt) {
-	my @ack = $m, $n;
+sub arrayA(Int $m, Int $n --> Int) {
+	my @ack of int = $m, $n;
 	while @ack.elems > 1 {
-		(my $m, my $n) = @ack.splice(@ack.elems-2);
+		(my int $m, my int $n) = @ack.splice(@ack.elems-2);
 		if $m == 0 { @ack.push($n + 1) }
 		elsif $n == 0 { @ack.push($m - 1, 1) }
 		else { @ack.push($m - 1, $m, $n -1) }
@@ -113,15 +119,20 @@ sub arrayA(UInt $m, UInt $n --> UInt) {
 	@ack.pop;
 }
 
-sub doA(UInt $m, UInt $n, :$count, :$A=&givenA, *%flags) {
+sub doA(UInt $m, UInt $n, :$count, :$A=&whenA, *%flags) {
 	say $A($m, $n, |%flags) for ^$count;
 }
 
 proto MAIN(UInt $m, UInt $n, UInt :$count, *%options) {*}
 
-multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$given=True) {
-	#= Ackermann via given/when recursion
+multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$when=True) {
+	#= Ackermann via recursion using when instead of if/else
 	doA($m, $n, :$count);
+}
+
+multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$recurse!) {
+	#= Ackermann via if/else recursion
+	doA($m, $n, :$count, :A(&recurseA));
 }
 
 multi MAIN(UInt $m, UInt $n, UInt :$count=1, Bool :$multi!) {
