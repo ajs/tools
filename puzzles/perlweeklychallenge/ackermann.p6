@@ -30,8 +30,8 @@ multi multiA(Int $m,      0 --> Int) { multiA($m - 1, 1)                  }
 multi multiA(Int $m, Int $n --> Int) { multiA($m - 1, multiA($m, $n - 1)) }
 
 sub whenA(Int $m, Int $n) {
-	when $m == 0 {        $n + 1                      }
-	when $n == 0 { whenA($m - 1, 1)                  }
+	when $m == 0 {        $n + 1                    }
+	when $n == 0 { whenA($m - 1, 1)                 }
 	default      { whenA($m - 1, whenA($m, $n - 1)) }
 }
 
