@@ -103,15 +103,15 @@ broadly detached as the ANSI C spec and GCC! That's all up to the
 language. But the queue needs to know where the spec stands.
 
 [Perl 5 has an interesting numbering
-[convention](http://learn.perl.org/faq/perlfaq1.html#Which-version-of-Perl-should-I-use).
-[It reserves the odd numbered "major" number for development releases. It's my
-[feeling, but obviously up to them, that this is a good thing to be
-[maintained, but should be pushed down one level. So `5.30.0.0` would be a
-[production release while `5.30.1.0` would be a development release. This
-[means that bumps to the major number could flag incompatible changes such as
-[a replacement to a major component such as the object system. Again, that's
-[all convention that's entirely up to the language itself, but it would make
-[some sense and would give everyone plenty of room to breathe.
+convention](http://learn.perl.org/faq/perlfaq1.html#Which-version-of-Perl-should-I-use).
+It reserves the odd numbered "major" number for development releases. It's my
+feeling, but obviously up to them, that this is a good thing to be
+maintained, but should be pushed down one level. So `5.30.0.0` would be a
+production release while `5.30.1.0` would be a development release. This
+means that bumps to the major number could flag incompatible changes such as
+a replacement to a major component such as the object system. Again, that's
+all convention that's entirely up to the language itself, but it would make
+some sense and would give everyone plenty of room to breathe.
 
 Perl 6 has been using non-numeric versions like 6.d. This is also fine. It
 would seem reasonable to require that a base-36 numeric sort of version
