@@ -6,9 +6,7 @@ use v6;
 # information, please checkout wikipedia page.
 # https://en.wikipedia.org/wiki/Amicable_numbers
 
-sub number($n) {
-    "a" x $n;
-}
+sub number($n) { "a" x $n }
 
 sub divisors($n) {
     my @divisors;
@@ -20,13 +18,15 @@ sub sum(+@n) { [+] @n>>.chars }
 
 #= The most obvious way to find Amicable Numbers
 sub MAIN(
+        Int $start=0, #= Where to start the search (0)
+        Int $end=Int, #= Where to terminate the search (∞)
         Bool :$include-same, #= Include pairs that are the same number
         Bool :$verbose #= Verbose output
 ) {
-    for 0..* -> $i {
+    for $start .. ($end//Inf) -> $i {
         my $amicable = sum(divisors(number($i)));
         my $second = sum(divisors(number($amicable)));
-        say "  $i: $amicable -> $second" if $verbose;
+        say "  $i -> $amicable -> $second" if $verbose;
         next if $include-same ?? $i > $amicable !! $i >= $amicable;
         say "$i, $amicable" if $i == $second;
     }
