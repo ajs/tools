@@ -64,8 +64,6 @@ this can be thought of as part of the regex syntax, not a generic
 variable naming convention, just as backslashed back-references were
 treated in previous implementations.
 
-Let's begin...
-
 ## Code, not strings
 
 Many languages implement regular expressions as strings that are parsed
