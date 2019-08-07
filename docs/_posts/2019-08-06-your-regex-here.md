@@ -275,7 +275,7 @@ The typical regular expression quantifiers are supported:
 * `+` - Match the preceding "atom" (single matching literal, group, sub-rule
   or class) one or more times.
 * `*` - Match the preceding atom zero or more times.
-* `** min[..max]` - Match the preceding atom min to max (* means forever)
+* `** min[..max]` - Match the preceding atom min to max (\* means forever)
   times.
 
 These constructs modify preceding quantifiers:
@@ -286,6 +286,20 @@ These constructs modify preceding quantifiers:
 * `%` - Match the preceding atom _with quantifier_ separated by the following
   atom (e.g. `\w+ % ','` which matches comma-separated words)
 * `%%` - Same as `%`, but allows a trailing separator.
+
+And finally, there is a special syntax for matching balanced expressions:
+
+    '(' ~ ')' <expression>
+
+Which matches the sub-rule `<expression>` enclosed in parentheses.
+
+This is not substantially different from:
+
+    '(' <expression> ')'
+
+But it does allow the system to provide more useful diagnostics
+because it knows that the intent of the user was to match a
+balanced beginning and ending token.
 
 ## Conjunctions
 
