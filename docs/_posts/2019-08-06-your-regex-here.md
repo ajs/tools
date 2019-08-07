@@ -264,7 +264,7 @@ Unicode codepoints can also be referenced by hexadecimal number:
 
 or:
 
-    \x[12]
+    \x[12345]
 
 Or by name:
 
@@ -484,11 +484,71 @@ All `<...>` interpolations of external code will save to a numbered
 group as if they were within parens, but can be named like so:
 `<name=?{code}>` or `<name=$variable>`.
 
+## Integration concerns
+
+While the rest of this document considers what's _in_ a regex, this
+section will consider how to take that construct and integrate it into
+the larger language. The simplest way to do this is via some form of
+method invocation on the grammar as an object. For example, Perl 6
+treats the top-level rule `TOP` as special, invoking it via the method
+`parse` like so:
+
+    if MyGrammar.parse($string) {
+      ...
+    }
+
+Ideally such a method should return the match object which contains
+the tree of results from the final match.
+
+Another way to do this would be to integrate regexes into an existing
+basic regular expression if your language supports them, e.g. (in Perl
+5 syntax):
+
+    # start with the "expression" rule
+    if (/<MyGrammar::expression>/) {
+      ...
+    }
+
+But a more interesting approach might be to treat grammars as a
+special way of defining classes, and simply allow any sub-rule to
+be invoked directly as a method, and perhaps even allow non-regex
+methods to be defined on grammars.
+
+How that works and what it means will be very language specific,
+but it's there to consider...
+
+### Actions
+
+In Perl 6, grammars are tightly coupled to the concept of "actions".
+These are methods of a class that is associated with the grammar
+whose names are the same as the names of the sub-rules in the
+grammar. Thus, when a sub-rule match occurrs, its corresponding
+action can be invoked.
+
+The most common reason to do this is to allow these actions to
+augment or replace the match object, for example, performing the
+first steps in a code generation pass for a language, creating
+a formal abstract syntax tree.
+
+Actions make regexes into a full parser specification system and
+so their implementation should be considered carefully in the
+implementation of regexes.
+
+### Unicode
+
+Regexes are tightly coupled to Unicode, and there are some hard
+choices to be made in integrating the two. Perl 6 obviates many concerns
+by transforming all strings into a form called "NFG". How this is
+done and what it means is outside of the scope of this document,
+but at the very least, the implications of matching a "character"
+on a Unicode string that might contain many composing codepoints must
+be addressed by the implementation.
+
 ## Example
 
-The following is a complete parser for the [ECMA-404 2nd Edition
-/ December 2017](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)
-specification:
+The following is a complete parser for the
+[ECMA-404 2nd Edition](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)
+JSON specification:
 
 ```
 grammar JSON {
