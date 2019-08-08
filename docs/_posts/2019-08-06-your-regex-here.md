@@ -589,13 +589,15 @@ try to outline the high points, here.
   different parameters. Here's an example from the core
   NQP definition of regexes themselves:
 
-    proto token metachar { <...> }
-    token metachar:sym<[ ]> { '[' ~ ']' <nibbler> <.SIGOK> }
-    token metachar:sym<( )> { '(' ~ ')' <nibbler> <.SIGOK> }
-    token metachar:sym<'> { <?['‘‚]> <quote_EXPR: ':q'>  <.SIGOK> }
-    token metachar:sym<"> { <?["“„]> <quote_EXPR: ':qq'> <.SIGOK> }
-    token metachar:sym<.> { <sym> <.SIGOK> }
-    ...
+  ```
+  proto token metachar { <...> }
+  token metachar:sym<[ ]> { '[' ~ ']' <nibbler> <.SIGOK> }
+  token metachar:sym<( )> { '(' ~ ')' <nibbler> <.SIGOK> }
+  token metachar:sym<'> { <?['‘‚]> <quote_EXPR: ':q'>  <.SIGOK> }
+  token metachar:sym<"> { <?["“„]> <quote_EXPR: ':qq'> <.SIGOK> }
+  token metachar:sym<.> { <sym> <.SIGOK> }
+  ...
+  ```
 
 * Inline comments - Perl 6 allows comments to appear
   inline by using bracketing: `#\`(...)`
