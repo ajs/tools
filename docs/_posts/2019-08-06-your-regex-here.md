@@ -472,6 +472,18 @@ tree of matches from sub-rules, and indeed this is how most grammars
 work, turning input test into a tree of match results that can be
 transformed into an AST or directly acted upon.
 
+To turn off capturing, place a period before the sub-rule name:
+
+    token IPv4 { <.octet> ** 4 % '.' }
+
+So that the resulting match object will not contain the
+"octet" entry that would otherwise be created.
+
+If, on the other hand, you want to re-name that entry in the
+match, use an equal sign:
+
+    token IPv4 { <byte=octet> ** 4 % '.' }
+
 ## Code interpolation
 
 There are several ways to interpolate native language structures
@@ -491,7 +503,8 @@ re-interpreted in a language-specific way.
 
 All `<...>` interpolations of external code will save to a numbered
 group as if they were within parens, but can be named like so:
-`<name=?{code}>` or `<name=$variable>`.
+`<name=?{code}>` or `<name=$variable>`, or their results can
+be discarded by prefixing with a period like a sub-rule.
 
 ## Integration concerns
 
