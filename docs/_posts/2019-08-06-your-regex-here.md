@@ -89,7 +89,7 @@ introduce a regex. I'm going to use three basic keywords, here:
 * `rule` - Introduces a regex that uses significant whitespace by default.
   Occurs within a grammar.
 * `token` - Introduces a regex that does not use significant whitespace
-  by default. Occurs within a grammar.
+  by default and does not backtrack. Occurs within a grammar.
 
 So, what is this significant whitespace thing? An example may help:
 
@@ -443,6 +443,15 @@ Any adverb may be negated by using `:!` e.g.:
     'fruit:' [:ignorecase 'apple' | :!ignorecase 'FruitClass']
 
 Would match "fruit:appLE", "fruit:FruitClass" but not "fruit:fruitclass".
+
+Now that you've seen all of the adverbs, we can go over
+token vs. rule again. A token is identical to:
+
+    rule foo {:!sigspace :ratchet ...}
+
+While a rule is identical to:
+
+    token foo {:sigspace :!ratchet ...}
 
 ## Sub-rules
 
