@@ -588,6 +588,7 @@ try to outline the high points, here.
   multiple definitions of the same name ar declared with
   different parameters. Here's an example from the core
   NQP definition of regexes themselves:
+
     proto token metachar { <...> }
     token metachar:sym<[ ]> { '[' ~ ']' <nibbler> <.SIGOK> }
     token metachar:sym<( )> { '(' ~ ')' <nibbler> <.SIGOK> }
@@ -595,6 +596,7 @@ try to outline the high points, here.
     token metachar:sym<"> { <?["“„]> <quote_EXPR: ':qq'> <.SIGOK> }
     token metachar:sym<.> { <sym> <.SIGOK> }
     ...
+
 * Inline comments - Perl 6 allows comments to appear
   inline by using bracketing: `#\`(...)`
 * Angle-bracket quoting of lists of strings as alternation.
