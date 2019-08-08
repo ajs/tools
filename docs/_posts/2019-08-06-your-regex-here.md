@@ -636,15 +636,100 @@ try to outline the high points, here.
   * `:global`, `:g`
   * `:overlap`, `:o`
   * All of the substitution-specific adverbs:
-    * :samecase or :ii
-    * :samemark or :mm
-    * :samespace or :ss
+    * `:samecase` or `:ii`
+    * `:samemark` or `:mm`
+    * `:samespace` or `:ss`
 * The many other keywords and syntaxes for defining regexes:
   * `regex`
   * `m`
   * `rx`
   * `/.../`
   * All of the bracketing types that can accompany some of these.
+
+### A bit of marketing
+
+There isn't a whole lot of focus in this document on drumming up adoption.
+The presumption is that the target audience understands why a full
+grammar specification would radically improve the capabilities of any
+programming language and the only remaining questions relate to the
+difficulty of implementation and disruption to other langauge elements
+(which I _have_ attempted to address). But let's take a momemnt and
+consider the benefits just to make sure everyone is on the same page:
+
+#### Cleanliness
+
+Here is a regular expression that you might find in any modern language:
+
+    <[+-]>?\d*'.'\d+[e<[+-]>?\d+]?
+
+Here is how Perl 6's best practices document suggests you render that
+in Perl 6 Regex:
+
+```
+token sign { <[+-]> }
+token decimal { \d+ }
+token exponent { 'e' <sign>? <decimal> }
+token float {
+    :!ratchet
+    <sign>?
+    <decimal>?
+    '.'
+    <decimal>
+    <exponent>?
+}
+```
+
+I think we can all see which is the most readable and maintainable...
+
+#### A full parser
+
+It cannot be stressed enough that Perl 6 Regexes are _not_ just
+a new syntax for basic regular expressions. They are full-fledged
+parsers (as shown in the JSON example at the end of this document).
+Even more so, because of the embedded code, they are fully
+context-sensitive parsers, which means that there is no
+[formal language](https://en.wikipedia.org/wiki/Chomsky_hierarchy)
+that they cannot specify.
+
+This is a quantitative difference in the space of possible problems
+that they can solve.
+
+#### Debugging
+
+Because these regexes are first-class language components, they
+can be just as debuggable as ordinary code. There is no reason
+that a debugger could not step form ordinary code into a regex
+and down into enclosed regular code.
+
+They also can produce compile-time errors. In many high level
+languages, today, the compile-time/run-time distinction can be
+fuzzy, but at the very least, compile-time implies that the
+syntax _must_ be correct. For example, consider this Python code:
+
+```Python
+import re
+def foo(s):
+    return re.match(r'fo**', s)
+```
+
+This is perfectly valid Python code and unless your test coverage
+manages to find the specific case where this bad value is
+passed to `re.match` (trivial, here, but obviously that's
+because it's a trivial example), you may not find out that there
+is an error for a very long time.
+
+In a Regex scenario:
+
+```Python
+def foo(s):
+    grammar Foo:
+        token t_foo:
+            fo**
+    return Foo.t_foo(s)
+```
+
+would result in a compile-time error before anyone tried to
+execute the code!
 
 ### Your Regex Where?
 
