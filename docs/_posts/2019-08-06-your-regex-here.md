@@ -796,3 +796,5 @@ grammar JSON {
     }
 }
 ```
+
+*This document is distributed under the [CC By-SA 3.0 US](https://creativecommons.org/licenses/by-sa/3.0/us/) license and all code samples herein are alternately licensed under the Artistic License 2.0, obtainable from Perl.org*
