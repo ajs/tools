@@ -4,50 +4,42 @@ title:  "Your Regex Here"
 published: true
 ---
 
-Usually, in this blog, I've been demonstrating Perl 6 programs and
-techniques, but that's not what this post is about. It's also quite a
-lot longer than most of my posts. It's intended as a proposal to
-those who develop, extend or maintain other languages as to how they
+This post is intended as a proposal to
+those who develop, extend or maintain languages
+_other than Perl 6_ as to how they
 could adapt Perl 6 Regexes (AKA Rules) to their language.
 
-If you just want to see what this would look like, feel free to skip to
-the end of this post to see a full parser for JSON as an example.
-
-Before we go there, let's cover why that's a good idea.
+There is a full JSON parser at the end of this article, written
+in this specification's syntax, so if you don't know anything
+about what Perl 6 Regexes look like, that might be good
+to glance at before continuing.
 
 I measure regular expressions in 5 epochs or generations, with a
 zeroth generation for the purely mathematical idea of a regular
 expression.
 
-In the early days of Unix, there was a regular expression library.
-I call this the first generation.
-Not very long after that it was "standardized" by extending it and
-changing/mutilating the syntax. This is the POSIX regular expression
-standard.
-
-Then we entered the boom times of regular expression development
-when Perl introduced its improvements to the traditional Unix and
-POSIX regular expressions. Sometime between POSIX and Perl, regular
-expressions also stopped being regular in the mathematical sense
-because of backtracking.
-
-Perl, PCRE, Python and Java all had a hand in the evolution of the
-basic third generation regular expression into what I'll call the
-fourth generation: the regular expressions that you're probably familiar
-with, today. These include features like named groups (first introduced
-in Python) and some implementations have extensions for full Unicode
-support.
-
-And then along came Perl 6! Perl 6 calls its system "regexes" and
-technically they're a full grammar engine, but realistically that's
-not all that much of a departure from modern regular expression engines,
-many of which support features such as back-referencing, look-ahead and
-look-behind, and Perl 5 even supports a primitive sort of recursive
-sub-rule!
-
-What's truly interesting about these 5th-generation regular expressions
-is that they're not just an extension, but a complete re-imagining
-of the basic Unix regular expression syntax.
+1. In the early days of Unix, there were a few programs that
+   used an arcane syntax few had heard of to match text.
+   These included ed and grep, soon to be followed by
+   ex, vi and friends.
+2. Not very long after that, regular expressions were
+   "standardized" by extending it and changing/mutilating the
+   syntax. This is the POSIX regular expression standard.
+3. Then we entered the boom times of regular expression development
+   when Perl introduced its improvements to the traditional Unix and
+   POSIX regular expressions.
+4. Perl, PCRE, Python and Java all had a hand in the evolution of the
+   basic third generation regular expression into what I'll call the
+   fourth generation: the regular expressions that you're probably familiar
+   with, today. These include features like named groups (first introduced
+   in Python) and some implementations have extensions for full Unicode
+   support including matching properties, code blocks, etc.
+5. And then along came Perl 6! Perl 6 calls its system "regexes" and
+   technically they're a full grammar engine, but realistically that's
+   not all that much of a departure from modern regular expression engines,
+   many of which support features such as back-referencing, look-ahead and
+   look-behind, and Perl 5 even supports a primitive sort of recursive
+   sub-rule!
 
 ## Toward a Language-Neutral 6th Generation
 
@@ -67,7 +59,7 @@ treated in previous implementations.
 ## Code, not strings
 
 Many languages implement regular expressions as strings that are parsed
-at run-time to produce a matching structure. Regexes aren't like that.
+at run-time to produce a matching structure. These regexes aren't like that.
 They are designed to be first-class code in the native language. As such
 they can fail at the time the rest of the program is parsed if malformed
 and they can include nested code execution.
@@ -78,6 +70,13 @@ code execution because of the inherent backtracking that occurs within a
 regex, potentially undoing bindings created within match objects and
 invalidating previous state.
 
+This is where regexes are difficult for someone familiar with a simple
+regular expression library to understand, and it bears some thought,
+but one thing that this proposal does to try to limit the impact of that
+complexity is to hide everything away behind the `grammar` keyword.
+Indeed, though it is a keyword, one could imagine a language implementation
+even gating access to it behind a library/module inclusion.
+
 ## Keywords and Whitespace
 
 Perl 6 is very, very free with introducing keywords. It can do this because
@@ -87,12 +86,10 @@ introduce a regex. I'm going to use three basic keywords, here:
 
 * `grammar` - Something like "class" in most modern OO languages, but
   the body isn't a set of properties and methods, but rather regexes.
-* `rule` - Introduces a regex that uses significant whitespace by default
+* `rule` - Introduces a regex that uses significant whitespace by default.
+  Occurs within a grammar.
 * `token` - Introduces a regex that does not use significant whitespace
-  by default.
-
-If your language is very restrictive with keywords, only the grammar keyword
-is really necessary, as the other two are nested within grammars.
+  by default. Occurs within a grammar.
 
 So, what is this significant whitespace thing? An example may help:
 
