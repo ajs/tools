@@ -281,7 +281,8 @@ These constructs modify preceding quantifiers:
 * `!` - Match greedily (the default)
 * `:` - Do not perform backtracking for the previous quantifier
 * `%` - Match the preceding atom _with quantifier_ separated by the following
-  atom (e.g. `\w+ % ','` which matches comma-separated words)
+  atom (e.g. `<string>+ % ','` which matches comma-separated `<string>` sub-rule
+  matches)
 * `%%` - Same as `%`, but allows a trailing separator.
 
 And finally, there is a special syntax for matching balanced expressions:
