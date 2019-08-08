@@ -28,13 +28,13 @@ expression.
 3. Then we entered the boom times of regular expression development
    when Perl introduced its improvements to the traditional Unix and
    POSIX regular expressions.
-4. Perl, PCRE, Python and Java all had a hand in the evolution of the
+4. Perl, TCL, PCRE, Python and Java all had a hand in the evolution of the
    basic third generation regular expression into what I'll call the
    fourth generation: the regular expressions that you're probably familiar
    with, today. These include features like named groups (first introduced
    in Python) and some implementations have extensions for full Unicode
    support including matching properties, code blocks, etc.
-5. And then along came Perl 6! Perl 6 calls its system "regexes" and
+5. And then along came Perl 6. Perl 6 calls its system "regexes" and
    technically they're a full grammar engine, but realistically that's
    not all that much of a departure from modern regular expression engines,
    many of which support features such as back-referencing, look-ahead and
