@@ -608,7 +608,7 @@ try to outline the high points, here.
 
 * [Pod](https://docs.perl6.org/language/pod)
 * Angle-bracket quoting of lists of strings as alternation.
-  e.g. `<oh happy day>` matches `oh | happy | day`.
+  e.g. `< oh happy day >` matches `oh | happy | day`.
 * Programatic range for repetition count
   (e.g. `[foo] ** {min_foo()..max_foo()}`)
 * Repetition quantifier variants (e.g. `[foo] ** ^10`, `[foo] ** 0^..^10`, etc)
