@@ -447,7 +447,7 @@ Would match "fruit:appLE", "fruit:FruitClass" but not "fruit:fruitclass".
 
 A sub-rule is like a subroutine call. All `rule` and `token` blocks
 introduce a sub-rule, which can be referenced by any other sub-rule
-using angel-brackets:
+using angle-brackets:
 
     rule identifier { <word> | <number> }
 
