@@ -613,6 +613,12 @@ try to outline the high points, here.
   (e.g. `[foo] ** {min_foo()..max_foo()}`)
 * Repetition quantifier variants (e.g. `[foo] ** ^10`, `[foo] ** 0^..^10`, etc)
 
+### Your Regex Where?
+
+The first step in porting this spec to your language is
+going to be to modify it to be language-specific. To that
+end, you will want to start with [the markdown text, available
+on GitHub](https://raw.githubusercontent.com/ajs/tools/master/docs/_posts/2019-08-06-your-regex-here.md).
 
 ## Example
 
