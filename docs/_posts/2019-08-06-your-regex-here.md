@@ -41,7 +41,7 @@ expression.
    look-behind, and Perl 5 even supports a primitive sort of recursive
    sub-rule!
 
-## Toward a Language-Neutral 6th Generation
+## Toward a language-neutral 6th generation
 
 The goal, here, is to come up with the core of Perl 6 regexes in order
 to allow future innovators in other languages to move toward the 6th
@@ -77,7 +77,7 @@ complexity is to hide everything away behind the `grammar` keyword.
 Indeed, though it is a keyword, one could imagine a language implementation
 even gating access to it behind a library/module inclusion.
 
-## Keywords and Whitespace
+## Keywords and whitespace
 
 Perl 6 is very, very free with introducing keywords. It can do this because
 the namespace is pretty well guarded and user-defined values rarely
@@ -731,7 +731,7 @@ def foo(s):
 would result in a compile-time error before anyone tried to
 execute the code!
 
-### Your Regex Where?
+### Your regex where?
 
 The first step in porting this spec to your language is
 going to be to modify it to be language-specific. To that
