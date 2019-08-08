@@ -600,7 +600,13 @@ try to outline the high points, here.
   ```
 
 * Inline comments - Perl 6 allows comments to appear
-  inline by using bracketing: `#\`(...)`
+  inline by using bracketing:
+
+  ```
+  apple #`(This is a comment) pear
+  ```
+
+* [Pod](https://docs.perl6.org/language/pod)
 * Angle-bracket quoting of lists of strings as alternation.
   e.g. `<oh happy day>` matches `oh | happy | day`.
 * Programatic range for repetition count
