@@ -573,6 +573,37 @@ but at the very least, the implications of matching a "character"
 on a Unicode string that might contain many composing codepoints must
 be addressed by the implementation.
 
+### What was dropped
+
+If you look at
+[the full Perl 6 Regex grammar](https://github.com/perl6/nqp/blob/master/src/QRegex/P6Regex/Grammar.nqp),
+which is, of course,
+written in Perl 6 Regex (using a subset of the language known
+as NQP), you can see that many specifics were skipped over.
+Some might be added back in later, some just don't make any sense
+outside of Perl 6 and some are interesting question marks. I'll
+try to outline the high points, here.
+
+* proto/sym - This is a bit like function overloading where
+  multiple definitions of the same name ar declared with
+  different parameters. Here's an example from the core
+  NQP definition of regexes themselves:
+    proto token metachar { <...> }
+    token metachar:sym<[ ]> { '[' ~ ']' <nibbler> <.SIGOK> }
+    token metachar:sym<( )> { '(' ~ ')' <nibbler> <.SIGOK> }
+    token metachar:sym<'> { <?['‘‚]> <quote_EXPR: ':q'>  <.SIGOK> }
+    token metachar:sym<"> { <?["“„]> <quote_EXPR: ':qq'> <.SIGOK> }
+    token metachar:sym<.> { <sym> <.SIGOK> }
+    ...
+* Inline comments - Perl 6 allows comments to appear
+  inline by using bracketing: `#\`(...)`
+* Angle-bracket quoting of lists of strings as alternation.
+  e.g. `<oh happy day>` matches `oh | happy | day`.
+* Programatic range for repetition count
+  (e.g. `[foo] ** {min_foo()..max_foo()}`)
+* Repetition quantifier variants (e.g. `[foo] ** ^10`, `[foo] ** 0^..^10`, etc)
+
+
 ## Example
 
 The following is a complete parser for the
