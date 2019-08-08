@@ -386,7 +386,7 @@ Parentheses always capture their matches in the numbered match placeholders
 `$n` where n is associated with parenthetical groups in the following way:
 
 * Counting open-parens left-to-right
-* But alternation (`|`, `||`, `&` and `&&`) reset the numbering
+* But alternation (`|`, `||`, `&` and `&&`) resets the numbering
 * If alternations have differing numbers of groups, then the longest
   "wins" in the sense that subsequent groups will be numbered from
   the highest number used thus far.
@@ -470,7 +470,7 @@ think of a match as being a data structure that contains a numbered
 set of indexes and a named set of indexes, independently. How this
 is implemented is language-specific, but a match can contain a whole
 tree of matches from sub-rules, and indeed this is how most grammars
-work, turning input test into a tree of match results that can be
+work, turning input text into a tree of match results that can be
 transformed into an AST or directly acted upon.
 
 To turn off capturing, place a period before the sub-rule name:
@@ -489,7 +489,11 @@ Recursion is allowed, and is how recursive parsing is performed,
 e.g.:
 
     rule expr {
-        <term> | <term> <leftop> <expr> | '(' ~ ')' <expr>
+        <term> | <term> <leftop> <expr>
+    }
+
+    rule term {
+        <literal> | '(' ~ ')' <expr>
     }
 
 ## Code interpolation
@@ -550,7 +554,7 @@ but it's there to consider...
 ### Actions
 
 In Perl 6, grammars are tightly coupled to the concept of "actions".
-These are methods of a class that is associated with the grammar
+These are methods of a class associated with the grammar
 whose names are the same as the names of the sub-rules in the
 grammar. Thus, when a sub-rule match occurrs, its corresponding
 action can be invoked.
