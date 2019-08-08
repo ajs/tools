@@ -484,6 +484,13 @@ match, use an equal sign:
 
     token IPv4 { <byte=octet> ** 4 % '.' }
 
+Recursion is allowed, and is how recursive parsing is performed,
+e.g.:
+
+    rule expr {
+        <term> | <term> <leftop> <expr> | '(' ~ ')' <expr>
+    }
+
 ## Code interpolation
 
 There are several ways to interpolate native language structures
