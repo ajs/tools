@@ -35,15 +35,17 @@ expression.
    in Python) and some implementations have extensions for full Unicode
    support including matching properties, code blocks, etc.
 5. And then along came Perl 6. Perl 6 calls its system "regexes" and
-   technically they're a full grammar engine, but realistically that's
-   not all that much of a departure from modern regular expression engines,
-   many of which support features such as back-referencing, look-ahead and
-   look-behind, and Perl 5 even supports a primitive sort of recursive
-   sub-rule!
+   technically they're a full grammar engine, but this can frequently
+   be ignored in favor of treating them as souped-up-regexes.
+
+I'll use the term "regex" in this document to mean that 5th (and
+perhaps a future 6th) generation. This is just convention. Note
+that outside of this document, many people use "regex" to refer
+to legacy regular expression syntaxes.
 
 ## Toward a language-neutral 6th generation
 
-The goal, here, is to come up with the core of Perl 6 regexes in order
+The goal, here, is to come up with the core of Perl 6 Regexes in order
 to allow future innovators in other languages to move toward the 6th
 generation just as they did when Perl enhanced regular expressions back in
 the early 90s.
@@ -718,7 +720,7 @@ passed to `re.match` (trivial, here, but obviously that's
 because it's a trivial example), you may not find out that there
 is an error for a very long time.
 
-In a Regex scenario:
+In a regex scenario:
 
 ```Python
 def foo(s):
