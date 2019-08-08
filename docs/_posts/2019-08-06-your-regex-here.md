@@ -626,6 +626,25 @@ try to outline the high points, here.
 * Programatic range for repetition count
   (e.g. `[foo] ** {min_foo()..max_foo()}`)
 * Repetition quantifier variants (e.g. `[foo] ** ^10`, `[foo] ** 0^..^10`, etc)
+* Several adverbs:
+  * `:Perl5`, `:P5` - (though perhaps in the larger context
+    `:PCRE` might have some value?)
+  * `:1st`, `:nth` and friends
+  * `:continue`, `:continue`
+  * `:pos`, `:p`
+  * `:exhaustive`, `:ex`
+  * `:global`, `:g`
+  * `:overlap`, `:o`
+  * All of the substitution-specific adverbs:
+    * :samecase or :ii
+    * :samemark or :mm
+    * :samespace or :ss
+* The many other keywords and syntaxes for defining regexes:
+  * `regex`
+  * `m`
+  * `rx`
+  * `/.../`
+  * All of the bracketing types that can accompany some of these.
 
 ### Your Regex Where?
 
