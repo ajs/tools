@@ -24,6 +24,10 @@ twitter_username: aaronsherman
 github_username:  ajs
 repository: "ajs/tools"
 
+include:
+  - README.md
+  - LICENSE.md
+
 # Build settings
 markdown: kramdown
 remote_theme: "mmistakes/minimal-mistakes@4.16.4"
