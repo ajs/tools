@@ -311,7 +311,7 @@ on the first matching alternative between the left and right hand sides.
 While the `|` now matches the longest of the two, as most BNF-like
 parser specifications expect, so:
 
-    'a' | 'aa' # will only ever match the right
+    'a' | 'aa' # matches the right if the input is "aa"
 
 The `&&` conjunction requires that its left and right hand sides both
 match the _same substring_. There is a `&` which is mostly identical
