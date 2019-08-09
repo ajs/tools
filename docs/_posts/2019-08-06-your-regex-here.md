@@ -641,6 +641,10 @@ try to outline the high points, here.
     * `:samecase` or `:ii`
     * `:samemark` or `:mm`
     * `:samespace` or `:ss`
+* The ability to associate adverbs with token/rule declarations
+  (this is Perl 6 langauge syntax, really, not regex syntax).
+* Similarly, any additional syntatic elements of the declaration
+  of a grammar (e.g. "is export").
 * The many other keywords and syntaxes for defining regexes:
   * `regex`
   * `m`
