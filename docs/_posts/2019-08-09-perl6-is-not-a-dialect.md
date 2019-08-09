@@ -26,22 +26,22 @@ usages the term “language” is superordinate lo “dialect,” but the nature
 of this relationship may be either linguistic or social, the latter
 problem falling in the province of sociolinguistics.*
 
-> \- Einar Haugen^(1)
+> \- Einar Haugen<sup>1</sup>
 
 > *Language and dialect exist on a continuum, and it is
 often difficult to determine where a dialect ends and a language begins.*
 
-> \- Walt Wolfram^(2)
+> \- Walt Wolfram<sup>2</sup>
 
 There is no universally acknowledged definition of a dialect (yes, you
 can go to the dictionary and look up "the definition", but a dictionary's
 job is to present the broadest semblance of a consensus on a moving
-target as if it were a well-defined mapping... a very utilitarian lie).^2
+target as if it were a well-defined mapping... a very utilitarian lie).<sup>2</sup>
 In the world where exceptions and specifics must be taken into account
 (academia) there is no such clear consensus on a formal definition, but
 we can outline it in basic terms.
 
-"Language" delineates two "linguistic norms,"^1 that is, ways that we
+"Language" delineates two "linguistic norms,"<sup>1</sup> that is, ways that we
 communicate ideas. In Perl, we have a dual meaning for "communicate," as we
 are both trying to communicate our intent with other programmers and
 to communicate to a computer the specific steps that we wish for it
@@ -56,7 +56,7 @@ But this is complicated by political and cultural issues. For example,
 Chinese has a number of "dialects" which are not universally
 intelligible by other Chinese speakers. Meanwhile Norwegian and Swedish
 are regarded as different "languages," yet their speakers can generally
-understand each other.^2
+understand each other.<sup>2</sup>
 
 ## Perl as language family
 
@@ -77,12 +77,12 @@ to Latin, then there are a whole tree of related languages like PHP, Perl 6
 and the various pidgins of Perl created within the CPAN repository.
 Meanwhile, if we think of Algol as Proto-Indo-European and all of the
 branches on _its_ tree as being like the various Indo-European language
-sub-families (Germanic, Romance, Greek, etc.)^5 then a picture emerges of
+sub-families (Germanic, Romance, Greek, etc.)<sup>5</sup> then a picture emerges of
 Perl as a significant branch-point in a very large continuum.
 
 Perl 6 is not, strictly speaking, a sister-language of Perl 5, as Larry
 offhandedly (and, I don't think with any intention of making a rigorous
-claim^(4)) referred to it. He's probably right to cast it in those terms,
+claim<sup>4</sup>) referred to it. He's probably right to cast it in those terms,
 though. While it's not strictly true that the two independently derived from
 a common ancestor, it is true that they share language constructs in a loose
 way that might suggest to a casual observer that this was the case.
@@ -97,7 +97,7 @@ diverse ideas in a prioritized way, but interestingly, this constructed
 language was initially opened up to the entire Perl 5 community in an
 "RFC" process which Larry Wall and others then boiled down into an essential
 list of features from which Larry wrote the first Apocalypses, the core
-statements of the goals, shape and specifics of the language.^6
+statements of the goals, shape and specifics of the language.<sup>6</sup>
 
 Perl 6's most obvious influences are from Perl 5, C++/Java,
 Haskell and Smalltalk. Its lesser influences are legion, ranging from
@@ -105,7 +105,7 @@ CommonLisp on the niche historical side to Python on the modern
 and popular side.
 
 Typically, related languages are broken down into loose (and sometimes
-highly varying) categories^(7, 7.1) of:
+highly varying) categories<sup>7, 7.1</sup> of:
 
 * jargon - A simple set of adopted or invented words.
 * pidgins - A pseudo-language that has no native speakers, but erupts from
