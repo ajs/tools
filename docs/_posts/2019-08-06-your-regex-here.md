@@ -95,23 +95,25 @@ introduce a regex. I'm going to use three basic keywords, here:
 
 ### Ratcheting
 
-A substantial difference between both `rule` and `token` is that they
+A substantial difference between both `rule` and `token` and what most
+users of older relgular expression engines might expect is that they
 do not backtrack by default. They merely seek the longest match. If you
 want backtracking, you can enable it with `:!ratchet` as described in
-the **Adverbs** section, below. Perl 6 provides an additional keyword,
-`regex` which enables backtracking by default.
+the **Adverbs** section, below.
 
 As an example, the rule or token:
 
     a*ab
 
-Will never match "aab" unless you enable `:!ratchet` mode because the
+Will never match "aab" unless you enable backtracking mode because the
 `a*` consumes the "aa" and then the second `a` in the rule/token does
 not match. Ratcheting in this way is very useful for parsing, but is
 rarely what traditional regular expression users expect, so whatever
 mechanism a language uses to integrate regexes, where it appears to be
-more traditional regular-expression-like, it should probably enable
-ratcheting.
+more traditional and regular-expression-like, it should probably enable
+ratcheting. Perl 6 provides an additional keyword,
+`regex` which enables backtracking by default (in addition to turning
+off significant whitespace).
 
 ### Significant whitespace
 
