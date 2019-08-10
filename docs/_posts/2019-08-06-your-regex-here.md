@@ -159,7 +159,8 @@ character or quoted:
 ## Simple non-literals
 
 As with most other regular expression formats, `.` matches any
-non-newline and there are the various character class escapes:
+chararcter (including newlines, use `\N` for non-newlines) and there are
+the various character class escapes:
 
 * `\s` matches whitespace
 * `\w` matches word characters (alphanumeric, underscore)
