@@ -197,9 +197,12 @@ named sub-rules:
 
 When used outside of `<+...>` character classes, these are
 sub-rules (see below), and may be preceded (within the `<...>`) by `.` in order to avoid
-capturing the matched value, like any other sub-rule.
+capturing the matched value, like any other sub-rule. If used as a chracter
+class (e.g. within <+...>) then they can be combined with other character
+classes freely except for `same`, `wb`, `ws` and `ww` which are not
+character classes.
 
-Unicode properties can also be matched. For example:
+Unicode properties can also be matched as character classes. For example:
 
     <:Script('Latin')>
 
@@ -262,9 +265,9 @@ To negate a property, simply follow the colon with a `!`.
 
 ## Character classes
 
-So far, these have all been expressed as "sub-rules". But you can
-also use them in "character class" constructions that can
-only ever match a single character and can be built up in pieces.
+You can use most of the above character-selecting sub-rules in "character
+class" constructions that can only ever match a single character and can
+be built up in pieces.
 
 Character classes can be explicit lists of characters:
 
