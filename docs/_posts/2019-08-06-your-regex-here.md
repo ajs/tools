@@ -68,7 +68,7 @@ and they can include nested code execution.
 
 Thinking of regexes in this way can be misleading however. There is
 an ephemeral nature to this execution that is unlike most other forms of
-code execution because of the inherent backtracking that occurs within a
+code execution because of the possibility of backtracking within a
 regex, potentially undoing bindings created within match objects and
 invalidating previous state.
 
@@ -91,9 +91,31 @@ introduce a regex. I'm going to use three basic keywords, here:
 * `rule` - Introduces a regex that uses significant whitespace by default.
   Occurs within a grammar.
 * `token` - Introduces a regex that does not use significant whitespace
-  by default and does not backtrack. Occurs within a grammar.
+  by default. Occurs within a grammar.
 
-So, what is this significant whitespace thing? An example may help:
+### Ratcheting
+
+A substantial difference between both `rule` and `token` is that they
+do not backtrack by default. They merely seek the longest match. If you
+want backtracking, you can enable it with `:!ratchet` as described in
+the **Adverbs** section, below. Perl 6 provides an additional keyword,
+`regex` which enables backtracking by default.
+
+As an example, the rule or token:
+
+    a*ab
+
+Will never match "aab" unless you enable `:!ratchet` mode because the
+`a*` consumes the "aa" and then the second `a` in the rule/token does
+not match. Ratcheting in this way is very useful for parsing, but is
+rarely what traditional regular expression users expect, so whatever
+mechanism a language uses to integrate regexes, where it appears to be
+more traditional regular-expression-like, it should probably enable
+ratcheting.
+
+### Significant whitespace
+
+What is this significant whitespace thing? An example may help:
 
 Here's a typical regex in just about any modern language:
 
@@ -436,7 +458,7 @@ inner-most group, rule or token within which they appear. These include:
 
 * `:ignorecase` or `:i` - Match upper and lower-case interchangeably
 * `:ignoremark` or `:m` - Match base Unicode characters, ignoring any combining elements (e.g. `:m u` would match "ü")
-* `:ratchet` or `:r` - Do not perform _any_ backtracking
+* `:ratchet` or `:r` - Do not perform _any_ backtracking (default)
 * `:sigspace` or `:s` - Treat whitespace as in rules
 * `:exhaustive` or `:e` - Perform all possible backtracking, even after a successful match
 
