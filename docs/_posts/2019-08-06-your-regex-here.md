@@ -294,6 +294,9 @@ Or by name:
 
 ## Quantifiers
 
+Everything described above is called an "atom". Groups are also atoms.
+Any atom can be made optional or repeating in a regex.
+
 The typical regular expression quantifiers are supported:
 
 * `+` - Match the preceding "atom" (single matching literal, group, sub-rule
