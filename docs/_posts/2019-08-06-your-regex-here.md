@@ -315,6 +315,17 @@ These constructs modify preceding quantifiers:
   matches)
 * `%%` - Same as `%`, but allows a trailing separator.
 
+Here are some examples:
+
+    a+
+
+Match one or more "a" characters.
+
+    \w*?a
+
+Match zero or more word characters, but match the shortest sequence that
+ends in "a".
+
 And finally, there is a special syntax for matching balanced expressions:
 
     '(' ~ ')' <expression>
