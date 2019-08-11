@@ -785,8 +785,12 @@ execute the code!
 
 The first step in porting this spec to your language is
 going to be to modify it to be language-specific. To that
-end, you will want to start with [the markdown text, available
-on GitHub](https://raw.githubusercontent.com/ajs/tools/master/docs/_posts/2019-08-06-your-regex-here.md).
+end, you will want to start with:
+
+* [the markdown text, available
+on GitHub](https://raw.githubusercontent.com/ajs/tools/master/docs/_posts/2019-08-06-your-regex-here.md)
+* [the formal specification written in itself](https://github.com/ajs/tools/blob/master/language/gen6-regex/regex)
+* [the Perl 6 test harness for the formal specification](https://github.com/ajs/tools/blob/master/language/gen6-regex/regex.t6)
 
 ## Example
 
