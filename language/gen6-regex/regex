@@ -1,0 +1,156 @@
+# A gen6-regex v1.0.0 definition of Gen6 Regex, a proper subset
+# of Perl 6 Regexes defined here:
+
+#   http://ajs.github.io/tools/your-regex-here/
+
+# The code below uses a fairly standard CamelCase naming for the grammar and
+# underscore_snake_case for rules/tokens because most languages do not grok
+# dashes in identifiers.
+
+# The goal is not to be able to parse Perl 6 Regexes, but it is to create a
+# grammar that can be read as a Perl 6 Regex as well as by any conforming
+# Gen6 Regex.
+
+grammar Gen6Regex {
+    rule TOP {^ <compound_expr> $}
+    rule compound_expr { <expr>* % <conjunction> }
+    rule expr { <adverb>? <single_expr>+ %% <adverb>? }
+    rule single_expr { <anchor> | <quantified_atom> }
+    rule anchor { <endpoint> | <builtin_anchor> }
+    rule quantified_atom {
+      [ '$<' <identifier> '>' '=' ]?
+      [
+           <balanced_start=atom> '~' <balanced_end=atom> <content=quantified_atom>
+        || <atom> [ <quantifier> <quant_control>? ]? <sepspec>?
+        || <code_block>
+      ]
+    }
+    rule sepspec { $<op> = ['%' '%'?] $<sep> = <quantified_atom> }
+    rule quantifier {
+        <simple_quant>
+      # Possible extension: code_block to provide either integer or whole
+      # range, as in Perl 6
+      | '**' <integer> [ '..' <integer>]?
+    }
+    rule atom { <literal> | <special_atom> | <assertion> | <group> }
+    rule special_atom { '.' | <backslash_class> }
+    rule group {
+        '(' ~ ')' <cap=compound_expr>
+      | '[' ~ ']' <noncap=compound_expr>
+    }
+    rule literal { <escaped> | <quoted> | <identifier> }
+    rule assertion {
+      '<'
+          <look_around>? [
+               :!ratchet
+               $<nocap> = ['.'?] [<name=identifier> '=']? <identifier>
+            || <code_block>
+            || <uniprop>
+            || <character_class_constructor>
+        ]
+      '>'
+    }
+    rule character_class_constructor {
+        [
+             <class_body>
+          || <prefix=class_joiner>
+            [ <uniprop> | <assertion> | <class_body> ]+
+              % <sep=class_joiner>
+        ]
+    }
+    rule code_block {
+      '{' ~ '}' <code>
+    }
+
+    # There's nothing technically different about tokens other than
+    # whitespace handling, but you can think of this section as the
+    # lexer portion of the grammar...
+
+    # Redefine whitespace sub-rule to skip comments
+    token ws { <!ww> [ '#' \N* || \s ]* }
+
+    token endpoint {
+        '^'
+      | '^^'
+      | '$'
+      | '$$'
+    }
+    token conjunction { '|' '|'? | '&' '&'? }
+    token builtin_anchor {
+      '<|w>'
+    }
+    token simple_quant { '?' | '*' | '+' }
+    token quant_control { [ '?' | '!' ] ':'? | ':' }
+    token integer { <[0..9]>+ }
+    token identifier { <ident>+ }
+    token adverb { <.ws> ':' $<not> = ['!'?] <adverb_name> <.ws> }
+    token adverb_name {
+      $<ignorecase> = [ 'i' 'gnorecase'?    ] |
+      $<ignoremark> = [ 'm' || 'ignoremark' ] |
+      $<ratchet>    = [ 'r' 'atchet'?       ] |
+      $<sigspace>   = [ 's' 'igspace'?      ] |
+      $<exhaustive> = [ 'e' 'xhaustive'?    ]
+    }
+    token escaped { '\\' <escapee> }
+    token escapee { :ignorecase <-[dhnstvw]> }
+    token quoted {
+      '"' ~ '"' <double_body>
+      | "'" ~ "'" <single_body>
+    }
+    token backslash_class { :ignorecase '\\' <[dhnstvw]> }
+    token class_char { '\\' <[\s\\\.\[\]]> || <-[\s\\\.\[\]]> }
+    token class_body { '[' <class_char>+ % '..' ']' }
+    token class_joiner { '+' | '-' }
+    token look_around { '?' | '!' }
+    token uniprop { ':' $<not> = ['!'?] <uniprop_name> }
+    token uniprop_name {
+      :!ratchet [
+          "C"  | "Other"
+        | "Cc" | "Control"
+        | "Cf" | "Format"
+        | "Cn" | "Unassigned"
+        | "Co" | "Private_Use"
+        | "Cs" | "Surrogate"
+        | "L"  | "Letter"
+        | "LC" | "Cased_Letter"
+        | "Ll" | "Lowercase_Letter"
+        | "Lm" | "Modifier_Letter"
+        | "Lo" | "Other_Letter"
+        | "Lt" | "Titlecase_Letter"
+        | "Lu" | "Uppercase_Letter"
+        | "M"  | "Mark"
+        | "Mc" | "Spacing_Mark"
+        | "Me" | "Enclosing_Mark"
+        | "Mn" | "Nonspacing_Mark"
+        | "N"  | "Number"
+        | "Nd" | "Decimal_Number"
+        | "Nl" | "Letter_Number"
+        | "No" | "Other_Number"
+        | "P"  | "Punctuation"
+        | "Pc" | "Connector_Punctuation"
+        | "Pd" | "Dash_Punctuation"
+        | "Pe" | "Close_Punctuation"
+        | "Pf" | "Final_Punctuation"
+        | "Pi" | "Initial_Punctuation"
+        | "Po" | "Other_Punctuation"
+        | "Ps" | "Open_Punctuation"
+        | "S"  | "Symbol"
+        | "Sc" | "Currency_Symbol"
+        | "Sk" | "Modifier_Symbol"
+        | "Sm" | "Math_Symbol"
+        | "So" | "Other_Symbol"
+        | "Z"  | "Separator"
+        | "Zl" | "Line_Separator"
+        | "Zp" | "Paragraph_Separator"
+        | "Zs" | "Space_Separator"
+      ]
+    }
+    token double_body {
+      [ <-[\"\\]> | [ '\\' . ] ]*
+    }
+    token single_body {
+      [ <-[\'\\]> | [ '\\' . ] ]*
+    }
+    # Embedded code must have balanced braces
+    token code { [ '{' ~ '}' <code> || <-[\{\}]>+ ]*  }
+}

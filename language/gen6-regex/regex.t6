@@ -1,0 +1,102 @@
+#!/usr/bin/env perl6
+
+use v6
+
+use File::Temp;
+
+# Construct the test file (because we can't use "is export" in the spec)
+
+class Tempfile {
+    has $.path;
+    has $.handle;
+
+    submethod BUILD(:$ext) {
+        my $suffix = $ext ?? ".$ext" !! "";
+        ($!path, $!handle) = tempfile(:$suffix);
+    }
+    method IO(Tempfile:D:) { self.path.IO }
+    method Str(Tempfile:D:) { self.path }
+}
+
+our $grammar_file = 'regex';
+our $perl = ~$*EXECUTABLE;
+our %tests =
+    empty => '', start_stop => '^$', space => ' ', dot => '.',
+    dot_plus => '.+', numbered_word => '\w\d+',
+    empty_code => '{}', print_class => '<print>',
+    char_range => '<[a..z]>',
+    balanced_parens => '"(" ~ ")" <expr>',
+    uniprop => '<:Letter>';
+
+subset TestName of Str where { !$_.defined or %tests{$_}:exists };
+
+proto MAIN(|) {*}
+
+multi sub MAIN(
+    Bool :$list-tests!, #= Show valid --test values
+) {
+    put %tests.keys.sort.join(', ');
+}
+
+multi sub MAIN(
+    Bool :$dogfood!, #= Use the parser to parse itself
+    Bool :$trace,    #= Use Grammar::Tracer to debug regexes
+) {
+    my $tmp = create_test_script(:$trace);
+    $tmp.handle.put(q{
+        grammar Gen6Structure {
+            # Redefine ws to skip comments
+            token ws { <!ww> [ '#' \N* || \s ]* }
+            rule TOP {^ <statement>* $}
+            rule statement { 'grammar' <name> '{' ~ '}' <tole>* }
+            rule tole {
+                [ 'token' || 'rule'] <name>
+                    '{' ~ '}' <Gen6Regex::compound_expr>
+            }
+            token name { <ident>+ }
+        }
+        ok Gen6Structure.parse(}~'q{'~get_grammar~'}'~q{),
+            "Dogfood the grammar";}
+    );
+    run_test_script($tmp);
+}
+
+multi sub MAIN(
+    TestName :$test,   #= Name of test to run
+    Bool :$trace,      #= Use Grammar::Tracer to debug regexes
+) {
+    my $tmp = create_test_script(:$trace);
+    $tmp.handle.put(q{my %example_regex := }, %tests.perl);
+    if $test {
+        $tmp.handle.print(qq{
+            my \$regex = \%example_regex<$test>;
+            ok Gen6Regex.parse(\$regex), "$test: \$regex";
+        });
+    } else {
+        $tmp.handle.print(
+            q{
+                plan +%example_regex;
+                for %example_regex.kv -> $name, $regex {
+                    ok Gen6Regex.parse($regex), "$name: Parse '$regex'";
+                }
+            });
+    }
+    run_test_script($tmp)
+}
+
+sub get_grammar() { $grammar_file.IO.slurp }
+
+sub create_test_script(:$trace) {
+    # Construct the test script
+    my $tmp = Tempfile.new(:ext('p6'));
+    $tmp.handle.put('use Test;');
+    $tmp.handle.put('use Grammar::Tracer;') if $trace;
+    $tmp.handle.print(get_grammar);
+
+    $tmp;
+}
+
+sub run_test_script($tmp) {
+    $tmp.handle.close;
+    exit(run([$perl, ~$tmp]).exitcode)
+}
