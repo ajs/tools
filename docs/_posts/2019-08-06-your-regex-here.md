@@ -693,6 +693,8 @@ try to outline the high points, here.
   * `rx`
   * `/.../`
   * All of the bracketing types that can accompany some of these.
+* Unicode property union/difference `<:Zp+:Zs-:Zl>`, which is redundant
+  with character class union/difference.
 
 ### A bit of marketing
 
