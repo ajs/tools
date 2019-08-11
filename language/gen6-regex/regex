@@ -1,4 +1,4 @@
-# A gen6-regex v1.0.0 definition of Gen6 Regex, a proper subset
+# A gen6-regex v1.0.0 DRAFT definition of Gen6 Regex, a proper subset
 # of Perl 6 Regexes defined here:
 
 #   http://ajs.github.io/tools/your-regex-here/
@@ -10,6 +10,9 @@
 # The goal is not to be able to parse Perl 6 Regexes, but it is to create a
 # grammar that can be read as a Perl 6 Regex as well as by any conforming
 # Gen6 Regex.
+
+# Note that this specification is currently a work in progress, and
+# does not yet fully parse itself.
 
 grammar Gen6Regex {
     rule TOP {^ <compound_expr> $}
