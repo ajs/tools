@@ -1,4 +1,4 @@
-# A gen6-regex v1.0.0 DRAFT definition of Gen6 Regex, a proper subset
+# A gen6-regex v1.0.1 DRAFT definition of Gen6 Regex, a proper subset
 # of Perl 6 Regexes defined here:
 
 #   http://ajs.github.io/tools/your-regex-here/
@@ -19,7 +19,6 @@ grammar Gen6Regex {
     rule compound_expr { <expr>* % <conjunction> }
     rule expr { <adverb>? <single_expr>+ %% <adverb>? }
     rule single_expr { <anchor> | <quantified_atom> }
-    rule anchor { <endpoint> | <builtin_anchor> }
     rule quantified_atom {
       [ '$<' <identifier> '>' '=' ]?
       [
@@ -35,7 +34,7 @@ grammar Gen6Regex {
       # range, as in Perl 6
       | '**' <integer> [ '..' <integer>]?
     }
-    rule atom { <literal> | <special_atom> | <assertion> | <group> }
+    rule atom { <special_atom> | <literal> | <assertion> | <group> }
     rule special_atom { '.' | <backslash_class> }
     rule group {
         '(' ~ ')' <cap=compound_expr>
@@ -44,23 +43,34 @@ grammar Gen6Regex {
     rule literal { <escaped> | <quoted> | <identifier> }
     rule assertion {
       '<'
-          <look_around>? [
-               :!ratchet
-               $<nocap> = ['.'?] [<name=identifier> '=']? <identifier>
-            || <code_block>
-            || <uniprop>
-            || <character_class_constructor>
+        <look_around>? <no_capture>? [
+            <subrule_like>
+          | <code_block>
+          | <uniprop>
+          | <character_class_constructor>
         ]
       '>'
     }
+    rule assertion_anchor {
+      '<'
+        <look_around> # anchor form requires look_around marker
+        <assertion_anchor_name>
+      '>'
+    }
+    rule subrule_like { [<name=identifier> '=']? <identifier> <argument>? }
+    rule argument {
+      <?after ['before' | 'after'] >
+      <argument=compound_expr>
+    }
     rule character_class_constructor {
         [
-             <class_body>
+             <enumerated_class>
           || <prefix=class_joiner>
-            [ <uniprop> | <assertion> | <class_body> ]+
+            [ <uniprop> | <assertion> | <enumerated_class> ]+
               % <sep=class_joiner>
         ]
     }
+    rule enumerated_class { '[' ~ ']' <enumerated_class_body> }
     rule code_block {
       '{' ~ '}' <code>
     }
@@ -70,18 +80,17 @@ grammar Gen6Regex {
     # lexer portion of the grammar...
 
     # Redefine whitespace sub-rule to skip comments
-    token ws { <!ww> [ '#' \N* || \s ]* }
+    token ws { <!.ww> [ '#' \N* || \s ]* }
 
-    token endpoint {
-        '^'
-      | '^^'
-      | '$'
-      | '$$'
+    token anchor {
+        $<start> = '^' '^'?
+      | $<end> = '$' <!before '<' > '$'?
+      | $<right> = '>>'
+      | $<left> = '<<'
+      | <assertion_anchor> # <wb> is an assertion, but <?wb> is an anchor
     }
+    token assertion_anchor_name { 'wb' | 'ww' }
     token conjunction { '|' '|'? | '&' '&'? }
-    token builtin_anchor {
-      '<|w>'
-    }
     token simple_quant { '?' | '*' | '+' }
     token quant_control { [ '?' | '!' ] ':'? | ':' }
     token integer { <[0..9]>+ }
@@ -94,17 +103,36 @@ grammar Gen6Regex {
       $<sigspace>   = [ 's' 'igspace'?      ] |
       $<exhaustive> = [ 'e' 'xhaustive'?    ]
     }
-    token escaped { '\\' <escapee> }
-    token escapee { :ignorecase <-[dhnstvw]> }
+    token escaped { \\ <escapee> }
+    token escapee { :ignorecase <-[cdhnstvwx]> }
     token quoted {
       '"' ~ '"' <double_body>
       | "'" ~ "'" <single_body>
     }
-    token backslash_class { :ignorecase '\\' <[dhnstvw]> }
-    token class_char { '\\' <[\s\\\.\[\]]> || <-[\s\\\.\[\]]> }
-    token class_body { '[' <class_char>+ % '..' ']' }
+    token backslash_class {
+      :ignorecase \x[5c] [<[dhnstvw]> | <parameterized_backslash_class>]
+    }
+    token parameterized_backslash_class {
+        x \[ \s* :ignorecase $<codepoint> = <[0..9 a..f]>+ \s* \]
+      | X \[ \s* :ignorecase $<not_codepoint> = <[0..9 a..f]>+ \s* \]
+      | c \[ $<name> = <[A..Z\-\ ]>+ \]
+      | C \[ $<not_name> = <[A..Z\-\ ]>+ \]
+    }
     token class_joiner { '+' | '-' }
+    # Note that <ws> is inappropriate, here, because of its requirement
+    # to occur <!ww> which breaks on <[abc]>
+    token enumerated_class_body { [ <enumerated_class_value>  \s* ]+ }
+    token enumerated_class_value {
+        <backslash_class>
+      | <uniprop>
+      | <enumerated_class_char> \s* [ '..' \s* <enumerated_class_char> ]?
+    }
+    token enumerated_class_char {
+        \\ $<escapee> = <[ \s \x[5c] \- \. \[ \] ]>
+      | $<character> = <-[ \s \x[5c] \- \. \[ \] ]>
+    }
     token look_around { '?' | '!' }
+    token no_capture { '.' }
     token uniprop { ':' $<not> = ['!'?] <uniprop_name> }
     token uniprop_name {
       :!ratchet [
@@ -149,10 +177,10 @@ grammar Gen6Regex {
       ]
     }
     token double_body {
-      [ <-[\"\\]> | [ '\\' . ] ]*
+      [ <-[ " \x[5c] ]> | [ \x[5c] \. ] ]*
     }
     token single_body {
-      [ <-[\'\\]> | [ '\\' . ] ]*
+      [ <-[ ' \x[5c] ]> | [ \x[5c] \. ] ]*
     }
     # Embedded code must have balanced braces
     token code { [ '{' ~ '}' <code> || <-[\{\}]>+ ]*  }
