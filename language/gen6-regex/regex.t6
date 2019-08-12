@@ -76,7 +76,7 @@ multi sub MAIN(
         $tmp.handle.print(
             q{
                 plan +%example_regex;
-                for %example_regex.kv -> $name, $regex {
+                for %example_regex.sort -> (:key($name), :value($regex)) {
                     ok Gen6Regex.parse($regex), "$name: Parse '$regex'";
                 }
             });
