@@ -22,7 +22,7 @@ our $grammar_file = 'regex';
 our $perl = ~$*EXECUTABLE;
 our %tests =
     empty => '', start_stop => '^$', space => ' ', dot => '.',
-    dot_plus => '.+', numbered_word => '\w\d+',
+    dot_plus => '.+', numbered_word => '\w\d+', word => '\w+',
     empty_code => '{}', print_class => '<print>',
     char_range => '<[a..z]>',
     balanced_parens => '"(" ~ ")" <expr>',
