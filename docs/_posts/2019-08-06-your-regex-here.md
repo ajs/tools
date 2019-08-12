@@ -367,8 +367,8 @@ chains of these operators) enhancing potential for parallelization.
 * `$` End of string
 * `^^` Start of newline-separated line within the string
 * `$$` End of newline-separated line within the string
-* `<?w>` Word boundary
-* `<!w>` Not a word boundary
+* `<?wb>` Word boundary
+* `<!wb>` Not a word boundary
 * `<?ww>` Within a word (no boundary)
 * `<!ww>` Not within a word
 * `<<` Left word boundary (a non-word character or start of string on the
@@ -695,6 +695,8 @@ try to outline the high points, here.
   * All of the bracketing types that can accompany some of these.
 * Unicode property union/difference `<:Zp+:Zs-:Zl>`, which is redundant
   with character class union/difference.
+* Unicode-equivalent operators such as `»` for `>>`
+* `<|w>` alias for `<wb>`
 
 ### A bit of marketing
 
