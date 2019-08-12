@@ -1,24 +1,18 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl6
 #
 # Treasure generator based on the d20 SRD
 #
-# (c) By Aaron Sherman, 2005
+# (c) By Aaron Sherman, 2005, 2019
 # Distributed under the Open Gaming License (OGL 1.0a)
 # Note that all item and ability names are part of the d20
 # system from Wizards of the Coast.
 #
-# $Id: mktreasure 263 2007-09-07 12:51:55Z ajs $
 
-use Getopt::Long;
-use Pod::Usage;
-use Storable qw(dclone);
-use YAML::Syck qw(LoadFile);
-use Data::Dumper;
-use strict;
+use YAML;
 
-$|=1;
+=begin pod
 
-sub mktrand($);
+The old code...
 
 # Globals used for command-line options
 our $cr = 1;
@@ -88,7 +82,6 @@ our %specials = (
 	deck_of_illusions    => \&special_deck_of_illusions,
 	concatenate          => \&special_concatenate,
 	specific_cursed_item => \&special_specific_cursed_item);
-
 # Parse command-line
 Getopt::Long::Configure('auto_abbrev','bundling');
 GetOptions(
@@ -119,11 +112,41 @@ GetOptions(
 eval "sub v { }" unless $verbose;
 eval "sub dbg { }" unless $debug;
 
-# Now just generate as many treasures as requested:
-init_rand();
-my @coins=(0,0,0,0);
-my $price = 0;
-my $sale_price = 0;
+=end pod
+
+class CoinType {
+    has $.name;
+    has $.abbrev;
+    has $.cp-value;
+    method gist { $!abbrev }
+}
+our $gold-piece = CoinType.new(:name<gold>, :abbrev<gp>, :cp-value<100>);
+our $silver-piece = CoinType.new(:name<silver>, :abbrev<sp>, cp-value<10>);
+our $copper-piece = CoinType.new(:name<copper>, :abbrev<cp>, :cp-value<1>);
+our $platinum-piece = CoinType.new(:name<platinum>, :abbrev<pp>, cp-value<1000>);
+class Treasure {
+    has CoinType @.coin-types =
+        $platinum-piece, $gold-piece, $silver-piece, $copper-piece;
+    has Int %.coins{CoinType} =
+        $gold-piece => 0,
+        $silver-piece => 0,
+        $copper-piece => 0,
+        $platinum-piece => 0;
+    has @.items;
+
+    # Generators
+    method for-cr(Treasure:U: Int $cr) { ... }
+
+    method add(Treasure:D: Treasure:D $other) {
+        my $new = Treasure.new;
+        $new.coins.append(self.coins.pairs)
+    }
+    method value(Treasure:D) { ... }
+    method sale-price(Treasure:D) { ... }
+}
+
+multi sub infix:<+>(Treasure:D $a, Treasure:D $b) { $a.add($b) }
+
 foreach my $n (1..$count) {
     my($tmp_price, $tmp_sale, $tmp_coins) =
       ($force?force_treasure($force):treasure_for_cr($cr));
