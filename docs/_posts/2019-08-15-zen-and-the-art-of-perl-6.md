@@ -1,4 +1,3 @@
-
 ---
 layout: single
 title:  "Zen and the Art of Perl 6"
