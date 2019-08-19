@@ -154,8 +154,8 @@ to the visual simplicity of passing variables as named arguments:
 
     add-to-database(:$db-handle, :$object);
 
-Perl 6 arms its uses with tools for readability, and then stands back and lets
-them decide how to apply them. In the wild, I find that code tends to be
+Perl 6 arms its users with tools for readability, and then stands back and
+lets them decide how to apply them. In the wild, I find that code tends to be
 extremely readable as a result because users tend to like the idea of making
 their code accessible *when doing so is made easy by the language*.
 
@@ -197,7 +197,7 @@ look like:
 
 To the user of the library it looks like a valid sequence of integers. It can
 be copied around and its values stored, etc. But any attempt to check the
-contents of a value after the fifth one will result in an exception.
+contents of a value after the fourth one will result in an exception.
 
 That being said, the core concept, here, is that code should deal with
 exceptional circumstances rather than ignoring them, and I doubt that there
