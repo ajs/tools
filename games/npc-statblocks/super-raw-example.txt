@@ -1,0 +1,32 @@
+BOLGART CAGGAN (HUMAN FORM) CR 3
+XP 800
+Male human afflicted wereboar fighter 2 (Pathfinder RPG
+Bestiary 2 182)
+CG Medium humanoid (human, shapechanger)
+Init +1; Senses low-light vision, scent; Perception +2
+DEFENSE
+AC 11, touch 11, flat-footed 10 (+1 Dex)
+hp 26 (2d10+11)
+Fort +7, Ref +2, Will +2 (+1 vs. fear)
+Defensive Abilities bravery +1
+OFFENSE
+Speed 30 ft.
+Melee mwk warhammer +6 (1d8+3/×3) or
+unarmed strike +4 (1d3+2)
+Ranged bottle or pot +3 (1d4+2)
+TACTICS
+During Combat Caggan fights with his fists and thrown
+pottery from the bar unless attacked with lethal
+weapons, at which point he pulls out his warhammer.
+Morale Caggan’s not going to give up his life over a unfair
+decree that will hopefully be only temporary. As a result,
+he surrenders if reduced to 13 hit points or fewer.
+STATISTICS
+Str 14, Dex 12, Con 17, Int 8, Wis 12, Cha 11
+Base Atk +2; CMB +4; CMD 15
+Feats Improved Unarmed Strike, Throw Anything,
+Toughness, Weapon Focus (warhammer)
+Skills Intimidate +4, Perception +2, Profession (barkeep) +6
+Languages Common
+SQ change shape (human, hybrid, and boar; polymorph)
+Gear mwk warhammer, cloak of resistance +1, 20 gp
