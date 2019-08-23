@@ -4,6 +4,10 @@ title:  "Your Regex Here"
 published: true
 ---
 
+*This document is being updated and maintained
+[in its own repository](https://github.com/ajs/Gen6-Regex/blob/master/YOUR-REGEX-HERE-POSTING.md)
+and this version will only remain for historical purposes.*
+
 This post is intended as a proposal to
 those who develop, extend or maintain languages
 _other than Perl 6_ as to how they
@@ -787,12 +791,10 @@ execute the code!
 
 The first step in porting this spec to your language is
 going to be to modify it to be language-specific. To that
-end, you will want to start with:
+end, you will want to start with this document, the latest version
+of which is now in its own repository at:
 
-* [the markdown text, available
-on GitHub](https://raw.githubusercontent.com/ajs/tools/master/docs/_posts/2019-08-06-your-regex-here.md)
-* [the formal specification written in itself](https://github.com/ajs/tools/blob/master/language/gen6-regex/regex)
-* [the Perl 6 test harness for the formal specification](https://github.com/ajs/tools/blob/master/language/gen6-regex/regex.t6)
+https://github.com/ajs/Gen6-Regex/blob/master/YOUR-REGEX-HERE-POSTING.md
 
 ## Example
 
