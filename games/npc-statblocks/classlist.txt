@@ -1,0 +1,51 @@
+Barbarian
+Bard
+Cleric
+Druid
+Fighter
+Monk
+Paladin
+Ranger
+Rogue
+Sorcerer
+Wizard
+Alchemist
+Cavalier
+Gunslinger
+Inquisitor
+Magus
+Omdura
+Oracle
+Shifter
+Summoner
+Vampire Hunter
+Vigilante
+Witch
+Arcanist
+Bloodrager
+Brawler
+Hunter
+Investigator
+Shaman
+Skald
+Slayer
+Swashbuckler
+Warpriest
+Antipaladin
+Ninja
+Samurai
+Unchained Barbarian
+Unchained Monk
+Unchained Rogue
+Unchained Summoner
+Kineticist
+Medium
+Mesmerist
+Occultist
+Psychic
+Spiritualist
+Adept
+Aristocrat
+Commoner
+Expert
+Warrior
