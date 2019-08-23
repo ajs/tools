@@ -1,0 +1,28 @@
+h1 {
+    font-size: 16pt;
+    background-color: black;
+    color: white;
+    text-transform: uppercase;
+}
+h2 {
+    font-size: 14pt;
+    padding: 0em 0em;
+    margin: 0em 0em;
+    line-height: 0.25em;
+    text-decoration: underline overline;
+}
+span.ability-name {
+    text-transform: capitalize;
+    font-weight: bold;
+}
+span.ability-score {
+    font-weight: normal;
+    font-family: monospace, Courier New, Courier, fixed;
+}
+span.tactic-heading:before {
+    content: '\A';
+    white-space: pre;
+}
+span.tactic-heading {
+    font-weight: bold;
+}
