@@ -1,66 +1,39 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl6
 #
 # A command-line factorization program based on BigInt and BigFloat.
 #
 # This is the slow, dumb way of doing it, but it gets the job done in
 # finite time for all cases that you have sufficient VM for.
 #
-# Written in 1999,2000 (c) by Aaron Sherman <ajs@ajs.com>
+# Written in Perl 5 in 1999,2000 (c) by Aaron Sherman <ajs@ajs.com>
+# Updated to Perl 6 in 2019 (c) by Aaron Sherman <ajs@ajs.com>
+#
+# Distributed under the Artistic License 2.0 which you should have
+# received with your copy of Perl.
 
-use Math::BigInt;
-use Math::BigFloat;
+# Pull in the Perl 5 ntheory module's "factor"
+use Inline::Perl5;
+our $p5 = Inline::Perl5.new();
+$p5.use('ntheory');
 
-$MAXINT = 2**31+(2**31-1);
-$doint = 0;
-$0=~s/^.*\///;
-$usage = "Usage: $0 [-i|--int] <number> ...\n";
-
-while(defined($arg = shift @ARGV)) {
-  if ($arg =~ s/^-//) {
-    if ($arg eq 'i' || $arg eq '-int') {
-      $doint = 1;
-    } else {
-      die "$0: Unknown argument -$arg\n$usage";
+our &factor = $p5.run(q{
+    sub factor {
+        my $n = shift @_;
+        ntheory::factor($n);
     }
-  } else {
-    @numbers = ($arg,@ARGV);
-    last;
-  }
-}
+    \&factor;
+});
 
-if ($doint) {
-  eval q{
-    package Math::BigInt;
-    sub new {int $_[0]}
-  };
-}
-
-foreach $n (@numbers) {
-	print "$n: ", join(", ", fac(Math::BigInt->new($n))), "\n";
-}
-
-sub fac {
-  my $n = shift;
-  my $m = shift;
-  my $s;
-  $m = 2 unless defined $m;
-  if ($n < $MAXINT) {
-    if (ref($n) || ref($m)) {
-      $n = int($n);
-      $m = int($m);
+sub MAIN(*@numbers, Bool :$test) {
+    for @numbers -> $number {
+        # Force passing $number as a string so that ntheory can instantiate
+        # a Perl 5 Math::BigInt with it.
+        my @factors = factor(~$number).sort;
+        if $test {
+            my $product = [*] @factors;
+            die "fac($number) != {@factors.join('*')} = $product"
+                unless $product == +$number;
+        }
+        say @factors.join(' ');
     }
-    return (fac($n/2), 2) if $m == 2 && $n%2 == 0;
-    $s = int sqrt $n;
-  } else {
-    return (fac($n/2), 2) if $m == 2 && $n%2 == 0;
-    $s = int Math::BigFloat->new($n)->fsqrt;
-  }
-  $m++ if $m == 2;
-  for(my $i = $m;$s >= $i;$i+=2) {
-    if ($n%$i == 0) {
-      return ($i, fac($n/$i, $i));
-    }
-  }
-  return $n;
 }
-
