@@ -1,9 +1,6 @@
 #!/usr/bin/env perl6
 #
-# A command-line factorization program based on BigInt and BigFloat.
-#
-# This is the slow, dumb way of doing it, but it gets the job done in
-# finite time for all cases that you have sufficient VM for.
+# A command-line factorization program based Perl 5's ntheory.
 #
 # Written in Perl 5 in 1999,2000 (c) by Aaron Sherman <ajs@ajs.com>
 # Updated to Perl 6 in 2019 (c) by Aaron Sherman <ajs@ajs.com>
@@ -24,7 +21,10 @@ our &factor = $p5.run(q{
     \&factor;
 });
 
-sub MAIN(*@numbers, Bool :$test) {
+sub MAIN(
+    *@numbers, #= Your integer inputs here...
+    Bool :$test #= Verify the results
+) {
     for @numbers -> $number {
         # Force passing $number as a string so that ntheory can instantiate
         # a Perl 5 Math::BigInt with it.
@@ -33,6 +33,7 @@ sub MAIN(*@numbers, Bool :$test) {
             my $product = [*] @factors;
             die "fac($number) != {@factors.join('*')} = $product"
                 unless $product == +$number;
+            say "Result is correct.";
         }
         say @factors.join(' ');
     }
