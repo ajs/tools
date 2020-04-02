@@ -35,3 +35,5 @@ gem 'jekyll-include-cache'
 gem "github-pages", group: :jekyll_plugins
 
 gem 'jekyll-redirect-from'
+
+gem "nokogiri", ">= 1.10.8"
