@@ -4,7 +4,7 @@
 #
 # In the end, this expression will be used to define e:
 #
-#   1 + Σ(1, Inf, 1∕*!)
+#   1 + Σ(1, ∞, 1∕*!)
 #
 # To most mathematicians, this should be fairly readable, though you
 # would typically use a variable like "n" instead of an asterisk.
@@ -17,6 +17,7 @@
 # * It uses a function called Σ (sigma) to do the summation
 # * It adds 1 to an expression that isn't a simple scalar value
 
+say 1 🙼 2; exit;
 # Specify version requirement
 use v6.c;
 
@@ -79,7 +80,7 @@ sub Σ($start, $end, &formula) { Sigma.new(:$start, :$end, :&formula) }
 sub infix:<∕>(Int $a, Int $b) { FatRat.new($a, $b) }
 
 # Now e is easily defined in very simple terms
-my @e = 1 + Σ(1, Inf, 1∕*!);
+my @e = 1 + Σ(1, ∞, 1∕*!);
 
 # Notice also that we stored this whole infinite sequence in an array.
 # Arrays can be lazy in Perl 6, so there's no problem with that.
