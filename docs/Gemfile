@@ -37,3 +37,9 @@ gem "github-pages", group: :jekyll_plugins
 gem 'jekyll-redirect-from'
 
 gem "nokogiri", ">= 1.10.8"
+
+gem "rouge"
+
+gem "commonmarker"
+
+gem "escape_utils"
