@@ -128,6 +128,32 @@ class Board:
                         return False
         return True
 
+    def make_move(self, player, randomize=False):
+        """
+        Given a player 0 or 1, make a move on the current board state
+
+        Returns the move made or None if no moves were available.
+        """
+
+        losing_move = None
+        moves = [(x,y) for x in range(self.size) for y in range(self.size)]
+        if randomize:
+            random.shuffle(moves)
+        for move_x, move_y in moves:
+            if self.board[move_x][move_y] is None:
+                self.board[move_x][move_y] = player
+                if self.draw():
+                    return (move_x, move_y)
+                else:
+                    losing_move = (move_x, move_y)
+                    self.board[move_x][move_y] = None
+        if losing_move:
+            # Forced to make losing move
+            self.board[losing_move[0]][losing_move[1]] = player
+            return losing_move
+
+        return None
+
     def __str__(self):
         """Represent board as multi-line string"""
 
@@ -142,6 +168,25 @@ class Board:
         return f"{dims}\n{board}"
 
 
+def play_game(board):
+    """Play a game and print results"""
+
+    moves = []
+    while True:
+        for player in (1,0):
+            move = board.make_move(player, randomize=True)
+            if move:
+                moves.append(move)
+            summary = f"moves = {moves!r}\nBoard: {board}"
+            if move:
+                if not board.draw():
+                    print(f"Player {player} lost at {move!r} after:\n{summary}")
+                    return
+            else:
+                print(f"Draw reached after:\n{summary}")
+                return
+
+
 def main():
     """Run a simulation"""
 
@@ -153,16 +198,29 @@ def main():
         type=int,
         default=5,
     )
+    parser.add_argument(
+        "--play",
+        action="store_true",
+        help="Play out a random game",
+    )
     args = parser.parse_args()
 
     board = Board(size=args.board_size)
-    while True:
-        board.random_play()
-        if board.draw():
-            print(board)
-            break
+    if args.play:
+        play_game(board)
+    else:
+        while True:
+            board.random_play()
+            if board.draw():
+                print(board)
+                break
 
 ### Tests
+##
+## Run with `pytest <this-file>` or pytest-3 if you have
+## python3 installed with suffix names.
+##
+## Use `pip install pytest` if you do not have pytest.
 
 def test_board_creation():
     """Verify basic board state"""
