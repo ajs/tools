@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
 
+"""
+Solve Matt Parker's puzzle from:
+https://www.think-maths.co.uk/avoidthesquare
+"""
+
+
 import random
 
 class Board:
@@ -44,6 +50,7 @@ class Board:
             ) for y in range(self.size)
         )
         return f"{dims}\n{board}"
+
 
 board_size = 5
 
