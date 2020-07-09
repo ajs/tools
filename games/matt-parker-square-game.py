@@ -24,7 +24,7 @@ class Board:
     def draw(self):
         for x in range(self.size-1):
             for y in range(self.size-1):
-                for square in range(1, self.size-max(x,y)-1,1):
+                for square in range(1, self.size-max(x,y),1):
                     if (
                         self.board[x][y] == self.board[x+square][y+square] ==
                         self.board[x+square][y] == self.board[x][y+square]
