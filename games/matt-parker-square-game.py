@@ -6,7 +6,10 @@ https://www.think-maths.co.uk/avoidthesquare
 """
 
 
+import pytest
 import random
+import argparse
+
 
 class Board:
     def __init__(self, size):
@@ -51,12 +54,70 @@ class Board:
         )
         return f"{dims}\n{board}"
 
+def main():
+    parser = argparse.ArgumentParser(description="Parker Squares?!")
+    parser.add_argument(
+        "board_size",
+        nargs="?",
+        action="store",
+        type=int,
+        default=5,
+    )
+    args = parser.parse_args()
 
-board_size = 5
+    board = Board(size=args.board_size)
+    while True:
+        board.random_play()
+        if board.draw():
+            print(board)
+            break
 
-board = Board(size=board_size)
-while True:
+### Tests
+
+def test_board_creation():
+    board = Board(5)
+    assert board.size == 5, "Board size check"
+    assert all(board.board[x][y] is None for x in range(5) for y in range(5)), (
+        "Board default state check"
+    )
+
+def test_board_shuffle():
+    board = Board(5)
     board.random_play()
-    if board.draw():
-        print(board)
-        break
+    assert all(board.board[x][y] is not None for x in range(5) for y in range(5)), (
+        "Board shuffle non-default state check"
+    )
+
+@pytest.mark.parametrize(
+    'sample_board, size, result', (
+        # Just a square
+        ([
+            [0,0],
+            [0,0]], 2, False),
+        # Draw
+        ([
+            [1,0],
+            [1,0]], 2, True),
+        # Square in corners and 45-degree turn edges
+        ([
+            [1,0,1],
+            [0,0,0],
+            [1,0,1]], 3, False),
+        # Just edges
+        ([
+            [1,0,0],
+            [0,1,0],
+            [1,0,1]], 3, False),
+    )
+)
+def test_board_draw(sample_board, size, result):
+    board = Board(size)
+    board.board = sample_board
+    # Note that board as printed is x/y swapped from what's shown above
+    assert board.draw() is result, (
+        f"Sample board {board} expects draw is {result!r}"
+    )
+
+
+if __name__ == '__main__':
+    main()
