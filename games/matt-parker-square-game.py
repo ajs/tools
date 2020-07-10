@@ -6,9 +6,12 @@ https://www.think-maths.co.uk/avoidthesquare
 """
 
 
-import pytest
+import sys
+import math
 import random
 import argparse
+
+import pytest
 
 
 class Board:
@@ -17,14 +20,19 @@ class Board:
     This board can play a game randomly and assess win vs. draw.
     """
 
-    def __init__(self, size):
+    def __init__(self, size, default=None):
         self.size = size
+        self.default = default
         self.reset_board()
 
     def reset_board(self):
         """Set board to starting state"""
 
         self.board = [[None for _ in range(self.size)] for __ in range(self.size)]
+        if self.default:
+            dsize = min(self.default.size, self.size)
+            for x, y in ((x,y) for x in range(dsize) for y in range(dsize)):
+                self.board[x][y] = self.default.board[x][y]
 
     def random_play(self):
         """
@@ -168,7 +176,7 @@ class Board:
         return f"{dims}\n{board}"
 
 
-def play_game(board):
+def play_game(board, silent=False):
     """Play a game and print results"""
 
     moves = []
@@ -180,12 +188,31 @@ def play_game(board):
             summary = f"moves = {moves!r}\nBoard: {board}"
             if move:
                 if not board.draw():
-                    print(f"Player {player} lost at {move!r} after:\n{summary}")
-                    return
+                    if not silent:
+                        print(f"Player {player} lost at {move!r} after:\n{summary}")
+                    return 1-player
             else:
-                print(f"Draw reached after:\n{summary}")
-                return
+                if not silent:
+                    print(f"Draw reached after:\n{summary}")
+                return None
+    raise RuntimeError("Infinite loop completed!")
 
+
+def walk_board():
+    """Start with board size 2 and keep going, tryig to find draws for each"""
+
+    board = None
+    for size in range(2,10000,1):
+        #board = Board(size=size, default=board)
+        board = Board(size=size)
+        count = 0
+        while play_game(board, silent=True) is not None:
+            board.reset_board()
+            count += 1
+            if count % 100 == 0:
+                sys.stdout.write(".")
+                sys.stdout.flush()
+        print(board)
 
 def main():
     """Run a simulation"""
@@ -203,12 +230,40 @@ def main():
         action="store_true",
         help="Play out a random game",
     )
+    parser.add_argument(
+        "--walk",
+        action="store_true",
+        help="Walk the board size up, finding a draw for each one...",
+    )
+    parser.add_argument(
+        "--check",
+        action="store",
+        help="Give a board layout as a 1/0 string, filling the board left-to-right, top-to-bottom and report status of game",
+    )
     args = parser.parse_args()
 
-    board = Board(size=args.board_size)
     if args.play:
+        board = Board(size=args.board_size)
         play_game(board)
+    if args.walk:
+        walk_board()
+    if args.check:
+        board_data = "".join(c for c in args.check if c.isdigit())
+        pieces = len(board_data)
+        size = math.sqrt(pieces)
+        if int(size) != size:
+            raise ValueError(f"Board to check is not square (len={pieces})")
+        size=int(size)
+        board = Board(size=size)
+        for i, piece in enumerate(board_data):
+            player = int(piece)
+            board.board[i%size][i//size] = player
+        if board.draw():
+            print("Draw: ", board)
+        else:
+            print("Not draw: ", board)
     else:
+        board = Board(size=args.board_size)
         while True:
             board.random_play()
             if board.draw():
