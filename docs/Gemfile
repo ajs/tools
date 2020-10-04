@@ -43,3 +43,6 @@ gem "rouge"
 gem "commonmarker"
 
 gem "escape_utils"
+
+gem "kramdown", ">= 2.3.0"
+
