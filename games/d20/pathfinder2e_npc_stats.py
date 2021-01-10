@@ -67,10 +67,7 @@ class AonNpc(AonObject):
         "int": aon_xpath_basic("Int"),
         "wis": aon_xpath_basic("Wis"),
         "cha": aon_xpath_basic("Cha"),
-        "items_equipment": aon_xpath_linked_list("Items", "Equipment.aspx"),
-        "items_weapon": aon_xpath_linked_list("Items", "Weapons.aspx"),
-        "items_armor": aon_xpath_linked_list("Items", "Armor.aspx"),
-        "items_shield": aon_xpath_linked_list("Items", "Shields.aspx"),
+        "items": aon_xpath_basic("Items"),
         "ac": aon_xpath_basic("AC"),
         "fort_save": aon_xpath_basic("Fort"),
         "ref_save": aon_xpath_basic("Ref"),
@@ -83,8 +80,8 @@ class AonNpc(AonObject):
     }
     text_fields = { "name", "level", "alignment", "size" }
     list_fields = {
-        "source", "traits", "skills", "languages", "items_equipment", "items_weapon",
-        "items_armor", "items_shield", "melee", "ranged", "spells",
+        "source", "traits", "skills", "languages", "items", "items_shield",
+        "melee", "ranged", "spells",
     }
     numeric_fields = {
         "perception", "str", "dex", "con", "int", "wis", "cha", "ac", "fort_save",
@@ -93,8 +90,8 @@ class AonNpc(AonObject):
     all_fields = (
         "name", "url", "level", "image", "alignment", "size", "traits", "source",
         "perception", "skills", "languages", "str", "dex", "con", "int",
-        "wis", "cha", "items_equipment", "items_weapon", "items_armor",
-        "items_shield", "ac", "fort_save", "ref_save", "will_save",
+        "wis", "cha", "items",
+        "ac", "fort_save", "ref_save", "will_save",
         "hp", "speed", "melee", "ranged", "spells",
     )
 
@@ -175,24 +172,6 @@ class AonNpc(AonObject):
             if detail:
                 yield scrub(detail[0].text)
 
-    def items_equipment_list(self):
-        return self.items_any_list("items_equipment")
-
-    def items_weapon_list(self):
-        return self.items_any_list("items_weapon")
-
-    def items_armor_list(self):
-        return self.items_any_list("items_armor")
-
-    def items_shield_list(self):
-        return self.items_any_list("items_shield")
-
-    def items_any_list(self, name):
-        items = self.xpath_get_detail(name)
-        for item in items:
-            if item is not None:
-                yield scrub(item.text)
-
     def melee_list(self):
         values = self.xpath_get_detail("melee")
 
@@ -209,17 +188,33 @@ class AonNpc(AonObject):
         values = self.xpath_get_detail("spells")
 
         for value in values:
-            elements = []
-            if value is None:
-                continue
-            while value is not None:
-                elements.append(value)
-                value = value.getnext()
-                if value.tag and value.tag == 'br':
-                    break
             yield "".join(
                 str(html.tostring(element, method="text", encoding="utf8"), encoding="utf8")
-                for element in elements)
+                for element in self.to_end_of_line(value))
+
+    @property
+    def items(self):
+        values = self.xpath_get_detail("items")
+
+        items = self.to_end_of_line(values[0])
+        if items:
+            items.pop(0)
+        return "".join(
+            str(html.tostring(element, method="text", encoding="utf8"), encoding="utf8")
+            for element in items)
+
+    def to_end_of_line(self, element):
+        """Scan from the current element to end of line and return all elements"""
+
+        elements = []
+        if element is None:
+            return []
+        while element is not None:
+            elements.append(element)
+            element = element.getnext()
+            if hasattr(element, "tag") and element.tag and element.tag in ('hr', 'br'):
+                break
+        return elements
 
     @property
     def image(self):
