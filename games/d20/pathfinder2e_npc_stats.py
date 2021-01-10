@@ -18,7 +18,7 @@ def scrub(value):
     """Scrub trailing garbage from a string"""
 
     if value:
-        return re.sub(r'\s*([,;]+\s*)$', '', value)
+        return re.sub(r'\s*([,;]+\s*)$', '', value).strip()
     return value
 
 def aon_xpath_basic(name):
@@ -34,8 +34,9 @@ def aon_xpath_linked_list(name, target):
 class AonObject:
     """A generic Archives of Nethys object"""
 
-    def __init__(self, html_content, logger=None):
+    def __init__(self, html_content, url=None, logger=None):
         self.html_content = html_content
+        self.url = url
         self.logger = logger or logging.getLogger(__name__)
 
     @property
@@ -69,20 +70,20 @@ class AonNpc(AonObject):
         "items_equipment": aon_xpath_linked_list("Items", "Equipment.aspx"),
         "items_weapon": aon_xpath_linked_list("Items", "Weapons.aspx"),
         "items_armor": aon_xpath_linked_list("Items", "Armor.aspx"),
-        "items_sheild": aon_xpath_linked_list("Items", "Shields.aspx"),
+        "items_shield": aon_xpath_linked_list("Items", "Shields.aspx"),
         "ac": aon_xpath_basic("AC"),
         "fort_save": aon_xpath_basic("Fort"),
         "ref_save": aon_xpath_basic("Ref"),
         "will_save": aon_xpath_basic("Will"),
         "hp": aon_xpath_basic("HP"),
         "speed": aon_xpath_basic("Speed"),
-        "melee": ".//b[text()='Melee']/following-sibling::img[@class='actionlight']",
-        "ranged": ".//b[text()='Ranged']/following-sibling::img[@class='actionlight']",
-        "spells": ".//b[contains(text(), 'Spells')]",
+        "melee": "./span[@class='hanging-indent' and ./b/text()='Melee']",
+        "ranged": "./span[@class='hanging-indent' and ./b/text()='Ranged']",
+        "spells": "./b[contains(., 'Spells')]",
     }
     text_fields = { "name", "level", "alignment", "size" }
     list_fields = {
-        "traits", "skills", "languages", "items_equipment", "items_weapon",
+        "source", "traits", "skills", "languages", "items_equipment", "items_weapon",
         "items_armor", "items_shield", "melee", "ranged", "spells",
     }
     numeric_fields = {
@@ -90,10 +91,10 @@ class AonNpc(AonObject):
         "ref_save", "will_save", "hp",
     }
     all_fields = (
-        "name", "level", "image", "alignment", "size", "traits", "source",
+        "name", "url", "level", "image", "alignment", "size", "traits", "source",
         "perception", "skills", "languages", "str", "dex", "con", "int",
         "wis", "cha", "items_equipment", "items_weapon", "items_armor",
-        "items_sheild", "ac", "fort_save", "ref_save", "will_save",
+        "items_shield", "ac", "fort_save", "ref_save", "will_save",
         "hp", "speed", "melee", "ranged", "spells",
     )
 
@@ -115,9 +116,7 @@ class AonNpc(AonObject):
 
         def content(value):
             value = value.tail or value.text
-            if value is not None:
-                value = value.strip()
-            return value
+            return scrub(value)
 
         self.logger.debug(f"Requested dynamic field {name}")
         if name in self.xpath_npc_details:
@@ -179,8 +178,8 @@ class AonNpc(AonObject):
     def items_equipment_list(self):
         return self.items_any_list("items_equipment")
 
-    def items_weapons_list(self):
-        return self.items_any_list("items_weapoons")
+    def items_weapon_list(self):
+        return self.items_any_list("items_weapon")
 
     def items_armor_list(self):
         return self.items_any_list("items_armor")
@@ -191,8 +190,44 @@ class AonNpc(AonObject):
     def items_any_list(self, name):
         items = self.xpath_get_detail(name)
         for item in items:
-            if item:
+            if item is not None:
                 yield scrub(item.text)
+
+    def melee_list(self):
+        values = self.xpath_get_detail("melee")
+
+        for value in values:
+            yield str(html.tostring(value, method="text", encoding="utf8"), encoding="utf8")
+
+    def ranged_list(self):
+        values = self.xpath_get_detail("ranged")
+
+        for value in values:
+            yield str(html.tostring(value, method="text", encoding="utf8"), encoding="utf8")
+
+    def spells_list(self):
+        values = self.xpath_get_detail("spells")
+
+        for value in values:
+            elements = []
+            if value is None:
+                continue
+            while value is not None:
+                elements.append(value)
+                value = value.getnext()
+                if value.tag and value.tag == 'br':
+                    break
+            yield "".join(
+                str(html.tostring(element, method="text", encoding="utf8"), encoding="utf8")
+                for element in elements)
+
+    @property
+    def image(self):
+        values = self.xpath_get_detail("image")
+        if values:
+            return values[0].get("src")
+        else:
+            return None
 
     @property
     def level(self):
@@ -257,7 +292,7 @@ class AonBrowser:
 
     def get_npc(self, url, name):
         npc_page = self.aon_get(url, reason=name)
-        return AonNpc(self.aon_clean(npc_page), logger=self.logger)
+        return AonNpc(self.aon_clean(npc_page), url=self.__last_url, logger=self.logger)
 
 
 def main():
