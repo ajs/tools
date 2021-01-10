@@ -77,11 +77,12 @@ class AonNpc(AonObject):
         "melee": "./span[@class='hanging-indent' and ./b/text()='Melee']",
         "ranged": "./span[@class='hanging-indent' and ./b/text()='Ranged']",
         "spells": "./b[contains(., 'Spells')]",
+        "other": "./span[@class='hanging-indent' and not(./b/text()='Melee' or ./b/text()='Ranged')]",
     }
     text_fields = { "name", "level", "alignment", "size" }
     list_fields = {
         "source", "traits", "skills", "languages", "items", "items_shield",
-        "melee", "ranged", "spells",
+        "melee", "ranged", "spells", "other",
     }
     numeric_fields = {
         "perception", "str", "dex", "con", "int", "wis", "cha", "ac", "fort_save",
@@ -92,7 +93,7 @@ class AonNpc(AonObject):
         "perception", "skills", "languages", "str", "dex", "con", "int",
         "wis", "cha", "items",
         "ac", "fort_save", "ref_save", "will_save",
-        "hp", "speed", "melee", "ranged", "spells",
+        "hp", "speed", "melee", "ranged", "spells", "other",
     )
 
     # Applied to melee and ranged nodes
@@ -176,32 +177,44 @@ class AonNpc(AonObject):
         values = self.xpath_get_detail("melee")
 
         for value in values:
-            yield str(html.tostring(value, method="text", encoding="utf8"), encoding="utf8")
+            yield self.element_str(value)
 
     def ranged_list(self):
         values = self.xpath_get_detail("ranged")
 
         for value in values:
-            yield str(html.tostring(value, method="text", encoding="utf8"), encoding="utf8")
+            yield self.element_str(value)
 
     def spells_list(self):
         values = self.xpath_get_detail("spells")
 
         for value in values:
             yield "".join(
-                str(html.tostring(element, method="text", encoding="utf8"), encoding="utf8")
+                self.element_str(element)
                 for element in self.to_end_of_line(value))
 
     @property
     def items(self):
         values = self.xpath_get_detail("items")
 
-        items = self.to_end_of_line(values[0])
+        if values:
+            items = self.to_end_of_line(values[0])
+        else:
+            return None
         if items:
             items.pop(0)
         return "".join(
-            str(html.tostring(element, method="text", encoding="utf8"), encoding="utf8")
+            self.element_str(element)
             for element in items)
+
+    def other_list(self):
+        values = self.xpath_get_detail("other")
+
+        for value in values:
+            yield self.element_str(value)
+
+    def element_str(self, element):
+        return str(html.tostring(element, method="text", encoding="utf8"), encoding="utf8")
 
     def to_end_of_line(self, element):
         """Scan from the current element to end of line and return all elements"""
