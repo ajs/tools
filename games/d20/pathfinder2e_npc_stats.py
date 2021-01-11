@@ -326,11 +326,11 @@ class AonBrowser:
         return None
 
     def get_creatures(self, url, reason, fetcher, single):
-        creatures_list = self.aon_get(url, reason=reason).text
+        creatures_list = self.aon_clean(self.aon_get(url, reason=reason))
         if single:
             yield self.get_single_creature(creatures_list, single, fetcher)
         else:
-            for creature_match in self.CREATURES_LIST_RE.finditer(self.aon_clean(creatures_list)):
+            for creature_match in self.CREATURES_LIST_RE.finditer(creatures_list):
                 yield fetcher(*creature_match.groups())
 
     def get_monsters(self, single=None):
@@ -361,7 +361,7 @@ def process_records(source, output, fields, reader, single=None, limit=None):
         if fields:
             creature_dict = {field: creature_dict[field] for field in fields}
         if output == "csv":
-            writer.writerow(ceature_dict)
+            writer.writerow(creature_dict)
         elif output == "text":
             print(repr(creature_dict))
         else:
