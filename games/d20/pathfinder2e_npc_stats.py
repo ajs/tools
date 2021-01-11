@@ -47,8 +47,7 @@ class AonObject:
     def elements(self):
         return html.parse(self.content_io)
 
-
-class AonNpc(AonObject):
+class AonCoreCreature(AonObject):
     xpath_npc = "//span[@id='ctl00_MainContent_DetailedOutput']"
     xpath_npc_details = {
         "name": "./h1[@class='title']/a",
@@ -104,6 +103,16 @@ class AonNpc(AonObject):
     def npc(self):
         """The body of the NPC definition"""
 
+        self.logger.debug("Remove secondary sections...")
+        # Remove supplemental sections
+        h3 = self.elements.xpath(".//h3")
+        if h3:
+            element = h3[0]
+            while element is not None:
+                next_element = element.getnext()
+                element.getparent().remove(element)
+                element = next_element
+
         return self.elements.xpath(self.xpath_npc)[0]
 
     def xpath_get_detail(self, name):
@@ -140,7 +149,7 @@ class AonNpc(AonObject):
                 value = content(value)
             return value
 
-        raise AttributeError(f"Unknown NPC attribute {name}")
+        raise AttributeError(f"Unknown {self.__class__.__name__} attribute {name}")
 
     def skills_list(self):
         skills = self.xpath_get_detail("skills")
@@ -250,10 +259,21 @@ class AonNpc(AonObject):
         return {field: getattr(self, field) for field in self.all_fields}
 
 
+class AonNpc(AonCoreCreature):
+    pass
+
+class AonMonster(AonCoreCreature):
+    pass
+
+
 class AonBrowser:
     NPCS_LIST = "https://2e.aonprd.com/NPCs.aspx?Letter=All"
+    MONSTERS_LIST = "https://2e.aonprd.com/Monsters.aspx?Letter=All"
+
     # Should also use xpath for this...
-    NPCS_LIST_RE = re.compile(r'href=\W*(NPCs\.aspx\?ID=\d+)\W+?\<u\>\s*([^\<]+?)\s*\<\/u', re.IGNORECASE)
+    CREATURES_LIST_RE = re.compile(r'href=\W*((?:NPC|Monster)s\.aspx\?ID=\d+)\W+?\<u\>\s*([^\<]+?)\s*\<\/u', re.IGNORECASE)
+    CREATURE_SINGLE_BY_NAME_RE = r'href=\W*((?:NPC|Monster)s\.aspx\?ID=\d+)\W+?\<u\>\s*([^\<]*?{name}[^\<]*?)\s*\<\/u'
+    CREATURE_SINGLE_BY_URL_RE = r'href=\W?({url}\W*?\<u\>\s*({re.escape(name)})\s*\<\/u'
 
     def __init__(self, delay_offset=1, timeout=10, logger=None):
         self.delay_offset = delay_offset
@@ -293,15 +313,55 @@ class AonBrowser:
         text = text.replace('script async', 'script ')
         return text
 
-    def get_npcs(self):
-        npcs_list = self.aon_get(self.NPCS_LIST, reason="NPC list")
-        for npc_match in self.NPCS_LIST_RE.finditer(self.aon_clean(npcs_list)):
-            yield self.get_npc(*npc_match.groups())
+    def get_single_creature(self, list_page, single, creature_reader):
+        match = (
+            re.search(self.CREATURE_SINGLE_BY_NAME_RE.format(name=single), list_page) or
+            re.search(self.CREATURE_SINGLE_BY_URL_RE.format(url=single), list_page))
+        if match:
+            return creature_reader(*match.groups())
+        return None
+
+    def get_creatures(self, url, reason, fetcher, single):
+        creatures_list = self.aon_get(url, reason=reason).text
+        if single:
+            yield self.get_single_creature(creatures_list, single, fetcher)
+        else:
+            for creature_match in self.CREATURES_LIST_RE.finditer(self.aon_clean(creatures_list)):
+                yield fetcher(*creature_match.groups())
+
+    def get_monsters(self, single=None):
+        return self.get_creatures(self.MONSTERS_LIST, "Monster list", self.get_monster, single)
+
+    def get_npcs(self, single=None):
+        return self.get_creatures(self.NPCS_LIST, "NPC list", self.get_monster, single)
+
+    def get_monster(self, url, name):
+        monster_page = self.aon_get(url, reason=name)
+        return AonMonster(self.aon_clean(monster_page), url=self.__last_url, logger=self.logger)
 
     def get_npc(self, url, name):
         npc_page = self.aon_get(url, reason=name)
         return AonNpc(self.aon_clean(npc_page), url=self.__last_url, logger=self.logger)
 
+
+def process_records(source, output, fields, reader, single=None, limit=None):
+    """Read records from the site and output as directed"""
+
+    if output == "csv":
+        writer = csv.DictWriter(sys.stdout, fieldnames=fields)
+        writer.writeheader()
+    for row, creature in enumerate(reader(single=single)):
+        if limit and limit == row:
+            break
+        creature_dict = creature.as_dict()
+        if fields:
+            creature_dict = {field: creature_dict[field] for field in fields}
+        if output == "csv":
+            writer.writerow(ceature.as_dict())
+        elif output == "text":
+            print(repr(creature.as_dict()))
+        else:
+            raise ValueError(f"Unknown output mode {output}")
 
 def main():
     parser = argparse.ArgumentParser(description="Data reader for Archives of Nethys")
@@ -318,7 +378,7 @@ def main():
     parser.add_argument(
         "--source",
         action="store",
-        choices=("npc",),
+        choices=("npc","monster"),
         default="npc",
         help="Source listing to read from AoN")
     parser.add_argument(
@@ -333,31 +393,37 @@ def main():
         action="store",
         default=None,
         help="Comma-separated list of fields to select")
+    parser.add_argument(
+        "-1", "--limit-one",
+        action="store",
+        metavar="NAME-OR-URL",
+        default=None,
+        help="Name or URL of record to fetch")
 
     options = parser.parse_args()
 
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger("pathfinder-reader")
     if options.debug:
         logging.basicConfig(level=logging.DEBUG)
         logger.setLevel(logging.DEBUG)
     limit_fields = re.split(r'\s*,\s*', options.limit_fields) if options.limit_fields else None
     aon = AonBrowser(logger=logger)
-    if options.source == "npc":
-        if options.output == "csv":
-            writer = csv.DictWriter(sys.stdout, fieldnames=limit_fields or AonNpc.all_fields)
-            writer.writeheader()
-        for row, npc in enumerate(aon.get_npcs()):
-            if options.limit and options.limit == row:
-                break
-            npc_dict = npc.as_dict()
-            if limit_fields:
-                npc_dict = {field: npc_dict[field] for field in limit_fields}
-            if options.output == "csv":
-                writer.writerow(npc.as_dict())
-            elif options.output == "text":
-                print(repr(npc.as_dict()))
-            else:
-                raise ValueError(f"Unknown output mode {options.output}")
+    if options.source == "monster":
+        process_records(
+            options.source,
+            output=options.output,
+            fields=(limit_fields or AonMonster.all_fields),
+            reader=aon.get_monsters,
+            single=options.limit_one,
+            limit=options.limit)
+    elif options.source == "npc":
+        process_records(
+            options.source,
+            output=options.output,
+            fields=(limit_fields or AonNpc.all_fields),
+            reader=aon.get_npcs,
+            single=options.limit_one,
+            limit=options.limit)
     else:
         raise ValueError(f"Unknown source: {source}")
 
