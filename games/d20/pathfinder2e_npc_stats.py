@@ -273,7 +273,7 @@ class AonBrowser:
     # Should also use xpath for this...
     CREATURES_LIST_RE = re.compile(r'href=\W*((?:NPC|Monster)s\.aspx\?ID=\d+)\W+?\<u\>\s*([^\<]+?)\s*\<\/u', re.IGNORECASE)
     CREATURE_SINGLE_BY_NAME_RE = r'href=\W*((?:NPC|Monster)s\.aspx\?ID=\d+)\W+?\<u\>\s*([^\<]*?{name}[^\<]*?)\s*\<\/u'
-    CREATURE_SINGLE_BY_URL_RE = r'href=\W?({url}\W*?\<u\>\s*({re.escape(name)})\s*\<\/u'
+    CREATURE_SINGLE_BY_URL_RE = r'href=\W?({url})\W*?\<u\>\s*([^\<]+?)\s*\<\/u'
 
     def __init__(self, delay_offset=1, timeout=10, logger=None):
         self.delay_offset = delay_offset
@@ -314,11 +314,15 @@ class AonBrowser:
         return text
 
     def get_single_creature(self, list_page, single, creature_reader):
+        rel_url = re.escape(re.sub(r'^[^:]*://[^/]+/', '', single))
+        single = re.escape(single)
         match = (
             re.search(self.CREATURE_SINGLE_BY_NAME_RE.format(name=single), list_page) or
-            re.search(self.CREATURE_SINGLE_BY_URL_RE.format(url=single), list_page))
+            re.search(self.CREATURE_SINGLE_BY_URL_RE.format(url=single), list_page) or
+            re.search(self.CREATURE_SINGLE_BY_URL_RE.format(url=rel_url), list_page))
         if match:
             return creature_reader(*match.groups())
+        self.logger.warning(f"Did not match URL or NAME with: {single}")
         return None
 
     def get_creatures(self, url, reason, fetcher, single):
@@ -357,9 +361,9 @@ def process_records(source, output, fields, reader, single=None, limit=None):
         if fields:
             creature_dict = {field: creature_dict[field] for field in fields}
         if output == "csv":
-            writer.writerow(ceature.as_dict())
+            writer.writerow(ceature_dict)
         elif output == "text":
-            print(repr(creature.as_dict()))
+            print(repr(creature_dict))
         else:
             raise ValueError(f"Unknown output mode {output}")
 
