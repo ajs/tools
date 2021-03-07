@@ -17,11 +17,6 @@ KNOWN_RARE = (
     20313839704202, 20331657922202, 20331875722202, 20333875702202,
     40313893704200)
 
-LOW_SQUARES = set((
-    1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289,
-    324, 361, 400, 441, 484, 529, 576, 625, 676, 729, 784, 841, 900, 961,
-))
-
 
 def rare_last_digit(first):
     """Given a leading digit, first, return all possible last digits of a rare number"""
@@ -38,12 +33,10 @@ def rare_last_digit(first):
         raise ValueError(f"Invalid first digit of rare number: {first}")
 
 
-def isqrt(n):
+def py37_isqrt(n):
     """Return largest integer r such that r^2 <= n"""
 
-    if sys.version_info.major == 3 and sys.version_info.minor >= 8:
-        return math.isqrt(n)
-    elif n < 10000000000000000000000: # trial and error
+    if n < 10000000000000000000000: # trial and error
         return math.floor(math.sqrt(n))
     else:
         # https://stackoverflow.com/a/53983683
@@ -73,20 +66,25 @@ def isqrt(n):
     )
 )
 def test_isqrt(n, result):
-    assert isqrt(n) == result, f"Expect isqrt({n}) == {result}"
+    assert py37_isqrt(n) == result, f"Expect isqrt({n}) == {result}"
+
+
+if sys.version_info.major == 3 and sys.version_info.minor >= 8:
+    isqrt = math.isqrt
+else:
+    isqrt = py37_isqrt
 
 
 def is_perfect_square(n):
     """Return True if n is a Perfect Square"""
 
-    if n < 1000:
-        return n in LOW_SQUARES
-    if str(n)[-1] in (2, 3, 7, 8):
-        return False
-    if digital_root(n) not in (1, 4, 7, 9):
-        return False
-    root = isqrt(n)
-    return root**2 == n
+    # These shortcuts actually take longer than just checking with isqrt
+    #if n % 10 in (2, 3, 7, 8):
+    #    return False
+    #if digital_root(n) not in (1, 4, 7, 9):
+    #    return False
+    sqt = isqrt(n)
+    return sqt * sqt == n
 
 
 @pytest.mark.parametrize(
@@ -129,12 +127,14 @@ def test_digital_root(n, result):
 def is_rare(n, rev=None):
     """Return True if n is a Rare Number"""
 
-    if digital_root(n) not in (2, 5, 8, 9):
-        return False
+    # This is a good high-pass filter, but slow
+    #if digital_root(n) not in (2, 5, 8, 9):
+    #    return False
     if rev is None:
         rev = int(str(n)[::-1])
-    if rev > n:
-        return False
+        # Assume if rev is passed in, this check was done
+        if rev >= n:
+            return False
     return is_perfect_square(n + rev) and is_perfect_square(n - rev)
 
 
@@ -147,6 +147,10 @@ def is_rare(n, rev=None):
         (621770, True),
         (22134434735752443122, True),
         (22134434535752443122, False),
+        (61999171315484316965, True),
+        (61999171315484316960, False),
+        (65459144877856561700, True),
+        (65459144877856561705, False),
     )
 )
 def test_is_rare(n, result):
@@ -234,18 +238,22 @@ def rare_numbers(digits):
                         end = str(mid_last_d) + str(last_d)
                         if digits == 4:
                             n = int(start + end)
-                            if is_rare(n):
+                            rev = int(str(n)[::-1])
+                            if n > rev and is_rare(n, rev=rev):
                                 yield n
                         else:
-                            for mid in range(0, 10**(digits-4)):
-                                mid_pad = f"{{mid:0{digits-4}d}}".format(mid=mid)
-                                #print(f"Construct {start} + {mid_pad} + {end}")
-                                n = int(start + mid_pad + end)
+                            # 1 followed by digits in middle piece
+                            mid_range = 10 ** (digits - 4)
+                            for mid in range(mid_range, 2 * mid_range):
+                                # Drop the leading "1" for fast 0-padding
+                                n = int(start + str(mid)[1:] + end)
                                 # Perform a quich check and if it passes, call is_rare
                                 # for the full check
                                 rev = int(str(n)[::-1])
-                                check = n + rev if digits % 2 == 0 else n - rev
-                                if check % 11 == 0 and n > rev and is_rare(n, rev=rev):
+                                # All valid results will show check % 11 == 0,
+                                # but that test is slower than is_rare
+                                #check = n + rev if digits % 2 == 0 else n - rev
+                                if n > rev and is_rare(n, rev=rev):
                                     yield n
 
 
