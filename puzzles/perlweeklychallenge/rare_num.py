@@ -257,12 +257,19 @@ def rare_numbers(digits):
                                     yield n
 
 
-def test_rare_numbers():
-    """Check a simple range, others take too long..."""
+@pytest.mark.parametrize(
+    'digits, result', (
+        (2, [65]),
+        (3, []),
+        (4, []),
+        (5, []),
+        (6, [621770]),
+    )
+)
+def test_rare_numbers(digits, result):
+    """Check small ranges that can be completed fast"""
 
-    numbers = list(rare_numbers(2))
-    assert len(numbers) == 1, "Expect one result for rare_numbers(2)"
-    assert numbers[0] == 65, "Expect first rare number is 65"
+    assert list(rare_numbers(digits)) == result, f"Expect {result!r} for {digits} digits"
 
 
 def main():
