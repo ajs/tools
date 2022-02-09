@@ -28,7 +28,7 @@ def miller_rabin(p):
         k += 1
     a = random.randint(2, p-1)
     x = pow(a, m, p)
-    if x == 1 or x == p-1:
+    if x in (1, p-1):
         return True
     while k > 1:
         x = pow(x, 2, p)
@@ -58,11 +58,15 @@ def is_prime(p, repeat=20):
     # High level quick check:
     if p < 2 or p != int(p):
         return False
+    max_static = LOW_PRIMES[-1]
+    sqrt_p = (max_static + 1 if p > max_static else sqrt(p))
     for n in LOW_PRIMES:
         if p == n:
             return True
         if p % n == 0:
             return False
+        if n >= sqrt_p:
+            return True
     # Statistical check:
     for i in range(repeat):
         if not miller_rabin(p):
