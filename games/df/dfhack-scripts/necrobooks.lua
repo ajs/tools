@@ -2,6 +2,7 @@
 -- Search for and/or get rid of necromantic books
 
 local function do_book_stuff(item, args)
+    -- Do things to books. Returns number found, actions taken (integers)
     local action_count = 0
     local found_count = 0
     local desc = dfhack.items.getDescription(item, 0, 1)
@@ -14,7 +15,9 @@ local function do_book_stuff(item, args)
                     if ref._type == df.general_ref_interactionst then
                         local forbid = (item.flags.forbid and " (forbidden)" or "")
                         local dump = (item.flags.dump and " (marked for dumping)" or "")
+			found_count = found_count + 1
                         print("** Necrobook  found! "..desc..forbid..dump)
+
                         if args.dump and not item.flags.dump then
                             item.flags.dump = 1
                             print("  Marked for dumping.")
@@ -29,13 +32,14 @@ local function do_book_stuff(item, args)
                             print("  Claimed.")
                             action_count = action_count + 1
                         end
+
                     end
                 end
             end
         end
     end
 
-    return action_count
+    return {found_count=found_count, action_count=action_count}
 end
 
 -- Main
@@ -44,16 +48,25 @@ utils = require('utils')
 
 local args = argparse.processArgs({...}, utils.invert{'dump', 'forbid', 'claim'})
 local action_count = 0
+local found_count = 0
 for _,item in ipairs(df.global.world.items.other.BOOK) do
-    action_count = action_count + do_book_stuff(item, args)
+    counts = do_book_stuff(item, args)
+    found_count = found_count + counts.found_count
+    action_count = action_count + counts.action_count
 end
+
+
 for _,item in ipairs(df.global.world.items.other.TOOL) do
-    action_count = action_count + do_book_stuff(item, args)
+    counts = do_book_stuff(item, args)
+    found_count = found_count + counts.found_count
+    action_count = action_count + counts.action_count
 end
 
 if action_count > 0 then
-    print("Total actions: "..action_count)
+    print("Total found: "..found_count.."; Total actions: "..action_count)
+elseif found_count > 0 then
+    print("Total found: "..found_count.."; No actions were taken.")
 else
-    print("No actions were taken.")
+    print("No necrobooks found!")
 end
 
