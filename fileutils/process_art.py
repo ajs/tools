@@ -4,17 +4,20 @@
 
 import argparse
 import dataclasses
+import io
 import os.path
 import pathlib
 import re
 import sys
 import textwrap
+from typing import Union, Optional
 
 import pytest
-from PIL import Image
+from PIL import Image, ImageCms
 
 DEFAULT_OUTDIR = pathlib.Path("training_images")
 DEFAULT_SIZE = 512
+DEFAULT_QUALITY = 1 / 2.0
 
 
 @dataclasses.dataclass
@@ -286,14 +289,57 @@ def get_filename_key(fname: os.PathLike):
     return re.sub(r'-(\d+)\.', replacer, path_str)
 
 
+def convert_cmyk(
+        image: ImageInfo,
+        srgb_profile: Optional[Union[io.BytesIO, os.PathLike]] = None,
+        cmyk_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
+):
+    """
+    Convert the image in previous to the given srgb_profile
+    :param image: Input image with mode = CMYK
+    :param srgb_profile: Default sRGB profile (or path) to use
+    :param cmyk_profile: Default CMYK profile (or path) to use
+    :return:
+    """
+
+    if not srgb_profile:
+        # Use the built in default sRGB color space
+        srgb_profile = ImageCms.createProfile('sRGB')
+
+    # Check to see if the image has an embedded profile
+    img_profile_data = image.image.info.get('icc_profile')
+    if img_profile_data:
+        image_profile = ImageCms.ImageCmsProfile(io.BytesIO(img_profile_data))
+    else:
+        image_profile = cmyk_profile
+
+    tmp_img = ImageCms.profileToProfile(
+        image.image,
+        inputProfile=image_profile,
+        outputProfile=srgb_profile,
+        renderingIntent=0,
+        outputMode='RGB'
+    )
+    if tmp_img:
+        image.image = tmp_img
+        print("  WARNING: Cannot convert color profile in TIFF image")
+
+    if not tmp_img:
+        print("  WARNING: CMYK is poorly supported, will try naive conversion")
+        image.convert_rgb()
+
+
 def process_img_dir(
         img_dir: os.PathLike,
         outdir: os.PathLike = DEFAULT_OUTDIR,
         output_size: int = DEFAULT_SIZE,
+        minimum_quality: float = DEFAULT_QUALITY,
         all_images: bool = False,
         unmasked: bool = False,
         keep: bool = False,
         trans_background: bool = False,
+        srgb_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
+        cmyk_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
 ):
     """
     Find and label all images in `img_dir`
@@ -301,14 +347,17 @@ def process_img_dir(
         (extracted using pdfimages)
     :param outdir: optional directory to store results
     :param output_size: the size (in width and height) of output images
+    :param minimum_quality: float representing the lowest fraction of output_size images to keep
     :param all_images: process images that lack a mask
     :param unmasked: only process unmasked images
     :param keep: Keep existing images (defaults to False, overwriting)
     :param trans_background: Make generated images transparent
+    :param srgb_profile: profile or file path to the profile to use in converting CMYK
+    :param cmyk_profile: profile or file path to the profile to use for CMYK files with none
     :return: nothing
     """
 
-    small_image = output_size / 2.0
+    small_image = output_size * minimum_quality
     white_color = (255, 255, 255)
     previous = None
     history = FuzzyImageRecall()
@@ -341,14 +390,7 @@ def process_img_dir(
         if previous and not previous.is_mask:
             filename = os.path.join(outdir, os.path.basename(previous.file_path))
             if previous.image.mode == 'CMYK':
-                # TODO: Handle color space conversions...
-                # CMYK_ICC = 'WebCoatedSWOP2006Grade3.icc'
-                # RGB_ICC = 'sRGB_v4_ICC_preference.icc'
-                # trans = ImageCms.buildTransform(CMYK_ICC, RGB_ICC, 'CMYK', 'RGB')
-                # img_color_tmp = ImageCms.applyTransform(img_color, trans)
-                print(f"  WARNING: CMYK is poorly supported, will try...")
-                previous.convert_rgb()
-
+                convert_cmyk(previous, srgb_profile, cmyk_profile)
             if previous.masked_by(info):
                 info.is_mask = True
                 if not unmasked:
@@ -402,6 +444,18 @@ def main():
         help="Where to store results"
     )
     parser.add_argument(
+        '-q', '--quality', action='store', metavar='VALUE', default=DEFAULT_QUALITY, type=float,
+        help="A value less than 1 that indicates the minimum fraction of the --output-size images to keep"
+    )
+    parser.add_argument(
+        '-S', '--srgb-color-profile', action='store', metavar='ICC_FILE',
+        help="The path to an ICC color profile for sRGB to convert CMYK images",
+    )
+    parser.add_argument(
+        '-C', '--cmyk-color-profile', action='store', metavar='ICC_FILE',
+        help="The path to the default ICC profile for CMYK files that have none",
+    )
+    parser.add_argument(
         'image_dirs',
         action='store', metavar='DIR', nargs='+',
         help="The image directories to read, includes all subdirs"
@@ -416,11 +470,14 @@ def main():
             process_img_dir(
                 pathlib.Path(img_dir).absolute(),
                 output_size=args.output_size,
+                minimum_quality=args.quality,
                 outdir=args.output_dir,
                 all_images=(args.unmasked or args.all),
                 unmasked=args.unmasked,
                 keep=args.keep,
                 trans_background=args.transparent,
+                srgb_profile=args.srgb_color_profile,
+                cmyk_profile=args.cmyk_color_profile,
             )
     else:
         raise RuntimeError("Usage: process_art <imgdir>...")
