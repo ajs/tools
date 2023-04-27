@@ -225,13 +225,15 @@ def process_final_image(
 ):
     png_file = ".".join([os.fspath(filename).rsplit(".", 1)[0], "png"])
     outfile = pathlib.Path(os.path.join(output_dir, os.path.basename(png_file)))
-    if keep and outfile.exists():
-        return outfile
 
     if image in img_hash:
         print(f"  skipping, we've seen it")
         return None
     img_hash.add(image)
+
+    if keep and outfile.exists():
+        return outfile
+
     try:
         img_scaled = image.resize(target_size(image, output_size))
     except ValueError as err:
