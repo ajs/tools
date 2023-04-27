@@ -6,6 +6,7 @@ import argparse
 import dataclasses
 import os.path
 import pathlib
+import re
 import sys
 import textwrap
 
@@ -41,9 +42,20 @@ class ImageInfo:
     def height(self):
         return self.image.height
 
-    @property
-    def is_color(self):
-        return 'L' not in self.image.mode and '1' not in self.image.mode
+    @classmethod
+    def is_color(cls, image: Image):
+        """
+        Is the given image color? This is not a perfect test, but it's good enough for
+        our purposes. We don't care about color images that don't contain any saturated
+        pixels, we only care about images that are explicitly only *capable* of holding
+        grayscale or black and white data.
+        If we did care about the contents, we'd have to check each pixel value on
+        images that are CMYK, RGB, etc.
+
+        This is a class method so that it can be used in places where we don't have
+        an ImageInfo object handy.
+        """
+        return 'L' not in image.mode and '1' not in image.mode
 
     def masked_by(self, other: "ImageInfo"):
         """
@@ -54,7 +66,7 @@ class ImageInfo:
         return(
             self.height == other.height and
             self.width == other.width and
-            self.is_color and not other.is_color
+            self.is_color(self.image) and not other.is_color(other.image)
         )
 
     def convert_rgb(self):
@@ -87,7 +99,7 @@ class FuzzyImageRecall:
 
     def _to_tuple(self, image: Image):
         """Convert an image into a 100-tuple by scaling to 10x10 and grayscaling"""
-        return tuple(self._autocrop(image).resize((10, 10), Image.ANTIALIAS).convert("L").getdata())
+        return tuple(self._autocrop(image).resize((10, 10), Image.LANCZOS).convert("L").getdata())
 
     def _autocrop(self, image: Image):
         """Find the largest sub-image that does not have an all-white border on any side"""
@@ -202,7 +214,15 @@ def guess_border(image: Image):
     return sorted(vote.keys(), key=lambda x: pixel_order(x, vote[x]))[-1]
 
 
-def process_final_image(image: Image, img_hash: FuzzyImageRecall, filename=None, output_dir: os.PathLike = DEFAULT_OUTDIR, output_size=DEFAULT_SIZE, keep: bool = False):
+def process_final_image(
+        image: Image,
+        img_hash: FuzzyImageRecall,
+        filename=None,
+        output_dir: os.PathLike = DEFAULT_OUTDIR,
+        output_size=DEFAULT_SIZE,
+        keep: bool = False,
+        trans_background: bool = False,
+):
     png_file = ".".join([os.fspath(filename).rsplit(".", 1)[0], "png"])
     outfile = pathlib.Path(os.path.join(output_dir, os.path.basename(png_file)))
     if keep and outfile.exists():
@@ -222,9 +242,15 @@ def process_final_image(image: Image, img_hash: FuzzyImageRecall, filename=None,
         save_image = img_scaled
     else:
         border_color = guess_border(img_scaled)
-        if 'L' in img_scaled.mode or '1' in img_scaled.mode:
+        if not ImageInfo.is_color(img_scaled):
             border_color = (border_color, border_color, border_color)
-        save_image = Image.new('RGB', (output_size, output_size), border_color)
+        if trans_background:
+            mode = 'RGBA'
+            if len(border_color) < 4:
+                border_color = border_color + (0,)
+        else:
+            mode = 'RGB'
+        save_image = Image.new(mode, (output_size, output_size), border_color)
         if img_scaled.width > img_scaled.height:
             y_offset = (output_size - img_scaled.height) // 2
             save_image.paste(img_scaled, (0, y_offset))
@@ -242,12 +268,30 @@ def mask_image(image: Image, mask: Image, background: tuple):
     return img_masked
 
 
+def get_filename_key(fname: os.PathLike):
+    """Return a filename key that correctly sorts numbered files"""
+
+    # This was necessary because pdfimages has a tendency to output filenames
+    # like file-100.png and file-1000.png for the same input PDF, making a
+    # string-based sort disorder the input images.
+
+    def replacer(match: re.Match) -> str:
+        in_fname = match.group(0)
+        file_id = int(match.group(1))
+        return f"{in_fname[0:match.pos]}-{file_id:06d}.{in_fname[match.endpos-1:]}"
+
+    path_str = str(fname)
+    return re.sub(r'-(\d+)\.', replacer, path_str)
+
+
 def process_img_dir(
         img_dir: os.PathLike,
         outdir: os.PathLike = DEFAULT_OUTDIR,
         output_size: int = DEFAULT_SIZE,
         all_images: bool = False,
+        unmasked: bool = False,
         keep: bool = False,
+        trans_background: bool = False,
 ):
     """
     Find and label all images in `img_dir`
@@ -256,7 +300,9 @@ def process_img_dir(
     :param outdir: optional directory to store results
     :param output_size: the size (in width and height) of output images
     :param all_images: process images that lack a mask
+    :param unmasked: only process unmasked images
     :param keep: Keep existing images (defaults to False, overwriting)
+    :param trans_background: Make generated images transparent
     :return: nothing
     """
 
@@ -268,12 +314,13 @@ def process_img_dir(
         output_size=output_size,
         output_dir=outdir,
         keep=keep,
+        trans_background=trans_background,
         img_hash=history,
     )
     print(f"Starting on {img_dir} -> {outdir}")
     img_dir = pathlib.Path(img_dir)  # ensure that it's not a string
     all_files = (pathlib.Path(f) for f in img_dir.glob(os.path.join('**', '*.*')) if os.path.isfile(f))
-    for img_file in sorted(all_files):
+    for img_file in sorted(all_files, key=get_filename_key):
         print(f" input file: {img_file}")
         if "." not in str(img_file):
             print(f"  skipping unknown file type for {img_file}")
@@ -302,14 +349,15 @@ def process_img_dir(
 
             if previous.masked_by(info):
                 info.is_mask = True
-                img_masked = mask_image(previous.image, info.image, background=white_color)
-                if outfile := process_final_image(img_masked, filename=filename, **process_args):
-                    print(f"  wrote {outfile}")
-            elif all_images:
+                if not unmasked:
+                    img_masked = mask_image(previous.image, info.image, background=white_color)
+                    if outfile := process_final_image(img_masked, filename=filename, **process_args):
+                        print(f"  wrote {outfile}")
+            elif all_images or unmasked:
                 if outfile := process_final_image(previous.image, filename=filename, **process_args):
                     print(f"  wrote {outfile}")
         previous = info
-    if previous and not previous.is_mask and all_images:
+    if previous and not previous.is_mask and (unmasked or all_images):
         filename = os.path.join(outdir, os.path.basename(previous.file_path))
         if outfile := process_final_image(previous.image, filename=filename, **process_args):
             print(f"  wrote {outfile}")
@@ -332,6 +380,9 @@ def main():
     parser.add_argument('-a', '--all', action='store_true', help=(
         "Turn on processing of images that lack a mask (lots of extra images!)"
     ))
+    parser.add_argument('-u', '--unmasked', action='store_true', help=(
+        "Only process unmasked images (incompatible with --all)"
+    ))
     parser.add_argument(
         '-s', '--output-size', action='store', type=int, default=DEFAULT_SIZE,
         help=(
@@ -341,17 +392,43 @@ def main():
     )
     parser.add_argument('-k', '--keep', action='store_true', help="Keep existing images")
     parser.add_argument(
+        '-t', '--transparent', action='store_true',
+        help="Make PNG output transparent if the scaled image does not fit in the target dimensions fully"
+    )
+    parser.add_argument(
         'image_dirs',
         action='store', metavar='DIR', nargs='+',
         help="The image directories to read, includes all subdirs"
     )
     args = parser.parse_args()
 
+    if args.unmasked and args.all:
+        raise RuntimeError(f"Cannot combine --all and --unmasked, choose one.")
+
     if len(sys.argv) > 1:
         for img_dir in args.image_dirs:
-            process_img_dir(pathlib.Path(img_dir).absolute(), output_size=args.output_size, all_images=args.all, keep=args.keep)
+            process_img_dir(
+                pathlib.Path(img_dir).absolute(),
+                output_size=args.output_size,
+                all_images=(args.unmasked or args.all),
+                unmasked=args.unmasked,
+                keep=args.keep,
+                trans_background=args.transparent,
+            )
     else:
         raise RuntimeError("Usage: process_art <imgdir>...")
+
+
+@pytest.mark.parametrize(
+    'filename, expect',
+    [
+        ("x", "x"),
+        ("abc-1.png", "abc-000001.png"),
+        ("abc-01.png", "abc-000001.png"),
+    ]
+)
+def test_get_filename_key(filename, expect):
+    assert get_filename_key(filename) == expect, f"filename key handling: {filename} -> {expect}"
 
 
 @pytest.mark.parametrize(
