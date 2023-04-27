@@ -395,6 +395,7 @@ def main():
         '-t', '--transparent', action='store_true',
         help="Make PNG output transparent if the scaled image does not fit in the target dimensions fully"
     )
+    parser.add_argument('-o', '--output-dir', action='store', metavar='PATH', help="Where to store results")
     parser.add_argument(
         'image_dirs',
         action='store', metavar='DIR', nargs='+',
@@ -410,6 +411,7 @@ def main():
             process_img_dir(
                 pathlib.Path(img_dir).absolute(),
                 output_size=args.output_size,
+                outdir=args.output_dir,
                 all_images=(args.unmasked or args.all),
                 unmasked=args.unmasked,
                 keep=args.keep,
