@@ -2,6 +2,10 @@
 # applies the mask and puts the image on an appropriate background, scaling it to fit inside
 # a 512x512 (or other size given by the -s flag) frame
 
+# This program is distributed under the terms of the MIT License, which you can
+# find here: https://opensource.org/license/mit/ as well as in this repository's root
+# directory.
+
 import argparse
 import dataclasses
 import io
@@ -22,6 +26,10 @@ DEFAULT_QUALITY = 1 / 2.0
 
 @dataclasses.dataclass
 class ImageInfo:
+    """
+    A wrapper class for a PIL Image that tracks things we wish to know
+    about it, and provides some helper methods
+    """
     file_path: os.PathLike
     image: Image
     is_mask: bool = False
@@ -226,6 +234,17 @@ def process_final_image(
         keep: bool = False,
         trans_background: bool = False,
 ):
+    """
+    Write the image out to disk, pending some last checks such as for duplicates.
+    :param image: The image to save
+    :param img_hash: The history tracking hash
+    :param filename: Image filename
+    :param output_dir: Directory to save in
+    :param output_size: Maximum dimension for the saved image max(width, height)
+    :param keep: Whether to keep existing files or overwrite
+    :param trans_background: Should background be transparent?
+    :return: filename written (or existing if keep is True)
+    """
     png_file = ".".join([os.fspath(filename).rsplit(".", 1)[0], "png"])
     outfile = pathlib.Path(os.path.join(output_dir, os.path.basename(png_file)))
 
@@ -509,6 +528,7 @@ def test_get_filename_key(filename, expect):
     ]
 )
 def test_guess_border(image, expected, what_is):
+    """Quick test for our border color guessing"""
     assert guess_border(image) == expected, f"Expect return value of {expected!r} for {what_is}"
 
 
