@@ -484,22 +484,19 @@ def main():
     if args.unmasked and args.all:
         raise RuntimeError(f"Cannot combine --all and --unmasked, choose one.")
 
-    if len(sys.argv) > 1:
-        for img_dir in args.image_dirs:
-            process_img_dir(
-                pathlib.Path(img_dir).absolute(),
-                output_size=args.output_size,
-                minimum_quality=args.quality,
-                outdir=args.output_dir,
-                all_images=(args.unmasked or args.all),
-                unmasked=args.unmasked,
-                keep=args.keep,
-                trans_background=args.transparent,
-                srgb_profile=args.srgb_color_profile,
-                cmyk_profile=args.cmyk_color_profile,
-            )
-    else:
-        raise RuntimeError("Usage: process_art <imgdir>...")
+    for img_dir in args.image_dirs:
+        process_img_dir(
+            pathlib.Path(img_dir).absolute(),
+            output_size=args.output_size,
+            minimum_quality=args.quality,
+            outdir=args.output_dir,
+            all_images=(args.unmasked or args.all),
+            unmasked=args.unmasked,
+            keep=args.keep,
+            trans_background=args.transparent,
+            srgb_profile=args.srgb_color_profile,
+            cmyk_profile=args.cmyk_color_profile,
+        )
 
 
 @pytest.mark.parametrize(
