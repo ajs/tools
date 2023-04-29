@@ -12,9 +12,8 @@ import io
 import os.path
 import pathlib
 import re
-import sys
 import textwrap
-from typing import Union, Optional
+from typing import Union, Optional, Literal, Tuple
 
 import pytest
 from PIL import Image, ImageCms
@@ -74,16 +73,60 @@ class ImageInfo:
         That is, is `other` a black and white or grayscale mask for this image?
         """
 
+        # Potential issues:
+        #
+        # * grayscale and black and white images can be masked as well
+        # * we're not taking the actual mask/smask info from the PDF into account
+        # * there is another class of image often found before (possibly a drop shadow?)
+
         return(
             self.height == other.height and
             self.width == other.width and
             self.is_color(self.image) and not other.is_color(other.image)
         )
 
-    def convert_rgb(self):
-        """Turn this image into RGB mode"""
+    def to_rgb(self):
+        """Turn this image into RGB mode, without any image profile assistance"""
         assert not self.is_mask, f"Cannot convert a mask ({self.file_path}) to RGB!"
         self.image = self.image.convert('RGB')
+
+    def from_cmyk_to_rgb(
+            self,
+            srgb_profile: Optional[Union[io.BytesIO, os.PathLike]] = None,
+            cmyk_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
+    ):
+        """
+        Convert this image to the given srgb_profile (or the default sRGB profile if none
+        is passed)
+        :param srgb_profile: sRGB profile (or path) to use
+        :param cmyk_profile: Default CMYK profile (or path) to use
+        :return: NA
+        """
+
+        if not srgb_profile:
+            # Use the built in default sRGB color space
+            srgb_profile = ImageCms.createProfile('sRGB')
+
+        # Check to see if the image has an embedded profile
+        img_profile_data = self.image.info.get('icc_profile')
+        if img_profile_data:
+            image_profile = ImageCms.ImageCmsProfile(io.BytesIO(img_profile_data))
+        else:
+            image_profile = cmyk_profile
+
+        tmp_img = ImageCms.profileToProfile(
+            self.image,
+            inputProfile=image_profile,
+            outputProfile=srgb_profile,
+            renderingIntent=0,
+            outputMode='RGB'
+        )
+        if tmp_img:
+            self.image = tmp_img
+        else:
+            print("  WARNING: Cannot convert color profile in TIFF image")
+            print("  WARNING: ... will try naive conversion")
+            self.to_rgb()
 
 
 class FuzzyImageRecall:
@@ -268,12 +311,11 @@ def process_final_image(
         border_color = guess_border(img_scaled)
         if not ImageInfo.is_color(img_scaled):
             border_color = (border_color, border_color, border_color)
+        mode: Literal['RGBA', 'RGB'] = 'RGB'
         if trans_background:
             mode = 'RGBA'
             if len(border_color) < 4:
                 border_color = border_color + (0,)
-        else:
-            mode = 'RGB'
         save_image = Image.new(mode, (output_size, output_size), border_color)
         if img_scaled.width > img_scaled.height:
             y_offset = (output_size - img_scaled.height) // 2
@@ -306,46 +348,6 @@ def get_filename_key(fname: os.PathLike):
 
     path_str = str(fname)
     return re.sub(r'-(\d+)\.', replacer, path_str)
-
-
-def convert_cmyk(
-        image: ImageInfo,
-        srgb_profile: Optional[Union[io.BytesIO, os.PathLike]] = None,
-        cmyk_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
-):
-    """
-    Convert the image in previous to the given srgb_profile
-    :param image: Input image with mode = CMYK
-    :param srgb_profile: Default sRGB profile (or path) to use
-    :param cmyk_profile: Default CMYK profile (or path) to use
-    :return:
-    """
-
-    if not srgb_profile:
-        # Use the built in default sRGB color space
-        srgb_profile = ImageCms.createProfile('sRGB')
-
-    # Check to see if the image has an embedded profile
-    img_profile_data = image.image.info.get('icc_profile')
-    if img_profile_data:
-        image_profile = ImageCms.ImageCmsProfile(io.BytesIO(img_profile_data))
-    else:
-        image_profile = cmyk_profile
-
-    tmp_img = ImageCms.profileToProfile(
-        image.image,
-        inputProfile=image_profile,
-        outputProfile=srgb_profile,
-        renderingIntent=0,
-        outputMode='RGB'
-    )
-    if tmp_img:
-        image.image = tmp_img
-        print("  WARNING: Cannot convert color profile in TIFF image")
-
-    if not tmp_img:
-        print("  WARNING: CMYK is poorly supported, will try naive conversion")
-        image.convert_rgb()
 
 
 def process_img_dir(
@@ -409,7 +411,7 @@ def process_img_dir(
         if previous and not previous.is_mask:
             filename = os.path.join(outdir, os.path.basename(previous.file_path))
             if previous.image.mode == 'CMYK':
-                convert_cmyk(previous, srgb_profile, cmyk_profile)
+                previous.from_cmyk_to_rgb(srgb_profile, cmyk_profile)
             if previous.masked_by(info):
                 info.is_mask = True
                 if not unmasked:
@@ -436,49 +438,45 @@ def main():
             This script manages files from pdfimages, attempting to assemble images
             used in the document into regular sized and uniformly formatted output
             images.
+            
+            Examples
+            
+            Process all images, rendering transparent backgrounds and saving as 720x720:
+            
+                process-art -a -t -s 720
+            
+            Process only non-masked images that are at least 75% of the target 512x512 size:
+            
+                process-art -u -q 0.75
             """
         ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
-    parser.add_argument('-a', '--all', action='store_true', help=(
-        "Turn on processing of images that lack a mask (lots of extra images!)"
-    ))
-    parser.add_argument('-u', '--unmasked', action='store_true', help=(
-        "Only process unmasked images (incompatible with --all)"
-    ))
-    parser.add_argument(
-        '-s', '--output-size', action='store', type=int, default=DEFAULT_SIZE,
-        help=(
+    help_text = {
+        'all': "Turn on processing of images that lack a mask (lots of extra images!)",
+        'unmasked': "Only process unmasked images (incompatible with --all)",
+        'output-size': (
             "Set the width and height of the output images to this size, note that no input images"
-            " half this size or smaller will be considered."
-        ),
-    )
-    parser.add_argument('-k', '--keep', action='store_true', help="Keep existing images")
-    parser.add_argument(
-        '-t', '--transparent', action='store_true',
-        help="Make PNG output transparent if the scaled image does not fit in the target dimensions fully"
-    )
-    parser.add_argument(
-        '-o', '--output-dir', action='store', metavar='PATH', default=DEFAULT_OUTDIR,
-        help="Where to store results"
-    )
-    parser.add_argument(
-        '-q', '--quality', action='store', metavar='VALUE', default=DEFAULT_QUALITY, type=float,
-        help="A value less than 1 that indicates the minimum fraction of the --output-size images to keep"
-    )
-    parser.add_argument(
-        '-S', '--srgb-color-profile', action='store', metavar='ICC_FILE',
-        help="The path to an ICC color profile for sRGB to convert CMYK images",
-    )
-    parser.add_argument(
-        '-C', '--cmyk-color-profile', action='store', metavar='ICC_FILE',
-        help="The path to the default ICC profile for CMYK files that have none",
-    )
-    parser.add_argument(
-        'image_dirs',
-        action='store', metavar='DIR', nargs='+',
-        help="The image directories to read, includes all subdirs"
-    )
+            " half this size or smaller will be considered."),
+        'keep': "Keep existing images",
+        'transparent': "Make PNG output transparent if the scaled image does not fit in the target dimensions fully",
+        'output-dir': "Where to store results",
+        'quality': "A value less than 1 that indicates the minimum fraction of the --output-size images to keep",
+        'srgb-color-profile': "The path to an ICC color profile for sRGB to convert CMYK images",
+        'cmyk-color-profile': "The path to the default ICC profile for CMYK files that have none",
+        'image_dirs': "The image directories to read, includes all subdirs",
+    }
+    parser.add_argument('-a', '--all', action='store_true', help=help_text['all'])
+    parser.add_argument('-k', '--keep', action='store_true', help=help_text['keep'])
+    parser.add_argument('-o', '--output-dir', action='store', metavar='PATH', default=DEFAULT_OUTDIR, help=help_text['output-dir'])
+    parser.add_argument('-q', '--quality', action='store', metavar='VALUE', default=DEFAULT_QUALITY, type=float, help=help_text['quality'])
+    parser.add_argument('-s', '--output-size', action='store', type=int, default=DEFAULT_SIZE, help=help_text['output-size'])
+    parser.add_argument('-t', '--transparent', action='store_true', help=help_text['transparent'])
+    parser.add_argument('-u', '--unmasked', action='store_true', help=help_text['unmasked'])
+    parser.add_argument('-C', '--cmyk-color-profile', action='store', metavar='ICC_FILE', help=help_text['cmyk-color-profile'])
+    parser.add_argument('-S', '--srgb-color-profile', action='store', metavar='ICC_FILE', help=help_text['srgb-color-profile'])
+    parser.add_argument('image_dirs', action='store', metavar='DIR', nargs='+', help=help_text['image_dirs'])
+
     args = parser.parse_args()
 
     if args.unmasked and args.all:
@@ -507,7 +505,7 @@ def main():
         ("abc-01.png", "abc-000001.png"),
     ]
 )
-def test_get_filename_key(filename, expect):
+def test_get_filename_key(filename: os.PathLike, expect: str):
     assert get_filename_key(filename) == expect, f"filename key handling: {filename} -> {expect}"
 
 
@@ -524,7 +522,7 @@ def test_get_filename_key(filename, expect):
         (make_image_corners("RGB", 'black', 'black', 'black', 'white'), (0, 0, 0), "Greyscale one white"),
     ]
 )
-def test_guess_border(image, expected, what_is):
+def test_guess_border(image: Image, expected: Union[int, Tuple[int, int, int]], what_is: str):
     """Quick test for our border color guessing"""
     assert guess_border(image) == expected, f"Expect return value of {expected!r} for {what_is}"
 
