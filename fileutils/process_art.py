@@ -8,6 +8,7 @@
 
 import argparse
 import dataclasses
+import functools
 import io
 import os.path
 import pathlib
@@ -15,8 +16,9 @@ import re
 import textwrap
 from typing import Union, Optional, Literal, Tuple, Dict, Any, Type, List
 
+import numpy as numpy
 import pytest
-from PIL import Image, ImageCms
+from PIL import Image, ImageCms, ImageOps
 
 DEFAULT_OUTDIR = pathlib.Path("training_images")
 DEFAULT_SIZE = 512
@@ -155,50 +157,44 @@ class FuzzyImageRecall:
         """Convert an image into a 100-tuple by scaling to 10x10 and grayscaling"""
         return tuple(self._autocrop(image).resize((10, 10), Image.LANCZOS).convert("L").getdata())
 
-    def _autocrop(self, image: Image):
+    @staticmethod
+    def _autocrop(image: Image):
         """Find the largest sub-image that does not have an all-white border on any side"""
         upper_left_x = 0
         upper_left_y = 0
         lower_right_x = image.width - 1
         lower_right_y = image.height - 1
-        white = (255, 255, 255)
-        done = False
-        for x in range(upper_left_x, lower_right_x):
-            for y in range(upper_left_y, lower_right_y):
-                if image.getpixel((x, y)) != white:
-                    upper_left_x = x
-                    done = True
-                    break
-            if done:
-                break
-        if not done:
+        white = white_pixel(image.mode)
+        np_image = numpy.asarray(image)
+
+        def first_column(from_end=False):
+            cols = range(upper_left_x, lower_right_x)
+            if from_end:
+                cols = reversed(cols)
+            for x in cols:
+                if numpy.any(np_image[x, :] != white):
+                    return x
+            return None
+
+        def first_row(from_end=False):
+            rows = range(upper_left_y, lower_right_y)
+            if from_end:
+                rows = reversed(rows)
+            for y in rows:
+                if numpy.any(np_image[:, y] != white):
+                    return y
+            return None
+
+        upper_left_x = first_column()
+        if upper_left_x is None:
             return image
-        done = False
-        for x in reversed(range(upper_left_x, lower_right_x)):
-            for y in range(upper_left_y, lower_right_y):
-                if image.getpixel((x, y)) != white:
-                    lower_right_x = x
-                    done = True
-                    break
-            if done:
-                break
-        for y in range(upper_left_y, lower_right_y):
-            for x in range(upper_left_x, lower_right_x):
-                if image.getpixel((x, y)) != white:
-                    upper_left_y = y
-                    done = True
-                    break
-            if done:
-                break
-        for y in reversed(range(upper_left_y, lower_right_y)):
-            for x in range(upper_left_x, lower_right_x):
-                if image.getpixel((x, y)) != white:
-                    lower_right_y = y
-                    done = True
-                    break
-            if done:
-                break
-        rect = (upper_left_x, upper_left_y, lower_right_x, lower_right_y)
+        lower_right_x = first_column(from_end=True)
+        upper_left_y = first_row()
+        if upper_left_y is None:
+            return image
+        lower_right_y = first_row(from_end=True)
+
+        rect = (upper_left_x, upper_left_y, lower_right_x+1, lower_right_y+1)
         try:
             return image.crop(rect)
         except IndexError:
@@ -209,27 +205,36 @@ class FuzzyImageRecall:
         self.seen.add(self._to_tuple(image))
 
 
-def target_size(image: Image, boundary_size: int):
-    """Return the size to scale to such that image fits inside the boundary_size"""
+# Would be nice if we could just:
+#  return ImageColor.getcolor('white', mode)
+# but ImageColor only works with a select few modes :-(
+def convert_bw_to_mode(mode: str, black: bool = False):
+    """Convert a black or white pixel to the given mode"""
+    return Image.new("1", (1, 1), 0 if black else 1).convert(mode).getpixel((0, 0))
 
-    def scale_dim(source: int, other_dim: int):
-        return int(source * (float(boundary_size) / other_dim))
 
-    if image.width > image.height:
-        return boundary_size, scale_dim(image.height, image.width)
-    return scale_dim(image.width, image.height), boundary_size
+@functools.cache
+def white_pixel(mode: str):
+    """Return a white pixel value in Image mode given"""
+    return convert_bw_to_mode(mode, black=False)
+
+
+@functools.cache
+def black_pixel(mode: str):
+    """Return a black pixel value in Image mode given"""
+    return convert_bw_to_mode(mode, black=True)
 
 
 def make_image_corners(mode, *corners):
     """Used for testing, make an Image with the given mode and corner pixel values"""
     corner_lookup = {
         'L': {
-            'white': 255,
-            'black': 0,
+            'white': white_pixel("L"),
+            'black': black_pixel("L"),
         },
         'RGB': {
-            'white': (255, 255, 255),
-            'black': (0, 0, 0),
+            'white': white_pixel("RGB"),
+            'black': black_pixel("RGB"),
         }
     }
     corners = [corner_lookup[mode][corner] for corner in corners]
@@ -307,7 +312,7 @@ def process_final_image(
         return outfile
 
     try:
-        img_scaled = image.resize(target_size(image, output_size))
+        img_scaled = ImageOps.contain(image, (output_size, output_size))
     except ValueError as err:
         # If we try to resize to 0 this fails
         print(f"  skipping bad resize: {err}")
@@ -427,7 +432,6 @@ def process_img_dir(
         stats[status] = stats.get(status, 0) + 1
 
     small_image = output_size * minimum_quality
-    white_color = (255, 255, 255)
     previous = None
     history = FuzzyImageRecall()
     process_args = dict(
@@ -458,6 +462,7 @@ def process_img_dir(
             print(f"  skipping {img_file} as we don't support PARAMS files")
             continue
         info = ImageInfo.get_image_info(img_file)
+        white_color = white_pixel(info.image.mode)
         if max(info.width, info.height) <= small_image:
             bump('small')
             print(f"  skipping small image")
@@ -514,6 +519,7 @@ def per_format_save_params(image_format: str, save_params: Dict[str, Any]):
 
     if image_format == 'png':
         known_params([('optimize', bool), ('compress_level', int)])
+
 
 def main():
     """Use command-line to find images to process"""
@@ -635,6 +641,27 @@ def main():
 )
 def test_get_filename_key(filename: os.PathLike, expect: str):
     assert get_filename_key(filename) == expect, f"filename key handling: {filename} -> {expect}"
+
+
+@pytest.mark.parametrize(
+    'mode',
+    ('1', 'L', 'RGB', 'RGBA', 'CMYK'),
+)
+def test_autocrop(mode):
+    white = white_pixel(mode)
+    black = black_pixel(mode)
+    image = Image.new(mode, (3, 3), white)
+    assert image.getpixel((0, 0)) == white, "Image should have white pixels"
+    cropped = FuzzyImageRecall._autocrop(image)
+    assert cropped.size == (3, 3), "Autocrop white image should make no change"
+    image.putpixel((1, 1), black)
+    cropped = FuzzyImageRecall._autocrop(image)
+    assert cropped.size == (1, 1), "Autocrop expected to return 1x1"
+    image.putpixel((0, 0), black)
+    cropped = FuzzyImageRecall._autocrop(image)
+    assert cropped.size == (2, 2), "Autocrop expected to return 2x2"
+    assert cropped.getpixel((0, 0)) == black, "Expect returned image to contain black in upper left"
+    assert cropped.getpixel((1, 0)) == white, "Expect returned image to contain black in upper left"
 
 
 @pytest.mark.parametrize(
