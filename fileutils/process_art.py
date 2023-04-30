@@ -13,7 +13,7 @@ import os.path
 import pathlib
 import re
 import textwrap
-from typing import Union, Optional, Literal, Tuple
+from typing import Union, Optional, Literal, Tuple, Dict, Any, Type, List
 
 import pytest
 from PIL import Image, ImageCms
@@ -276,6 +276,8 @@ def process_final_image(
         output_size=DEFAULT_SIZE,
         keep: bool = False,
         trans_background: bool = False,
+        image_extension: str = 'png',
+        save_params: Optional[Dict[str, str]] = None,
 ):
     """
     Write the image out to disk, pending some last checks such as for duplicates.
@@ -286,10 +288,15 @@ def process_final_image(
     :param output_size: Maximum dimension for the saved image max(width, height)
     :param keep: Whether to keep existing files or overwrite
     :param trans_background: Should background be transparent?
+    :param image_extension: The filename extension (without ".") for image writing
+    :param save_params: a dictionary of parameters to the save encoder.
+      see https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html
+      for details.
     :return: filename written (or existing if keep is True)
     """
-    png_file = ".".join([os.fspath(filename).rsplit(".", 1)[0], "png"])
-    outfile = pathlib.Path(os.path.join(output_dir, os.path.basename(png_file)))
+
+    ext_file = ".".join([os.fspath(filename).rsplit(".", 1)[0], image_extension])
+    outfile = pathlib.Path(os.path.join(output_dir, os.path.basename(ext_file)))
 
     if image in img_hash:
         print(f"  skipping, we've seen it")
@@ -323,8 +330,17 @@ def process_final_image(
         else:
             x_offset = (output_size - img_scaled.width) // 2
             save_image.paste(img_scaled, (x_offset, 0))
-    save_image.save(outfile, format="png")
+    save_image.save(outfile, **(save_params or {}))
     return outfile
+
+
+def safe_process_final_image(*args, **kwargs):
+    """A safe wrapper for process_final_image"""
+    try:
+        return process_final_image(*args, **kwargs)
+    except OSError as err:
+        print(f"  Error processing image data: {err!r}")
+        return None
 
 
 def mask_image(image: Image, mask: Image, background: tuple):
@@ -350,6 +366,29 @@ def get_filename_key(fname: os.PathLike):
     return re.sub(r'-(\d+)\.', replacer, path_str)
 
 
+def summarize_status(status: Dict[str, int]):
+    """Summarize image processing status info"""
+
+    status_info = {
+        'unknown': 'Unknown file types',
+        'unsupported': 'Known, but unsupported files',
+        'small': 'Images that were too small',
+        'cmyk': 'CMYK color space images converted',
+        'masked': 'Masked images composited',
+        'skipped': 'Skipped duplicate (or other)',
+        'normal': 'Images with no mask processed',
+        'total': 'Total number of processed images',
+    }
+
+    for reason in sorted(list(status.keys()) + ['total']):
+        label = status_info.get(reason, reason)
+        if reason == 'total':
+            count = status.get('masked', 0) + status.get('normal', 0)
+        else:
+            count = status[reason]
+        print(f"{label}: {count}")
+
+
 def process_img_dir(
         img_dir: os.PathLike,
         outdir: os.PathLike = DEFAULT_OUTDIR,
@@ -359,6 +398,8 @@ def process_img_dir(
         unmasked: bool = False,
         keep: bool = False,
         trans_background: bool = False,
+        image_extension: str = 'png',
+        save_params: Optional[Dict[str, str]] = None,
         srgb_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
         cmyk_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
 ):
@@ -373,10 +414,17 @@ def process_img_dir(
     :param unmasked: only process unmasked images
     :param keep: Keep existing images (defaults to False, overwriting)
     :param trans_background: Make generated images transparent
+    :param image_extension: The image file extension to save as
+    :param save_params: Optional parameters to the PIL Image save formatter
     :param srgb_profile: profile or file path to the profile to use in converting CMYK
     :param cmyk_profile: profile or file path to the profile to use for CMYK files with none
     :return: nothing
     """
+
+    stats = {}
+
+    def bump(status: str):
+        stats[status] = stats.get(status, 0) + 1
 
     small_image = output_size * minimum_quality
     white_color = (255, 255, 255)
@@ -388,6 +436,8 @@ def process_img_dir(
         keep=keep,
         trans_background=trans_background,
         img_hash=history,
+        image_extension=image_extension,
+        save_params=save_params,
     )
     print(f"Starting on {img_dir} -> {outdir}")
     img_dir = pathlib.Path(img_dir)  # ensure that it's not a string
@@ -396,37 +446,74 @@ def process_img_dir(
         print(f" input file: {img_file}")
         if "." not in str(img_file):
             print(f"  skipping unknown file type for {img_file}")
+            bump('unknown')
             continue
         img_extension = str(img_file).lower().rsplit(".", 1)[-1]
         if img_extension == "ccitt":
+            bump('unsupported')
             print(f"  skipping {img_file} as we don't support CCITT format TIFF compression")
             continue
         elif img_extension == "params":
+            bump('unsupported')
             print(f"  skipping {img_file} as we don't support PARAMS files")
             continue
         info = ImageInfo.get_image_info(img_file)
         if max(info.width, info.height) <= small_image:
+            bump('small')
             print(f"  skipping small image")
             continue
         if previous and not previous.is_mask:
             filename = os.path.join(outdir, os.path.basename(previous.file_path))
             if previous.image.mode == 'CMYK':
+                bump('cmyk')
                 previous.from_cmyk_to_rgb(srgb_profile, cmyk_profile)
             if previous.masked_by(info):
                 info.is_mask = True
                 if not unmasked:
                     img_masked = mask_image(previous.image, info.image, background=white_color)
-                    if outfile := process_final_image(img_masked, filename=filename, **process_args):
+                    if outfile := safe_process_final_image(img_masked, filename=filename, **process_args):
+                        bump('masked')
                         print(f"  wrote {outfile}")
+                    else:
+                        bump('skipped')
             elif all_images or unmasked:
-                if outfile := process_final_image(previous.image, filename=filename, **process_args):
+                if outfile := safe_process_final_image(previous.image, filename=filename, **process_args):
+                    bump('normal')
                     print(f"  wrote {outfile}")
+                else:
+                    bump('skipped')
         previous = info
     if previous and not previous.is_mask and (unmasked or all_images):
         filename = os.path.join(outdir, os.path.basename(previous.file_path))
-        if outfile := process_final_image(previous.image, filename=filename, **process_args):
+        if outfile := safe_process_final_image(previous.image, filename=filename, **process_args):
+            bump('normal')
             print(f"  wrote {outfile}")
+        else:
+            bump('skipped')
+    print(f"\n{img_dir} processing complete.")
+    summarize_status(stats)
 
+
+def per_format_save_params(image_format: str, save_params: Dict[str, Any]):
+    """
+    Fix known parameter types based on image format.
+
+    :param image_format: string such as 'png' or 'jpg'
+    :param save_params: dict of parameters to Image.save
+    """
+
+    def known_params(params: List[Tuple[str, Type]]):
+        for param, param_type in params:
+            if param in save_params:
+                save_params[param] = param_type(save_params[param])
+        if diff := set(save_params.keys()).difference({p[0] for p in params}):
+            print(f"WARNING: unrecognized image format parameters: {', '.join(sorted(diff))}")
+
+    if image_format in ('jpg', 'jpeg'):
+        known_params([('quality', int), ('optimize', bool), ('progressive', bool), ('comment', str)])
+
+    if image_format == 'png':
+        known_params([('optimize', bool), ('compress_level', int)])
 
 def main():
     """Use command-line to find images to process"""
@@ -441,13 +528,23 @@ def main():
             
             Examples
             
+            In these examples, the files to process are located in a directory called
+            "images" and you're writing the output to the default "training_images"
+            directory. These need to exist already.
+            
             Process all images, rendering transparent backgrounds and saving as 720x720:
             
-                process-art -a -t -s 720
+                process-art -a -t -s 720 tbd
             
             Process only non-masked images that are at least 75% of the target 512x512 size:
             
-                process-art -u -q 0.75
+                process-art -u -q 0.75 tbd
+            
+            Convert CMYK (print-ready color format) images using a standard color
+            space profile downloaded from Adobe
+            (at https://www.adobe.com/support/downloads/iccprofiles/iccprofiles_win.html)
+            
+                process-art -a -C USWebCoatedSWOP.icc tbd
             """
         ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -465,35 +562,66 @@ def main():
         'srgb-color-profile': "The path to an ICC color profile for sRGB to convert CMYK images",
         'cmyk-color-profile': "The path to the default ICC profile for CMYK files that have none",
         'image_dirs': "The image directories to read, includes all subdirs",
+        'save-params': (
+            "A comma-separated string of name=value pairs to pass to the image save formatter"
+            " see https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html"),
+        'save-format': "The image format (extension) to save as",
     }
-    parser.add_argument('-a', '--all', action='store_true', help=help_text['all'])
-    parser.add_argument('-k', '--keep', action='store_true', help=help_text['keep'])
-    parser.add_argument('-o', '--output-dir', action='store', metavar='PATH', default=DEFAULT_OUTDIR, help=help_text['output-dir'])
-    parser.add_argument('-q', '--quality', action='store', metavar='VALUE', default=DEFAULT_QUALITY, type=float, help=help_text['quality'])
-    parser.add_argument('-s', '--output-size', action='store', type=int, default=DEFAULT_SIZE, help=help_text['output-size'])
-    parser.add_argument('-t', '--transparent', action='store_true', help=help_text['transparent'])
-    parser.add_argument('-u', '--unmasked', action='store_true', help=help_text['unmasked'])
-    parser.add_argument('-C', '--cmyk-color-profile', action='store', metavar='ICC_FILE', help=help_text['cmyk-color-profile'])
-    parser.add_argument('-S', '--srgb-color-profile', action='store', metavar='ICC_FILE', help=help_text['srgb-color-profile'])
+
+    def param_arg(short_flag: str, flag: str, *args, **kwargs):
+        base_flag = flag.replace('--', '', 1)
+        parser.add_argument(short_flag, flag, *args, action='store', help=help_text[base_flag], **kwargs)
+
+    def state_arg(short_flag: str, flag: str, *args, **kwargs):
+        base_flag = flag.replace('--', '', 1)
+        parser.add_argument(short_flag, flag, *args, action='store_true', help=help_text[base_flag], **kwargs)
+
+    state_arg('-a', '--all')
+    param_arg('-f', '--save-format')
+    state_arg('-k', '--keep')
+    param_arg('-o', '--output-dir', metavar='PATH', default=DEFAULT_OUTDIR)
+    param_arg('-q', '--quality', metavar='VALUE', default=DEFAULT_QUALITY, type=float)
+    param_arg('-s', '--output-size', type=int, default=DEFAULT_SIZE)
+    state_arg('-t', '--transparent')
+    state_arg('-u', '--unmasked')
+    param_arg('-C', '--cmyk-color-profile', metavar='ICC_FILE')
+    param_arg('-S', '--srgb-color-profile', metavar='ICC_FILE')
+    param_arg('-P', '--save-params', metavar='VALUES')
+
     parser.add_argument('image_dirs', action='store', metavar='DIR', nargs='+', help=help_text['image_dirs'])
 
-    args = parser.parse_args()
+    options = parser.parse_args()
 
-    if args.unmasked and args.all:
+    if options.unmasked and options.all:
         raise RuntimeError(f"Cannot combine --all and --unmasked, choose one.")
 
-    for img_dir in args.image_dirs:
+    save_format = options.save_format.lower() if options.save_format else 'png'
+
+    if options.save_params:
+        save_params = dict(p.strip().split("=", 1) for p in options.save_params.split(","))
+        per_format_save_params(save_format, save_params)
+    else:
+        save_params = None
+
+    if options.transparent and options.save_format.lower() != 'png':
+        raise RuntimeError(f"--transparent only supported for 'png' images")
+
+    for img_dir in options.image_dirs:
+        img_dir = pathlib.Path(str(pathlib.Path(img_dir).absolute()))
+        print(f"Processing from {img_dir}")
         process_img_dir(
-            pathlib.Path(img_dir).absolute(),
-            output_size=args.output_size,
-            minimum_quality=args.quality,
-            outdir=args.output_dir,
-            all_images=(args.unmasked or args.all),
-            unmasked=args.unmasked,
-            keep=args.keep,
-            trans_background=args.transparent,
-            srgb_profile=args.srgb_color_profile,
-            cmyk_profile=args.cmyk_color_profile,
+            img_dir,
+            output_size=options.output_size,
+            minimum_quality=options.quality,
+            outdir=options.output_dir,
+            all_images=(options.unmasked or options.all),
+            unmasked=options.unmasked,
+            keep=options.keep,
+            trans_background=options.transparent,
+            image_extension=save_format,
+            save_params=save_params,
+            srgb_profile=options.srgb_color_profile,
+            cmyk_profile=options.cmyk_color_profile,
         )
 
 
