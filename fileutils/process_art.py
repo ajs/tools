@@ -18,7 +18,7 @@ from typing import Union, Optional, Literal, Tuple, Dict, Any, Type, List
 
 import numpy as numpy
 import pytest
-from PIL import Image, ImageCms, ImageOps
+from PIL import Image, ImageCms, ImageOps, ImageFilter, UnidentifiedImageError
 
 DEFAULT_OUTDIR = pathlib.Path("training_images")
 DEFAULT_SIZE = 512
@@ -153,9 +153,14 @@ class FuzzyImageRecall:
         """Allow the `in` operator to work on this class to test membership of an image"""
         return self._to_tuple(image) in self.seen
 
-    def _to_tuple(self, image: Image):
+    def _to_tuple(self, image: Image, blur_radius: int = 3):
         """Convert an image into a 100-tuple by scaling to 10x10 and grayscaling"""
-        return tuple(self._autocrop(image).resize((10, 10), Image.LANCZOS).convert("L").getdata())
+        # Note that we don't respect aspect ratio. This is by design and allows us to
+        # detect some stretching between copies.
+        blurred_10x10 = self._autocrop(image).convert("L").filter(
+            ImageFilter.GaussianBlur(radius=blur_radius)).resize((10, 10), Image.LANCZOS)
+        simplified = blurred_10x10.quantize(colors=32)
+        return tuple(simplified.getdata())
 
     @staticmethod
     def _autocrop(image: Image):
@@ -172,7 +177,7 @@ class FuzzyImageRecall:
             if from_end:
                 cols = reversed(cols)
             for x in cols:
-                if numpy.any(np_image[x, :] != white):
+                if numpy.any(np_image[:, x] != white):
                     return x
             return None
 
@@ -181,7 +186,7 @@ class FuzzyImageRecall:
             if from_end:
                 rows = reversed(rows)
             for y in rows:
-                if numpy.any(np_image[:, y] != white):
+                if numpy.any(np_image[y, :] != white):
                     return y
             return None
 
@@ -282,6 +287,7 @@ def process_final_image(
         keep: bool = False,
         trans_background: bool = False,
         image_extension: str = 'png',
+        find_duplicates: bool = False,
         save_params: Optional[Dict[str, str]] = None,
 ):
     """
@@ -294,29 +300,31 @@ def process_final_image(
     :param keep: Whether to keep existing files or overwrite
     :param trans_background: Should background be transparent?
     :param image_extension: The filename extension (without ".") for image writing
+    :param find_duplicates: Identify duplicates but do not process otherwise
     :param save_params: a dictionary of parameters to the save encoder.
       see https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html
       for details.
     :return: filename written (or existing if keep is True)
     """
 
+    assert output_size, "Must have non-zero output size."
+
     ext_file = ".".join([os.fspath(filename).rsplit(".", 1)[0], image_extension])
     outfile = pathlib.Path(os.path.join(output_dir, os.path.basename(ext_file)))
 
     if image in img_hash:
-        print(f"  skipping, we've seen it")
-        return None
+        return {'status': 'duplicate', 'outfile': outfile}
     img_hash.add(image)
+    if find_duplicates:
+        return {'status': 'normal', 'outfile': outfile}
 
     if keep and outfile.exists():
-        return outfile
+        return {'status': 'skipped', 'outfile': outfile}
 
-    try:
-        img_scaled = ImageOps.contain(image, (output_size, output_size))
-    except ValueError as err:
-        # If we try to resize to 0 this fails
-        print(f"  skipping bad resize: {err}")
-        return None
+    if 0 in image.size or 1 in image.size:
+        return {'status': 'small', 'outfile': outfile}
+
+    img_scaled = ImageOps.contain(image, size=(output_size, output_size))
     if img_scaled.width == img_scaled.height:
         save_image = img_scaled
     else:
@@ -326,8 +334,7 @@ def process_final_image(
         mode: Literal['RGBA', 'RGB'] = 'RGB'
         if trans_background:
             mode = 'RGBA'
-            if len(border_color) < 4:
-                border_color = border_color + (0,)
+            border_color = border_color[0:3] + (0,)
         save_image = Image.new(mode, (output_size, output_size), border_color)
         if img_scaled.width > img_scaled.height:
             y_offset = (output_size - img_scaled.height) // 2
@@ -336,7 +343,7 @@ def process_final_image(
             x_offset = (output_size - img_scaled.width) // 2
             save_image.paste(img_scaled, (x_offset, 0))
     save_image.save(outfile, **(save_params or {}))
-    return outfile
+    return {'status': 'normal', 'outfile': outfile}
 
 
 def safe_process_final_image(*args, **kwargs):
@@ -350,7 +357,8 @@ def safe_process_final_image(*args, **kwargs):
 
 def mask_image(image: Image, mask: Image, background: tuple):
     """Return the input image masked by `mask` with background defined by `background`"""
-    img_base = Image.new("RGB", image.size, background)
+    mode = 'RGBA' if len(background) > 3 else 'RGB'
+    img_base = Image.new(mode, image.size, background)
     img_masked = Image.composite(image, img_base, mask)
     return img_masked
 
@@ -380,7 +388,9 @@ def summarize_status(status: Dict[str, int]):
         'small': 'Images that were too small',
         'cmyk': 'CMYK color space images converted',
         'masked': 'Masked images composited',
-        'skipped': 'Skipped duplicate (or other)',
+        'skipped': 'Skipped',
+        'duplicate': 'Duplicate image',
+        'failed': 'Processing failed',
         'normal': 'Images with no mask processed',
         'total': 'Total number of processed images',
     }
@@ -405,6 +415,8 @@ def process_img_dir(
         trans_background: bool = False,
         image_extension: str = 'png',
         save_params: Optional[Dict[str, str]] = None,
+        history: Optional[FuzzyImageRecall] = None,
+        find_duplicates: bool = False,
         srgb_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
         cmyk_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
 ):
@@ -421,6 +433,8 @@ def process_img_dir(
     :param trans_background: Make generated images transparent
     :param image_extension: The image file extension to save as
     :param save_params: Optional parameters to the PIL Image save formatter
+    :param history: The history tracking FuzzyImageRecall state
+    :param find_duplicates: Just detect duplicates
     :param srgb_profile: profile or file path to the profile to use in converting CMYK
     :param cmyk_profile: profile or file path to the profile to use for CMYK files with none
     :return: nothing
@@ -431,9 +445,21 @@ def process_img_dir(
     def bump(status: str):
         stats[status] = stats.get(status, 0) + 1
 
+    def img_report(img_status: Optional[Dict[str, Any]]):
+        if not img_status:
+            bump('failed')
+        else:
+            status_type = img_status['status']
+            bump(status_type)
+            if find_duplicates:
+                if status_type == 'duplicate':
+                    print(img_status['outfile'])
+            else:
+                print(f"  image processing {status_type}, outfile: {img_status['outfile']}")
+
     small_image = output_size * minimum_quality
     previous = None
-    history = FuzzyImageRecall()
+    history = history or FuzzyImageRecall()
     process_args = dict(
         output_size=output_size,
         output_dir=outdir,
@@ -442,30 +468,41 @@ def process_img_dir(
         img_hash=history,
         image_extension=image_extension,
         save_params=save_params,
+        find_duplicates=find_duplicates,
     )
     print(f"Starting on {img_dir} -> {outdir}")
     img_dir = pathlib.Path(img_dir)  # ensure that it's not a string
     all_files = (pathlib.Path(f) for f in img_dir.glob(os.path.join('**', '*.*')) if os.path.isfile(f))
     for img_file in sorted(all_files, key=get_filename_key):
-        print(f" input file: {img_file}")
+        if not find_duplicates:
+            print(f" input file: {img_file}")
         if "." not in str(img_file):
-            print(f"  skipping unknown file type for {img_file}")
+            if not find_duplicates:
+                print(f"  skipping unknown file type for {img_file}")
             bump('unknown')
             continue
         img_extension = str(img_file).lower().rsplit(".", 1)[-1]
         if img_extension == "ccitt":
             bump('unsupported')
-            print(f"  skipping {img_file} as we don't support CCITT format TIFF compression")
+            if not find_duplicates:
+                print(f"  skipping {img_file} as we don't support CCITT format TIFF compression")
             continue
         elif img_extension == "params":
             bump('unsupported')
-            print(f"  skipping {img_file} as we don't support PARAMS files")
+            if not find_duplicates:
+                print(f"  skipping {img_file} as we don't support PARAMS files")
             continue
-        info = ImageInfo.get_image_info(img_file)
-        white_color = white_pixel(info.image.mode)
+        try:
+            info = ImageInfo.get_image_info(img_file)
+        except UnidentifiedImageError as err:
+            bump('unsupported')
+            if not find_duplicates:
+                print(f"  skipping {img_file}: {err!r}")
+            continue
         if max(info.width, info.height) <= small_image:
             bump('small')
-            print(f"  skipping small image")
+            if not find_duplicates:
+                print(f"  skipping small image")
             continue
         if previous and not previous.is_mask:
             filename = os.path.join(outdir, os.path.basename(previous.file_path))
@@ -475,26 +512,17 @@ def process_img_dir(
             if previous.masked_by(info):
                 info.is_mask = True
                 if not unmasked:
+                    white_color = white_pixel(previous.image.mode)
+                    if len(white_color) == 3 and trans_background:
+                        white_color = white_color + (0,)
                     img_masked = mask_image(previous.image, info.image, background=white_color)
-                    if outfile := safe_process_final_image(img_masked, filename=filename, **process_args):
-                        bump('masked')
-                        print(f"  wrote {outfile}")
-                    else:
-                        bump('skipped')
+                    img_report(safe_process_final_image(img_masked, filename=filename, **process_args))
             elif all_images or unmasked:
-                if outfile := safe_process_final_image(previous.image, filename=filename, **process_args):
-                    bump('normal')
-                    print(f"  wrote {outfile}")
-                else:
-                    bump('skipped')
+                img_report(safe_process_final_image(previous.image, filename=filename, **process_args))
         previous = info
     if previous and not previous.is_mask and (unmasked or all_images):
         filename = os.path.join(outdir, os.path.basename(previous.file_path))
-        if outfile := safe_process_final_image(previous.image, filename=filename, **process_args):
-            bump('normal')
-            print(f"  wrote {outfile}")
-        else:
-            bump('skipped')
+        img_report(safe_process_final_image(previous.image, filename=filename, **process_args))
     print(f"\n{img_dir} processing complete.")
     summarize_status(stats)
 
@@ -572,6 +600,7 @@ def main():
             "A comma-separated string of name=value pairs to pass to the image save formatter"
             " see https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html"),
         'save-format': "The image format (extension) to save as",
+        'find-duplicates': "Do not run the conversion at all, just identify duplicates",
     }
 
     def param_arg(short_flag: str, flag: str, *args, **kwargs):
@@ -583,18 +612,22 @@ def main():
         parser.add_argument(short_flag, flag, *args, action='store_true', help=help_text[base_flag], **kwargs)
 
     state_arg('-a', '--all')
-    param_arg('-f', '--save-format')
+    param_arg('-f', '--save-format', default='png')
     state_arg('-k', '--keep')
-    param_arg('-o', '--output-dir', metavar='PATH', default=DEFAULT_OUTDIR)
+    param_arg('-o', '--output-dir', metavar='PATH', default=DEFAULT_OUTDIR, type=pathlib.Path)
     param_arg('-q', '--quality', metavar='VALUE', default=DEFAULT_QUALITY, type=float)
     param_arg('-s', '--output-size', type=int, default=DEFAULT_SIZE)
     state_arg('-t', '--transparent')
     state_arg('-u', '--unmasked')
-    param_arg('-C', '--cmyk-color-profile', metavar='ICC_FILE')
-    param_arg('-S', '--srgb-color-profile', metavar='ICC_FILE')
+    param_arg('-C', '--cmyk-color-profile', metavar='ICC_FILE', type=pathlib.Path)
+    state_arg('-F', '--find-duplicates')
+    param_arg('-S', '--srgb-color-profile', metavar='ICC_FILE', type=pathlib.Path)
     param_arg('-P', '--save-params', metavar='VALUES')
 
-    parser.add_argument('image_dirs', action='store', metavar='DIR', nargs='+', help=help_text['image_dirs'])
+    parser.add_argument(
+        'image_dirs',
+        action='store', metavar='DIR', nargs='+', type=pathlib.Path, help=help_text['image_dirs']
+    )
 
     options = parser.parse_args()
 
@@ -612,8 +645,15 @@ def main():
     if options.transparent and options.save_format.lower() != 'png':
         raise RuntimeError(f"--transparent only supported for 'png' images")
 
+    if options.cmyk_color_profile and not options.cmyk_color_profile.exists():
+        raise RuntimeError(f"CMYK color profile file does not exist: {options.cmyk_color_profile}")
+    if options.srgb_color_profile and not options.srgb_color_profile.exists():
+        raise RuntimeError(f"sRGB color profile file does not exist: {options.srgb_color_profile}")
+
+    history = FuzzyImageRecall()
+
     for img_dir in options.image_dirs:
-        img_dir = pathlib.Path(str(pathlib.Path(img_dir).absolute()))
+        img_dir = img_dir.absolute()
         print(f"Processing from {img_dir}")
         process_img_dir(
             img_dir,
@@ -626,6 +666,8 @@ def main():
             trans_background=options.transparent,
             image_extension=save_format,
             save_params=save_params,
+            history=history,
+            find_duplicates=options.find_duplicates,
             srgb_profile=options.srgb_color_profile,
             cmyk_profile=options.cmyk_color_profile,
         )
