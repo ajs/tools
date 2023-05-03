@@ -793,13 +793,5 @@ def test_is_color_check(image, is_color, description):
     assert ImageInfo.is_color(image) is is_color, f"Expect is_color={is_color!r} for {description}"
 
 
-@pytest.mark.parametrize(
-    'image1, image2, is_mask, description',
-    [
-        (get_test_image_with_mask(True, "Test image with mask"))
-    ]
-)
-
-
 if __name__ == '__main__':
     main()
