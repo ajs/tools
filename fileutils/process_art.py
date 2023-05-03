@@ -57,17 +57,30 @@ class ImageInfo:
     @classmethod
     def is_color(cls, image: Image):
         """
-        Is the given image color? This is not a perfect test, but it's good enough for
-        our purposes. We don't care about color images that don't contain any saturated
-        pixels, we only care about images that are explicitly only *capable* of holding
-        grayscale or black and white data.
-        If we did care about the contents, we'd have to check each pixel value on
-        images that are CMYK, RGB, etc.
+        Is the given image color? There are two possible ways to answer:
+        * Is it CAPABLE of holding color information (determined from mode)
+        * Are there any non-grayscale pixels (we solve this below)
+
+        We will probably end up with a randomly bad answer on some images
+        that have transparency. That's not a problem I feel we need to
+        solve here.
 
         This is a class method so that it can be used in places where we don't have
         an ImageInfo object handy.
         """
-        return 'L' not in image.mode and '1' not in image.mode
+        if image.mode[0] in ('L', '1'):
+            return False
+
+        if image.mode != 'RGB':
+            # This is pretty heavy-weight, but any other solution requires lots of special cases
+            # around each potential permutation of image.mode. Just try to get this right
+            # for RGBa and PA at the same time, I dare you...
+            image = image.convert('RGB')
+
+        for count, color in image.getcolors(maxcolors=257):
+            if len(set(color)) > 1:
+                return True
+        return False
 
     def masked_by(self, other: "ImageInfo"):
         """
@@ -159,8 +172,13 @@ class FuzzyImageRecall:
         # detect some stretching between copies.
         blurred_10x10 = self._autocrop(image).convert("L").filter(
             ImageFilter.GaussianBlur(radius=blur_radius)).resize((10, 10), Image.LANCZOS)
-        simplified = blurred_10x10.quantize(colors=32)
+        simplified = blurred_10x10.quantize(colors=16)
         return tuple(simplified.getdata())
+
+    def hash_repr(self, image: Image, *args):
+        """Produce a string version of the hash"""
+        tuple_rep = self._to_tuple(image, *args)
+        return "".join(f"{(tuple_rep[p] << 4) + tuple_rep[p+1]:02X}" for p in range(0, len(tuple_rep), 2))
 
     @staticmethod
     def _autocrop(image: Image):
@@ -419,6 +437,7 @@ def process_img_dir(
         find_duplicates: bool = False,
         srgb_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
         cmyk_profile: Optional[Union[ImageCms.ImageCmsProfile, os.PathLike]] = None,
+        verbose: bool = False,
 ):
     """
     Find and label all images in `img_dir`
@@ -437,6 +456,7 @@ def process_img_dir(
     :param find_duplicates: Just detect duplicates
     :param srgb_profile: profile or file path to the profile to use in converting CMYK
     :param cmyk_profile: profile or file path to the profile to use for CMYK files with none
+    :param verbose: Produce verbose output
     :return: nothing
     """
 
@@ -454,7 +474,7 @@ def process_img_dir(
             if find_duplicates:
                 if status_type == 'duplicate':
                     print(img_status['outfile'])
-            else:
+            elif verbose:
                 print(f"  image processing {status_type}, outfile: {img_status['outfile']}")
 
     small_image = output_size * minimum_quality
@@ -470,14 +490,15 @@ def process_img_dir(
         save_params=save_params,
         find_duplicates=find_duplicates,
     )
-    print(f"Starting on {img_dir} -> {outdir}")
+    if verbose:
+        print(f"Starting on {img_dir} -> {outdir}")
     img_dir = pathlib.Path(img_dir)  # ensure that it's not a string
     all_files = (pathlib.Path(f) for f in img_dir.glob(os.path.join('**', '*.*')) if os.path.isfile(f))
     for img_file in sorted(all_files, key=get_filename_key):
         if not find_duplicates:
             print(f" input file: {img_file}")
         if "." not in str(img_file):
-            if not find_duplicates:
+            if not find_duplicates and verbose:
                 print(f"  skipping unknown file type for {img_file}")
             bump('unknown')
             continue
@@ -516,12 +537,18 @@ def process_img_dir(
                     if len(white_color) == 3 and trans_background:
                         white_color = white_color + (0,)
                     img_masked = mask_image(previous.image, info.image, background=white_color)
+                    if verbose:
+                        print(f"  image fuzzy hash: {history.hash_repr(img_masked)}")
                     img_report(safe_process_final_image(img_masked, filename=filename, **process_args))
             elif all_images or unmasked:
+                if verbose:
+                    print(f"  image fuzzy hash: {history.hash_repr(previous.image)}")
                 img_report(safe_process_final_image(previous.image, filename=filename, **process_args))
         previous = info
     if previous and not previous.is_mask and (unmasked or all_images):
         filename = os.path.join(outdir, os.path.basename(previous.file_path))
+        if verbose:
+            print(f"  image fuzzy hash: {history.hash_repr(previous.image)}")
         img_report(safe_process_final_image(previous.image, filename=filename, **process_args))
     print(f"\n{img_dir} processing complete.")
     summarize_status(stats)
@@ -601,6 +628,7 @@ def main():
             " see https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html"),
         'save-format': "The image format (extension) to save as",
         'find-duplicates': "Do not run the conversion at all, just identify duplicates",
+        'verbose': "Turn on verbose output",
     }
 
     def param_arg(short_flag: str, flag: str, *args, **kwargs):
@@ -619,6 +647,7 @@ def main():
     param_arg('-s', '--output-size', type=int, default=DEFAULT_SIZE)
     state_arg('-t', '--transparent')
     state_arg('-u', '--unmasked')
+    state_arg('-v', '--verbose')
     param_arg('-C', '--cmyk-color-profile', metavar='ICC_FILE', type=pathlib.Path)
     state_arg('-F', '--find-duplicates')
     param_arg('-S', '--srgb-color-profile', metavar='ICC_FILE', type=pathlib.Path)
@@ -654,7 +683,8 @@ def main():
 
     for img_dir in options.image_dirs:
         img_dir = img_dir.absolute()
-        print(f"Processing from {img_dir}")
+        if options.verbose:
+            print(f"Processing from {img_dir}")
         process_img_dir(
             img_dir,
             output_size=options.output_size,
@@ -670,6 +700,7 @@ def main():
             find_duplicates=options.find_duplicates,
             srgb_profile=options.srgb_color_profile,
             cmyk_profile=options.cmyk_color_profile,
+            verbose=options.verbose,
         )
 
 
@@ -722,6 +753,52 @@ def test_autocrop(mode):
 def test_guess_border(image: Image, expected: Union[int, Tuple[int, int, int]], what_is: str):
     """Quick test for our border color guessing"""
     assert guess_border(image) == expected, f"Expect return value of {expected!r} for {what_is}"
+
+
+def make_test_color_image(mode: str):
+    """Used for testing color image detection"""
+    image = make_test_grayscale_image('RGB')
+    image.putpixel((255, 255), (0, 255, 127))  # Add just one color pixel to make it harder
+    if mode != image.mode:
+        image = image.convert(mode)
+    return image
+
+
+def make_test_grayscale_image(mode: str):
+    """Used for testing color image detection"""
+    image = Image.linear_gradient('L').convert('RGB')
+    if mode != image.mode:
+        if mode.endswith('A'):
+            image.putalpha(Image.new('1', image.size, 1))
+        image = image.convert(mode)
+    return image
+
+
+@pytest.mark.parametrize(
+    'image, is_color, description',
+    [
+        (make_test_grayscale_image('1'), False, "B/W"),
+        (make_test_grayscale_image('L'), False, "grayscale"),
+        (make_test_grayscale_image('LA'), False, "grayscale with transparency"),
+        (make_test_grayscale_image('RGB'), False, "RGB grayscale"),
+        (make_test_color_image('RGB'), True, "RGB color image"),
+        (make_test_grayscale_image('RGBA'), False, "RGBA grayscale"),
+        (make_test_color_image('RGBA'), True, "RGBA color image"),
+        (make_test_grayscale_image('CMYK'), False, "CMYK grayscale"),
+        (make_test_color_image('CMYK'), True, "CMYK color image"),
+    ]
+)
+def test_is_color_check(image, is_color, description):
+    """Test the is_color check that is defined on ImageInfo"""
+    assert ImageInfo.is_color(image) is is_color, f"Expect is_color={is_color!r} for {description}"
+
+
+@pytest.mark.parametrize(
+    'image1, image2, is_mask, description',
+    [
+        (get_test_image_with_mask(True, "Test image with mask"))
+    ]
+)
 
 
 if __name__ == '__main__':
